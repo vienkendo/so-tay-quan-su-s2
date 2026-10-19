@@ -352,25 +352,35 @@ footer{padding-top:4px}
 @media (max-width:960px){.guide-grid,.guide-grid.roles{grid-template-columns:repeat(2,minmax(0,1fr))}.guide-layout{grid-template-columns:minmax(0,1fr)}}
 @media (max-width:560px){.guide-grid,.guide-grid.roles{grid-template-columns:minmax(0,1fr)}.guide-card{min-height:auto}}
 
-/* Kho tướng: thẻ dọc phong cách game */
-.klist{display:grid;grid-template-columns:repeat(auto-fill,minmax(132px,1fr));gap:12px;align-items:stretch}
-.khero{position:relative;min-width:0;overflow:hidden;padding:0;border:2px solid #32281f!important;border-radius:8px 8px 12px 12px;background:#211b17;color:#fff;display:flex;flex-direction:column;box-shadow:0 5px 13px rgba(24,16,8,.2)}
-.khero-art{position:relative;width:100%;aspect-ratio:3/4;overflow:hidden;background:linear-gradient(150deg,#cfae69,#542d27)}
-.khero-art:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.12),transparent 36%,rgba(0,0,0,.12) 56%,rgba(0,0,0,.88));pointer-events:none}
-.khero-art img{width:100%;height:100%;display:block;object-fit:cover;object-position:center top}
-.khero .k-rarity{position:absolute;z-index:1;top:5px;left:5px;font-weight:1000;font-size:13px;font-style:italic;color:#ff6b49;text-shadow:1px 2px #8a120b,-1px -1px #fff6bf,1px 1px #fff}
-.khero .k-level{position:absolute;z-index:2;right:4px;top:4px;width:44px;padding:2px 0;text-align:center;font:800 11px var(--mono);color:#65efff;background:rgba(14,25,29,.84);border:1px solid #e6d18b;border-radius:4px}
+
+/* Kho tướng v2: thẻ sạch, không phóng đại thumbnail vuông thành tranh dọc */
+.klist{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:12px;align-items:start}
+.khero{position:relative;min-width:0;overflow:hidden;padding:0;border:1px solid #4b3b2b!important;border-radius:10px;background:#191b20;color:#f5ead6;display:flex;flex-direction:column;box-shadow:0 4px 12px rgba(0,0,0,.2)}
+.khero-art{position:relative;width:100%;aspect-ratio:3/4;overflow:hidden;display:flex;align-items:center;justify-content:center;background:radial-gradient(ellipse at 50% 28%,#6d5a42 0,#343039 44%,#1a1b22 100%);border-bottom:1px solid #6e5737}
+.khero-art:before{content:"";position:absolute;inset:8px;border:1px solid rgba(221,190,124,.3);border-radius:5px;pointer-events:none}
+.khero-art img{display:none!important}
+.khero-placeholder{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;width:100%;height:100%;padding:12px;text-align:center;background:linear-gradient(145deg,rgba(255,255,255,.035),transparent 50%,rgba(0,0,0,.25))}
+.khero-emblem{display:flex;align-items:center;justify-content:center;width:62px;height:62px;border:1px solid #c8a96b;border-radius:50%;color:#e2c98f;font-size:28px;font-weight:800;background:rgba(15,15,20,.28);box-shadow:0 0 0 5px rgba(200,169,107,.07)}
+.khero-placeholder small{font-size:10px;letter-spacing:.08em;color:#d0b983;text-transform:uppercase}
+.khero .k-rarity{position:absolute;z-index:1;top:10px;left:10px;font-weight:900;font-size:12px;font-style:italic;color:#ffb36b;text-shadow:0 1px 3px #24130d}
+.khero .k-level{position:absolute;z-index:2;right:8px;top:8px;width:48px;padding:3px 0;text-align:center;font:800 11px var(--mono);color:#8fe9f2;background:rgba(16,20,25,.9);border:1px solid #8a7755;border-radius:5px}
 .khero .k-level input{width:100%;border:0;background:transparent;color:inherit;text-align:center;font:inherit;padding:0;outline:none}
-.khero .k-name{position:absolute;z-index:1;left:4px;right:4px;bottom:31px;text-align:center;font-weight:800;font-size:12px;line-height:1.2;color:#fff;text-shadow:1px 2px 2px #000,-1px -1px 2px #000}
-.khero .k-stars{position:absolute;z-index:1;left:3px;right:3px;bottom:13px;text-align:center;color:#ffd45e;font-size:12px;line-height:1.15;letter-spacing:-1px;text-shadow:1px 2px #6c250c,-1px -1px #fff1b3}
-.khero .k-faction{position:absolute;z-index:1;bottom:0;left:50%;transform:translateX(-50%);padding:1px 9px;border-radius:7px 7px 0 0;font-size:11px;font-weight:900;white-space:nowrap;background:var(--phe);color:#fff;text-shadow:0 1px 2px #222}
-.khero-bottom{padding:7px 6px 8px;display:flex;flex-direction:column;gap:6px;background:linear-gradient(180deg,#30251b,#17130f)}
-.khero-meta{font-size:10px;color:#e8d9b4;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.khero .k-name{position:absolute;z-index:1;left:8px;right:8px;bottom:37px;text-align:center;font-weight:800;font-size:13px;line-height:1.25;color:#fff;text-shadow:0 2px 4px #000}
+.khero .k-stars{position:absolute;z-index:1;left:3px;right:3px;bottom:16px;text-align:center;color:#f6ce72;font-size:13px;line-height:1.15;letter-spacing:0;text-shadow:0 2px 3px #24160a}
+.khero .k-faction{position:absolute;z-index:1;bottom:0;left:50%;transform:translateX(-50%);padding:2px 12px;border-radius:6px 6px 0 0;font-size:11px;font-weight:900;white-space:nowrap;background:var(--phe);color:#fff;text-shadow:0 1px 2px #222}
+.khero-bottom{padding:9px;display:flex;flex-direction:column;gap:7px;background:#202126}
+.khero-meta{font-size:11px;color:#c8c1b4;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .khero .tagcore{align-self:center;font-size:9px}
-.khero-actions{display:flex;gap:4px;flex-wrap:wrap}
-.khero-actions button{flex:1 1 42px;min-width:0;padding:4px 2px;border:1px solid #94723d;border-radius:5px;background:#443321;color:#fff0c4;font:700 10px var(--body);cursor:pointer}
-.khero-actions button:hover{background:#70502c}
-@media(max-width:520px){.klist{grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}.khero{border-width:1px!important;border-radius:4px 4px 7px 7px}.khero-art{aspect-ratio:3/4}.khero .k-rarity{top:2px;left:2px;font-size:9px}.khero .k-level{top:2px;right:2px;width:28px;font-size:8px;border-radius:2px}.khero .k-name{left:1px;right:1px;bottom:23px;font-size:8px;overflow-wrap:anywhere}.khero .k-stars{bottom:10px;font-size:8px;letter-spacing:-1px}.khero .k-faction{font-size:8px;padding:1px 4px}.khero-bottom{padding:4px 2px;gap:3px}.khero-meta{font-size:7px}.khero-actions{gap:2px}.khero-actions button{flex-basis:100%;padding:3px 1px;font-size:8px}.khero .tagcore{font-size:7px}}
+.khero-actions{margin:0;border:0;border-radius:6px;background:#302b24;overflow:hidden}
+.khero-actions summary{list-style:none;cursor:pointer;text-align:center;padding:7px 6px;border:1px solid #5f4a2c;border-radius:6px;color:#f0d6a0;font-size:11px;font-weight:800}
+.khero-actions summary::-webkit-details-marker{display:none}
+.khero-actions summary:after{content:"＋";float:right;color:#d8b66f}
+.khero-actions[open] summary{border-radius:6px 6px 0 0}
+.khero-actions[open] summary:after{content:"−"}
+.khero-action-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px;padding:6px}
+.khero-action-list button{min-width:0;padding:6px 3px;border:1px solid #70552e;border-radius:5px;background:#443321;color:#fff0c4;font:700 10px var(--body);cursor:pointer}
+.khero-action-list button:hover{background:#70502c}
+@media(max-width:420px){.klist{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.khero-bottom{padding:7px}.khero .k-name{font-size:12px}}
 
 </style>
 </head>
@@ -792,22 +802,27 @@ function validateUpgrade(u,ids){
 }
 let KLEVELS={};try{KLEVELS=JSON.parse(localStorage.getItem("s2-khero-levels")||"{}")||{}}catch(e){}
 function saveKLevel(name,value){const v=Math.max(1,Math.min(999,Math.floor(+value||0)));if(v)KLEVELS[name]=v;else delete KLEVELS[name];try{localStorage.setItem("s2-khero-levels",JSON.stringify(KLEVELS))}catch(e){}}
+let KLEVELS={};try{KLEVELS=JSON.parse(localStorage.getItem("s2-khero-levels")||"{}")||{}}catch(e){}
+function saveKLevel(name,value){const v=Math.max(1,Math.min(999,Math.floor(+value||0)));if(v)KLEVELS[name]=v;else delete KLEVELS[name];try{localStorage.setItem("s2-khero-levels",JSON.stringify(KLEVELS))}catch(e){}}
 function krender(){
  document.getElementById("orb").value=ORB;
- const items=K.filter(u=>kf==="Tất cả"||u.phe===kf||(kf==="SSR+"&&u.r==="SSR+")||(kf==="SSR (nguyên liệu)"&&u.r==="SSR"));
- items.sort((a,b)=>(CORE.has(b.name)-CORE.has(a.name))||(b.r==="SSR+")-(a.r==="SSR+")||b.star-a.star||a.name.localeCompare(b.name,"vi")||a.id-b.id);
- document.getElementById("kList").innerHTML=items.map(u=>{
-  const h=byName[u.name],lvl=KLEVELS[u.name]||"";
-  const art=ICONS[u.name]?'<img src="'+ICONS[u.name]+'" alt="'+esc(u.name)+'" loading="lazy">':(h?token(h):'<span class="token" style="background:'+(PHE_COLOR[u.phe]||"var(--muted)")+';font-size:22px">'+esc(short(u.name))+'</span>');
-  const factionColor=PHE_COLOR[u.phe]||"var(--muted)";
+ const groups={};K.forEach(u=>{(groups[u.name]=groups[u.name]||[]).push(u)});
+ let names=Object.keys(groups).filter(n=>{const u=groups[n][0];return kf==="Tất cả"||u.phe===kf||(kf==="SSR+"&&u.r==="SSR+")||(kf==="SSR (nguyên liệu)"&&u.r==="SSR")});
+ names.sort((a,b)=>(CORE.has(b)-CORE.has(a))||(groups[b][0].r==="SSR+")-(groups[a][0].r==="SSR+")||Math.max(...groups[b].map(u=>u.star))-Math.max(...groups[a].map(u=>u.star))||a.localeCompare(b,"vi"));
+ document.getElementById("kList").innerHTML=names.map(n=>{
+  const us=groups[n].sort((a,b)=>b.star-a.star),u0=us[0],h=byName[n],lvl=KLEVELS[n]||"";
+  const factionColor=PHE_COLOR[u0.phe]||"var(--muted)";
+  // Existing ICONS are square thumbnails, not full game cards; do not stretch/crop them into fake card art.
+  const art='<div class="khero-placeholder"><span class="khero-emblem">'+esc(short(n).slice(0,1))+'</span><strong>'+esc(n)+'</strong><small>Chưa có ảnh thẻ chuẩn</small></div>';
+  const starLine=stars(Math.max(...us.map(u=>u.star)));
   return '<article class="khero" style="--phe:'+factionColor+'"><div class="khero-art">'+art+
-   '<span class="k-rarity">'+esc(u.r)+'</span><label class="k-level" title="Nhập cấp hiện tại">Lv <input type="number" min="1" max="999" value="'+esc(lvl)+'" placeholder="150" data-level="'+esc(u.name)+'" aria-label="Cấp '+esc(u.name)+'"></label>'+
-   '<div class="k-name">'+esc(u.name)+'</div><div class="k-stars">'+stars(u.star)+'</div><div class="k-faction">'+esc(u.phe)+'</div></div>'+
-   '<div class="khero-bottom">'+(CORE.has(u.name)?'<span class="tagcore">Đội chính</span>':'')+
-   '<div class="khero-meta">Bản #'+u.id+' · '+stars(u.star)+' · '+esc(u.r)+'</div><div class="khero-actions">'+
-   '<button class="up" data-up="'+u.id+'" title="Nâng sao '+stars(u.star)+'">Nâng ★</button>'+
-   '<button data-del="'+u.id+'" title="Xóa bản này">Xóa</button>'+
-   '</div></div></article>';
+   '<span class="k-rarity">'+esc(u0.r)+'</span><label class="k-level" title="Nhập cấp hiện tại">Lv <input type="number" min="1" max="999" value="'+esc(lvl)+'" placeholder="—" data-level="'+esc(n)+'" aria-label="Cấp '+esc(n)+'"></label>'+
+   '<div class="k-name">'+esc(n)+'</div><div class="k-stars">'+starLine+'</div><div class="k-faction">'+esc(u0.phe)+'</div></div>'+
+   '<div class="khero-bottom">'+(CORE.has(n)?'<span class="tagcore">Đội chính</span>':'')+
+   '<div class="khero-meta">'+us.length+' bản · '+esc(u0.r)+'</div>'+
+   '<details class="khero-actions"><summary>Thao tác · '+us.length+' bản</summary><div class="khero-action-list">'+
+   us.map(u=>'<button class="up" data-up="'+u.id+'" title="Nâng sao '+stars(u.star)+'">'+stars(u.star)+' ↑</button><button data-del="'+u.id+'" title="Xóa bản '+stars(u.star)+'">Xóa '+stars(u.star)+'</button>').join('')+
+   '</div></details></div></article>';
  }).join("")||'<p class="empty">Không có tướng.</p>';
  document.getElementById("kLog").innerHTML=KLOG.slice().reverse().map(l=>'<li>'+esc(l)+'</li>').join("")||'<li class="meta">Chưa có thao tác.</li>';
  document.getElementById("kUndo").disabled=!KUNDO.length;
