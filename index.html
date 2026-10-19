@@ -802,8 +802,6 @@ function validateUpgrade(u,ids){
 }
 let KLEVELS={};try{KLEVELS=JSON.parse(localStorage.getItem("s2-khero-levels")||"{}")||{}}catch(e){}
 function saveKLevel(name,value){const v=Math.max(1,Math.min(999,Math.floor(+value||0)));if(v)KLEVELS[name]=v;else delete KLEVELS[name];try{localStorage.setItem("s2-khero-levels",JSON.stringify(KLEVELS))}catch(e){}}
-let KLEVELS={};try{KLEVELS=JSON.parse(localStorage.getItem("s2-khero-levels")||"{}")||{}}catch(e){}
-function saveKLevel(name,value){const v=Math.max(1,Math.min(999,Math.floor(+value||0)));if(v)KLEVELS[name]=v;else delete KLEVELS[name];try{localStorage.setItem("s2-khero-levels",JSON.stringify(KLEVELS))}catch(e){}}
 function krender(){
  document.getElementById("orb").value=ORB;
  const groups={};K.forEach(u=>{(groups[u.name]=groups[u.name]||[]).push(u)});
