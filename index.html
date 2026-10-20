@@ -384,10 +384,12 @@ footer{padding-top:4px}
     <div id="teamview"></div>
     <div class="panel" id="team-planner" style="margin-top:18px">
       <h3>Đội hình mẫu & kiểm tra quy tắc</h3>
-      <p class="meta">Đội hình tham khảo PVP/Boss theo dữ liệu mẫu. Cảnh báo được tính từ chỉ số Công, ô công pháp và phân công sách bên dưới; không thay đổi đội hình tối ưu hiện có.</p>
+      <p class="meta">Đội hình tham khảo PVP, Boss, PVE và Hán theo dữ liệu mẫu. Cảnh báo được tính từ chỉ số Công, ô công pháp và phân công sách; không thay đổi đội hình tối ưu hiện có.</p>
       <div class="modes" id="sample-team-modes" role="tablist" aria-label="Chọn chế độ đội hình">
         <button class="btn" type="button" data-sample-mode="PVP" aria-pressed="true">PVP</button>
         <button class="btn ghost" type="button" data-sample-mode="Boss" aria-pressed="false">Boss</button>
+        <button class="btn ghost" type="button" data-sample-mode="PVE" aria-pressed="false">PVE</button>
+        <button class="btn ghost" type="button" data-sample-mode="Han" aria-pressed="false">Hán</button>
       </div>
       <div id="sample-team-view"></div>
       <div id="sample-team-warnings" class="warn" aria-live="polite"></div>
@@ -1006,12 +1008,19 @@ vsSlots();
 // Đội hình mẫu PVP/Boss và kiểm tra quy tắc — dữ liệu tham khảo, không can thiệp kho tướng.
 const SAMPLE_TEAMS={
  PVP:[["Lý Long Cơ","Vương Chiêu Quân","Võ Tắc Thiên"],["Lữ Bố","Tây Thi","Điêu Thuyền"]],
- Boss:[["Lý Long Cơ","Ban Chiêu","Vương Chiêu Quân"],["Lữ Bố","Tây Thi","Điêu Thuyền"]]
+ Boss:[["Lý Long Cơ","Ban Chiêu","Vương Chiêu Quân"],["Lữ Bố","Tây Thi","Điêu Thuyền"]],
+ PVE:[["Bạch Khởi","Can Tương","Chung Vô Diệm"],["Tần Thủy Hoàng","Quỷ Cốc Tử","Biển Thước"]],
+ Han:[["Hàn Tín","Vệ Thanh","Vương Chiêu Quân"],["Lưu Bang","Ngu Cơ","Ban Chiêu"]]
 };
 const SAMPLE_HERO_STATS={
  "Lữ Bố":{atk:5000,slots:6,star:12},"Lý Long Cơ":{atk:4200,slots:6,star:13},
  "Vương Chiêu Quân":{atk:3000,slots:2,star:8},"Võ Tắc Thiên":{atk:2800,slots:2,star:8},
- "Tây Thi":{atk:3500,slots:6,star:12},"Điêu Thuyền":{atk:2600,slots:5,star:11},"Ban Chiêu":{atk:2700,slots:5,star:10}
+ "Tây Thi":{atk:3500,slots:6,star:12},"Điêu Thuyền":{atk:2600,slots:5,star:11},"Ban Chiêu":{atk:2700,slots:5,star:10},
+ "Bạch Khởi":{atk:3100,slots:6,star:12},"Can Tương":{atk:2900,slots:6,star:11},
+ "Chung Vô Diệm":{atk:2800,slots:6,star:10},"Tần Thủy Hoàng":{atk:3300,slots:6,star:13},
+ "Quỷ Cốc Tử":{atk:3000,slots:6,star:11},"Biển Thước":{atk:2700,slots:6,star:10},
+ "Hàn Tín":{atk:3200,slots:6,star:12},"Vệ Thanh":{atk:3100,slots:6,star:11},
+ "Lưu Bang":{atk:2800,slots:6,star:10},"Ngu Cơ":{atk:2700,slots:6,star:10}
 };
 const SAMPLE_BOOKS_ALLOC={
  "Lữ Bố":["Tây Thi","Tôn Sách","Lý Long Cơ","Chân Cơ","Vệ Thanh","Trương Công Cẩn"],
@@ -1030,8 +1039,11 @@ function renderSampleTeam(mode){
    const st=SAMPLE_HERO_STATS[name]||{},books=SAMPLE_BOOKS_ALLOC[name]||[];
    return '<div class="sample-team-cell"><strong>'+esc(name)+'</strong><small>Công: '+(st.atk??'Chưa có dữ liệu')+' · Ô: '+(st.slots??'—')+' · Sao: '+(st.star??'?')+'★</small>'+(books.length?'<details class="sample-team-book"><summary>Công pháp ('+books.length+')</summary>'+books.map(esc).join(' · ')+'</details>':'')+'</div>';
  }).join('')+'</div>').join('');
- const warnings=[],names=team.flat(),maxAtk=Math.max(...names.map(n=>(SAMPLE_HERO_STATS[n]||{}).atk||0));
- if((SAMPLE_HERO_STATS["Lữ Bố"]?.atk||0)<maxAtk)warnings.push('Lữ Bố chưa có Công cao nhất trong đội '+mode+'.');
+ const warnings=[],names=team.flat();
+ if(names.includes("Lữ Bố")){
+   const maxAtk=Math.max(...names.map(n=>(SAMPLE_HERO_STATS[n]||{}).atk||0));
+   if((SAMPLE_HERO_STATS["Lữ Bố"]?.atk||0)<maxAtk)warnings.push('Lữ Bố chưa có Công cao nhất trong đội '+mode+'.');
+ }
  [...new Set(names)].forEach(n=>{const st=SAMPLE_HERO_STATS[n],books=SAMPLE_BOOKS_ALLOC[n]||[];if(!st)warnings.push(n+': chưa có dữ liệu số ô công pháp.');else if(books.length>st.slots)warnings.push(n+' vượt số ô công pháp ('+books.length+'/'+st.slots+').');});
  warnBox.innerHTML=warnings.length?warnings.map(w=>'<div class="sample-warn">⚠️ '+esc(w)+'</div>').join(''):'<div class="sample-ok">✓ Không phát hiện vi phạm theo các dữ liệu mẫu đã nhập.</div><p class="meta">Lưu ý: kiểm tra này chỉ xét các quy tắc được khai báo trong dữ liệu mẫu.</p>';
 }
