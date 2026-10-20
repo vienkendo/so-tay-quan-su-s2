@@ -491,6 +491,17 @@ footer{padding-top:4px}
       <h3 style="margin-top:16px">Radar đội hình gợi ý</h3>
       <p class="meta">Chọn tiêu đề PVP, Boss, PVE hoặc Hán để xem radar của nhóm 5 tướng được xếp hạng cao nhất.</p>
       <div id="suggest-radar-result" class="inventory-radar" role="img" aria-label="Radar đội hình gợi ý"></div>
+      <div class="panel" style="margin-top:16px">
+        <h3>So sánh radar giữa 2 đội gợi ý</h3>
+        <div class="tools">
+          <label for="compare-team1">Đội 1</label>
+          <select id="compare-team1"><option value="PVP">PVP</option><option value="Boss">Boss</option><option value="PVE">PVE</option><option value="Han">Hán</option></select>
+          <label for="compare-team2">Đội 2</label>
+          <select id="compare-team2"><option value="Boss">Boss</option><option value="PVP">PVP</option><option value="PVE">PVE</option><option value="Han">Hán</option></select>
+          <button class="btn" type="button" id="compare-radar-btn">So sánh</button>
+        </div>
+        <div id="radar-compare-result" class="inventory-radar" role="img" aria-label="Biểu đồ radar so sánh hai đội gợi ý" aria-live="polite"></div>
+      </div>
     </div>
   </section>
 
@@ -877,6 +888,7 @@ function renderInventoryMatrix(){
  const labels=cols.map((c,i)=>{const p=point(i,max*1.2);return '<text x="'+p[0]+'" y="'+(p[1]+4)+'" text-anchor="middle" fill="var(--ink)" font-size="10">'+c[1]+'</text>';}).join("");
  radar.innerHTML='<div class="inventory-radar"><svg viewBox="0 0 360 320" aria-hidden="true">'+grid+spokes+'<polygon points="'+poly(shape)+'" fill="var(--accent)" fill-opacity=".22" stroke="var(--accent)" stroke-width="2"/>'+shape.map(p=>'<circle cx="'+p[0]+'" cy="'+p[1]+'" r="3" fill="var(--accent)"/>').join("")+labels+'</svg><div class="radar-legend">'+cols.map((c,i)=>'<span>'+c[1]+': <b>'+totals[i]+'/'+max+'</b></span>').join("")+'</div></div>';
 }
+let suggestedTeamsData={};
 function renderSuggestedTeams(){
  const box=document.getElementById("suggest-result");if(!box)return;
  const all=H.map(h=>h.name),get=(n)=>inventoryScore(n);
@@ -885,9 +897,11 @@ function renderSuggestedTeams(){
   ["PVP","Ưu tiên Công + Nộ + Khống chế",sortTop(s=>s.Cong+s.No+s.KhongChe)],
   ["Boss","Ưu tiên Công + Hỗ trợ",sortTop(s=>s.Cong+s.HoTro)],
   ["PVE","Ưu tiên Thủ + HP",sortTop(s=>s.Thu+s.HP)],
-  ["Hán","Ưu tiên tướng Hán trong danh sách hiện có",sortTop(s=>s.Cong+s.HoTro+s.Thu,n=>{const h=byName[n];return !!h&&h.phe==="Hán";})]
+  ["Han","Ưu tiên tướng Hán trong danh sách hiện có",sortTop(s=>s.Cong+s.HoTro+s.Thu,n=>{const h=byName[n];return !!h&&h.phe==="Hán";})]
  ];
- box.innerHTML='<div class="suggest-grid">'+sets.map(([title,desc,list])=>'<div class="suggest-card"><h4 role="button" tabindex="0" data-suggest-mode="'+title+'" style="cursor:pointer" title="Bấm để xem radar '+title+'">'+title+' <span class="meta">· xem radar</span></h4><p class="meta">'+desc+'</p><ol>'+list.map(x=>'<li>'+esc(x.name)+' <span class="meta">('+x.score+' điểm)</span></li>').join("")+'</ol></div>').join("")+'</div>';
+ suggestedTeamsData=Object.fromEntries(sets.map(([key,,list])=>[key,list.map(x=>x.name)]));
+ const labels={PVP:"PVP",Boss:"Boss",PVE:"PVE",Han:"Hán"};
+ box.innerHTML='<div class="suggest-grid">'+sets.map(([key,desc,list])=>'<div class="suggest-card"><h4 role="button" tabindex="0" data-suggest-mode="'+key+'" style="cursor:pointer" title="Bấm để xem radar '+labels[key]+'">'+labels[key]+' <span class="meta">· xem radar</span></h4><p class="meta">'+desc+'</p><ol>'+list.map(x=>'<li>'+esc(x.name)+' <span class="meta">('+x.score+' điểm)</span></li>').join("")+'</ol></div>').join("")+'</div>';
  const draw=(mode)=>{
   const target=document.getElementById("suggest-radar-result");if(!target)return;
   const selected=sets.find(x=>x[0]===mode)||sets[0],team=selected[2].map(x=>x.name),cols=sampleMatrixCols();
@@ -898,8 +912,8 @@ function renderSuggestedTeams(){
   let grid="";for(let level=1;level<=5;level++)grid+='<polygon points="'+poly(cols.map((_,i)=>point(i,max*level/5)))+'" fill="none" stroke="var(--line)"/>';
   const spokes=cols.map((c,i)=>{const p=point(i,max);return '<line x1="'+cx+'" y1="'+cy+'" x2="'+p[0]+'" y2="'+p[1]+'" stroke="var(--line)"/>';}).join("");
   const shape=cols.map((c,i)=>point(i,totals[i]));
-  const labels=cols.map((c,i)=>{const p=point(i,max*1.18);return '<text x="'+p[0]+'" y="'+(p[1]+4)+'" text-anchor="middle" fill="var(--ink)" font-size="10">'+c[1]+'</text>';}).join("");
-  target.innerHTML='<div><b>Radar '+esc(selected[0])+'</b><svg viewBox="0 0 360 300" aria-hidden="true">'+grid+spokes+'<polygon points="'+poly(shape)+'" fill="var(--accent)" fill-opacity=".22" stroke="var(--accent)" stroke-width="2"/>'+shape.map(p=>'<circle cx="'+p[0]+'" cy="'+p[1]+'" r="3" fill="var(--accent)"/>').join("")+labels+'</svg><div class="radar-legend">'+cols.map((c,i)=>'<span>'+c[1]+': <b>'+totals[i]+'/'+max+'</b></span>').join("")+'</div><p class="meta">Tướng được tính: '+team.map(esc).join(", ")+'</p></div>';
+  const labelsSvg=cols.map((c,i)=>{const p=point(i,max*1.18);return '<text x="'+p[0]+'" y="'+(p[1]+4)+'" text-anchor="middle" fill="var(--ink)" font-size="10">'+c[1]+'</text>';}).join("");
+  target.innerHTML='<div><b>Radar '+esc(labels[ selected[0] ])+'</b><svg viewBox="0 0 360 300" aria-hidden="true">'+grid+spokes+'<polygon points="'+poly(shape)+'" fill="var(--accent)" fill-opacity=".22" stroke="var(--accent)" stroke-width="2"/>'+shape.map(p=>'<circle cx="'+p[0]+'" cy="'+p[1]+'" r="3" fill="var(--accent)"/>').join("")+labelsSvg+'</svg><div class="radar-legend">'+cols.map((c,i)=>'<span>'+c[1]+': <b>'+totals[i]+'/'+max+'</b></span>').join("")+'</div><p class="meta">Tướng được tính: '+team.map(esc).join(", ")+'</p></div>';
  };
  box.querySelectorAll("[data-suggest-mode]").forEach(el=>{
   const activate=()=>draw(el.dataset.suggestMode);
@@ -907,6 +921,24 @@ function renderSuggestedTeams(){
   el.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();activate();}});
  });
  draw("PVP");
+ const btn=document.getElementById("compare-radar-btn");
+ if(btn&&!btn.dataset.bound){btn.dataset.bound="1";btn.addEventListener("click",compareSuggestedTeams);}
+ compareSuggestedTeams();
+}
+function compareSuggestedTeams(){
+ const target=document.getElementById("radar-compare-result"),a=document.getElementById("compare-team1"),b=document.getElementById("compare-team2");
+ if(!target||!a||!b)return;
+ const key1=a.value,key2=b.value,team1=suggestedTeamsData[key1]||[],team2=suggestedTeamsData[key2]||[],cols=sampleMatrixCols();
+ const total=team=>cols.map(c=>team.reduce((sum,name)=>sum+(Number(inventoryScore(name)[c[0]])||0),0));
+ const v1=total(team1),v2=total(team2),max=Math.max(1,team1.length*5,team2.length*5),cx=180,cy=150,r=88,angle=i=>-Math.PI/2+i*2*Math.PI/cols.length;
+ const point=(i,v)=>[cx+Math.cos(angle(i))*r*Math.max(0,Math.min(max,v))/max,cy+Math.sin(angle(i))*r*Math.max(0,Math.min(max,v))/max];
+ const poly=arr=>arr.map(p=>p.map(n=>n.toFixed(1)).join(",")).join(" ");
+ let grid="";for(let level=1;level<=5;level++)grid+='<polygon points="'+poly(cols.map((_,i)=>point(i,max*level/5)))+'" fill="none" stroke="var(--line)"/>';
+ const spokes=cols.map((c,i)=>{const p=point(i,max);return '<line x1="'+cx+'" y1="'+cy+'" x2="'+p[0]+'" y2="'+p[1]+'" stroke="var(--line)"/>';}).join("");
+ const shape1=cols.map((c,i)=>point(i,v1[i])),shape2=cols.map((c,i)=>point(i,v2[i]));
+ const labelsSvg=cols.map((c,i)=>{const p=point(i,max*1.18);return '<text x="'+p[0]+'" y="'+(p[1]+4)+'" text-anchor="middle" fill="var(--ink)" font-size="10">'+c[1]+'</text>';}).join("");
+ const name={PVP:"PVP",Boss:"Boss",PVE:"PVE",Han:"Hán"};
+ target.innerHTML='<svg viewBox="0 0 360 300" aria-hidden="true">'+grid+spokes+'<polygon points="'+poly(shape1)+'" fill="#007BFF" fill-opacity=".18" stroke="#007BFF" stroke-width="2"/><polygon points="'+poly(shape2)+'" fill="#ff6384" fill-opacity=".16" stroke="#ff6384" stroke-width="2"/>'+shape1.map(p=>'<circle cx="'+p[0]+'" cy="'+p[1]+'" r="3" fill="#007BFF"/>').join("")+shape2.map(p=>'<circle cx="'+p[0]+'" cy="'+p[1]+'" r="3" fill="#ff6384"/>').join("")+labelsSvg+'</svg><div class="radar-legend"><span><i style="display:inline-block;width:9px;height:9px;border-radius:50%;background:#007BFF"></i> <b>'+name[key1]+'</b></span><span><i style="display:inline-block;width:9px;height:9px;border-radius:50%;background:#ff6384"></i> <b>'+name[key2]+'</b></span></div><div class="sample-matrix-wrap"><table class="sample-matrix"><thead><tr><th>Tiêu chí</th><th>'+name[key1]+'</th><th>'+name[key2]+'</th></tr></thead><tbody>'+cols.map((c,i)=>'<tr><td>'+c[1]+'</td><td>'+v1[i]+'</td><td>'+v2[i]+'</td></tr>').join("")+'</tbody></table></div><p class="meta"><b>'+name[key1]+'</b>: '+team1.map(esc).join(", ")+'<br><b>'+name[key2]+'</b>: '+team2.map(esc).join(", ")+'</p>';
 }
 function renderGrid(){
   const q=qEl.value.trim().toLowerCase();
