@@ -358,6 +358,19 @@ footer{padding-top:4px}
 
 /* Thí Luyện Cổ Đế Viêm */
 .codviem-table{width:100%;border-collapse:collapse;font-size:13px}.codviem-table th,.codviem-table td{padding:9px 10px;text-align:left;border-bottom:1px solid var(--line);white-space:nowrap}.codviem-table th{color:var(--muted);font-weight:700;background:var(--surface-2)}.codviem-table tr:last-child td{border-bottom:0}.table-wrap{width:100%;overflow-x:auto;border:1px solid var(--line);border-radius:10px}@media(max-width:520px){.codviem-table{font-size:12px}.codviem-table th,.codviem-table td{padding:8px 7px}}
+/* Công cụ phân tích tướng */
+.analysis-card{cursor:default}
+.analysis-card .meta{line-height:1.5}
+.analysis-card .analysis-scores{display:flex;gap:6px;flex-wrap:wrap}
+.analysis-card .analysis-scores span{padding:3px 7px;border:1px solid var(--line);border-radius:6px;background:var(--surface-2);font:600 11px var(--mono)}
+#analysis-compare{overflow-x:auto}
+.analysis-compare-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.analysis-compare-card{min-width:0;padding:14px;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+.analysis-compare-card h4{margin:0 0 8px;font:600 18px var(--display);overflow-wrap:anywhere}
+.analysis-compare-card dl{display:grid;grid-template-columns:minmax(72px,auto) minmax(0,1fr);gap:6px 10px;margin:0;font-size:13px}
+.analysis-compare-card dt{color:var(--muted)}.analysis-compare-card dd{margin:0;overflow-wrap:anywhere}
+.analysis-compare-card .analysis-skill{margin-top:10px;padding-top:9px;border-top:1px solid var(--line);font-size:13px}
+@media(max-width:560px){.analysis-compare-grid{grid-template-columns:minmax(0,1fr)}.analysis-compare-card{padding:11px}}
 </style>
 </head>
 <body>
@@ -367,6 +380,7 @@ footer{padding-top:4px}
     <nav role="tablist" aria-label="Mục">
       <button role="tab" id="t-doi" aria-selected="true" data-tab="doi">Đội hình</button>
       <button role="tab" id="t-tuong" aria-selected="false" data-tab="tuong">Tướng</button>
+      <button role="tab" id="t-phan-tich" aria-selected="false" data-tab="phan-tich">Phân tích</button>
       <button role="tab" id="t-vs" aria-selected="false" data-tab="vs">Đối đầu</button>
       <button role="tab" id="t-kho" aria-selected="false" data-tab="kho">Kho</button>
       <button role="tab" id="t-cp" aria-selected="false" data-tab="cp">Công pháp</button>
@@ -424,6 +438,33 @@ footer{padding-top:4px}
     </div>
     <div class="filters" id="filters"></div>
     <div class="grid" id="grid"></div>
+  </section>
+
+  <section id="phan-tich" hidden>
+    <h2>Công cụ phân tích tướng</h2>
+    <p class="lead">Lọc danh sách theo phe và nhóm, hoặc đặt hai tướng cạnh nhau để so sánh vai trò, sao hiện tại, điểm tham khảo và mô tả kỹ năng. Dữ liệu lấy từ danh sách tướng hiện có trong sổ tay.</p>
+    <div class="panel">
+      <h3>Lọc tướng</h3>
+      <div class="tools">
+        <select id="analysis-phe" aria-label="Lọc theo phe">
+          <option value="">Tất cả phe</option><option value="3Q">3Q</option><option value="Hán">Hán</option><option value="Tần">Tần</option><option value="Đường">Đường</option>
+        </select>
+        <select id="analysis-nhom" aria-label="Lọc theo nhóm">
+          <option value="">Tất cả nhóm</option><option value="Công">Công</option><option value="Thủ">Thủ</option><option value="Trợ">Trợ</option><option value="Thuật Sĩ">Thuật Sĩ</option>
+        </select>
+        <input id="analysis-q" type="search" placeholder="Tìm tên hoặc kỹ năng…" aria-label="Tìm tướng trong phân tích">
+      </div>
+      <p class="meta" id="analysis-count" aria-live="polite"></p>
+      <div class="grid" id="analysis-results"></div>
+    </div>
+    <div class="panel" style="margin-top:18px">
+      <h3>So sánh hai tướng</h3>
+      <div class="tools">
+        <label for="analysis-hero1">Tướng 1</label><select id="analysis-hero1" aria-label="Chọn tướng thứ nhất"></select>
+        <label for="analysis-hero2">Tướng 2</label><select id="analysis-hero2" aria-label="Chọn tướng thứ hai"></select>
+      </div>
+      <div id="analysis-compare" aria-live="polite"></div>
+    </div>
   </section>
 
   <section id="vs" hidden>
@@ -1095,6 +1136,65 @@ document.getElementById("codviem-clear")?.addEventListener("click",()=>{
   try{localStorage.removeItem("stqs2_codviem_note");if(codviemStatus)codviemStatus.textContent="Đã xóa ghi chú.";}
   catch(e){if(codviemStatus)codviemStatus.textContent="Không xóa được dữ liệu lưu.";}
 });
+
+/* ===== CÔNG CỤ PHÂN TÍCH TƯỚNG ===== */
+const analysisPhe=document.getElementById("analysis-phe");
+const analysisNhom=document.getElementById("analysis-nhom");
+const analysisQ=document.getElementById("analysis-q");
+const analysisResults=document.getElementById("analysis-results");
+const analysisCount=document.getElementById("analysis-count");
+const analysisHero1=document.getElementById("analysis-hero1");
+const analysisHero2=document.getElementById("analysis-hero2");
+const analysisCompare=document.getElementById("analysis-compare");
+const analysisScore=v=>v==null?"—":Number(v).toFixed(1);
+function analysisCard(h){
+  const totalScore=["pvp","boss","pve"].filter(k=>h[k]!=null).length
+    ?(["pvp","boss","pve"].reduce((n,k)=>n+(Number(h[k])||0),0)/["pvp","boss","pve"].filter(k=>h[k]!=null).length).toFixed(1):"—";
+  return '<article class="card analysis-card"><div class="card-top">'+token(h)+'<div><h4>'+esc(h.name)+'</h4><div class="meta">'+esc(h.phe||"Chưa rõ phe")+' · '+esc(h.nhom||"Chưa rõ nhóm")+' · '+esc(h.sao??"—")+'★</div></div></div>'+
+    '<div class="analysis-scores"><span>PVP '+analysisScore(h.pvp)+'</span><span>Boss '+analysisScore(h.boss)+'</span><span>PVE '+analysisScore(h.pve)+'</span><span>TB '+totalScore+'</span></div>'+
+    '<div class="meta">'+esc(h.role||"Chưa có mô tả vai trò")+'</div><div class="r">'+esc(h.base||"Chưa có mô tả kỹ năng cơ bản")+'</div></article>';
+}
+function renderAnalysisList(){
+  if(!analysisResults)return;
+  const q=(analysisQ?.value||"").trim().toLocaleLowerCase("vi");
+  const list=H.filter(h=>(!analysisPhe.value||h.phe===analysisPhe.value)&&(!analysisNhom.value||h.nhom===analysisNhom.value)&&
+    (!q||[h.name,h.role,h.base,h.s9,h.s11,h.s13,h.nt,h.phe,h.nhom].join(" ").toLocaleLowerCase("vi").includes(q)));
+  list.sort((a,b)=>a.name.localeCompare(b.name,"vi"));
+  analysisCount.textContent="Tìm thấy "+list.length+" / "+H.length+" tướng.";
+  analysisResults.innerHTML=list.map(analysisCard).join("")||'<p class="empty">Không có tướng phù hợp bộ lọc.</p>';
+}
+function analysisCompareCard(h){
+  const row=(label,value)=>'<dt>'+label+'</dt><dd>'+esc(value??"Chưa có dữ liệu")+'</dd>';
+  return '<article class="analysis-compare-card"><h4>'+esc(h.name)+'</h4><dl>'+
+    row("Phe",h.phe)+row("Nhóm",h.nhom)+row("Sao hiện tại",(h.sao??"—")+"★")+
+    row("Vai trò",h.role)+row("PVP",analysisScore(h.pvp))+
+    row("Boss",analysisScore(h.boss))+row("PVE",analysisScore(h.pve))+
+    row("Duyên phận",h.tn)+'</dl>'+
+    '<div class="analysis-skill"><b>Cơ bản:</b> '+esc(h.base||"Chưa có dữ liệu")+'</div>'+
+    '<div class="analysis-skill"><b>Mốc 9★:</b> '+esc(h.s9||"Chưa có dữ liệu")+'</div>'+
+    '<div class="analysis-skill"><b>Mốc 11★:</b> '+esc(h.s11||"Chưa có dữ liệu")+'</div>'+
+    '<div class="analysis-skill"><b>Mốc 13★:</b> '+esc(h.s13||"Chưa có dữ liệu")+'</div>'+
+    (h.nt?'<div class="analysis-skill"><b>Cơ chế Nộ:</b> '+esc(h.nt)+'</div>':"")+'</article>';
+}
+function renderAnalysisCompare(){
+  if(!analysisCompare||!H.length)return;
+  const a=byName[analysisHero1.value]||H[0];
+  const b=byName[analysisHero2.value]||H[Math.min(1,H.length-1)];
+  analysisCompare.innerHTML='<div class="analysis-compare-grid">'+analysisCompareCard(a)+analysisCompareCard(b)+'</div>';
+}
+const analysisNames=H.map(h=>h.name).sort((a,b)=>a.localeCompare(b,"vi"));
+[analysisHero1,analysisHero2].forEach((sel,i)=>{
+  if(!sel)return;
+  sel.innerHTML=analysisNames.map(n=>'<option value="'+esc(n)+'">'+esc(n)+'</option>').join("");
+  sel.value=analysisNames.includes(i===0?"Lữ Bố":"Điêu Thuyền")?(i===0?"Lữ Bố":"Điêu Thuyền"):analysisNames[i]||"";
+});
+analysisPhe?.addEventListener("change",renderAnalysisList);
+analysisNhom?.addEventListener("change",renderAnalysisList);
+analysisQ?.addEventListener("input",renderAnalysisList);
+analysisHero1?.addEventListener("change",renderAnalysisCompare);
+analysisHero2?.addEventListener("change",renderAnalysisCompare);
+renderAnalysisList();
+renderAnalysisCompare();
 
 const lastTab=store.get("tab","doi"); if(["doi","tuong","vs","kho","cp","sao","quy","camnang","codviem"].includes(lastTab)) showTab(lastTab);
 </script>
