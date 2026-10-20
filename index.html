@@ -394,6 +394,14 @@ footer{padding-top:4px}
 .sample-matrix .score-high{font-weight:700;color:var(--accent)}
 .sample-matrix .score-low{color:var(--muted)}
 .sample-matrix .matrix-total th,.sample-matrix .matrix-total td{background:var(--surface-2);font-weight:700}
+.inventory-radar{max-width:460px;margin:0 auto}
+.inventory-radar svg{display:block;width:100%;height:auto}
+.suggest-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:10px}
+.suggest-card{border:1px solid var(--line);border-radius:12px;padding:12px;background:var(--surface)}
+.suggest-card h4{margin:0 0 8px}
+.suggest-card ol{margin:0;padding-left:22px}
+.suggest-card li{margin:5px 0}
+
 /* Biểu đồ radar SVG, không phụ thuộc CDN nên vẫn chạy offline */
 .radar-wrap{width:100%;max-width:460px;margin:0 auto}
 .radar-wrap svg{display:block;width:100%;height:auto;overflow:visible}
@@ -469,6 +477,18 @@ footer{padding-top:4px}
     </div>
     <div class="filters" id="filters"></div>
     <div class="grid" id="grid"></div>
+    <div class="panel" style="margin-top:16px">
+      <h3>Ma trận đánh giá kho tướng</h3>
+      <p class="meta">Điểm tham khảo theo dữ liệu kho tướng và quy tắc ước lượng hiện có; không phải chỉ số chính thức trong game.</p>
+      <div id="inventory-matrix-result" class="sample-matrix-wrap"></div>
+      <h3 style="margin-top:16px">Radar sức mạnh toàn kho</h3>
+      <div id="inventory-radar-result" role="img" aria-label="Biểu đồ radar tổng điểm kho tướng"></div>
+    </div>
+    <div class="panel" style="margin-top:16px">
+      <h3>Đội hình tiềm năng gợi ý</h3>
+      <p class="meta">Gợi ý xếp hạng từ các tiêu chí tham khảo hiện có; hãy kiểm tra kỹ năng và hiệp đồng thực tế trước khi áp dụng.</p>
+      <div id="suggest-result"></div>
+    </div>
   </section>
 
   <section id="phan-tich" hidden>
@@ -833,6 +853,39 @@ qEl.addEventListener("input",renderGrid); sEl.addEventListener("change",()=>{sto
 sEl.value=store.get("sort","tong");
 function bar(label,v){const w=v==null?0:v*20; const c=v>=5?"var(--good)":v>=3?"var(--warn)":"var(--bad)";
   return `<span>${label}</span><span class="track"><span class="fill" style="display:block;width:${w}%;background:${c}"></span></span><span>${v??"–"}</span>`;}
+function inventoryScore(name){
+ const st=SAMPLE_HERO_STATS[name]||{},h=byName[name]||{};
+ const atk=Number(st.atk)||0,star=Number(h.sao??st.star)||0,slotCount=Number(h.sao?slots(h.sao):st.slots)||0;
+ return {Cong:atk>4500?5:atk>=3000?3:1,Thu:atk>4000?5:atk>=2500?3:1,HP:star*1000>15000?5:star*1000>=10000?3:1,No:["Tây Thi","Lý Long Cơ"].includes(name)?5:1,Slots:slotCount>=6?5:slotCount>=4?3:1,KhongChe:["Vương Chiêu Quân","Võ Tắc Thiên"].includes(name)?5:1,HoTro:["Điêu Thuyền","Ban Chiêu","Ngu Cơ"].includes(name)?5:1};
+}
+function renderInventoryMatrix(){
+ const box=document.getElementById("inventory-matrix-result"),radar=document.getElementById("inventory-radar-result");if(!box||!radar)return;
+ const names=H.map(h=>h.name),cols=sampleMatrixCols(),rows=names.map(name=>({name,score:inventoryScore(name)}));
+ const head=cols.map(c=>"<th>"+c[1]+"</th>").join("");
+ const body=rows.map(x=>"<tr><td>"+esc(x.name)+"</td>"+cols.map(c=>{const v=x.score[c[0]];return '<td class="'+(v>=5?"score-high":v<=1?"score-low":"")+'">'+v+"</td>";}).join("")+"</tr>").join("");
+ const totals=cols.map(c=>rows.reduce((sum,x)=>sum+x.score[c[0]],0));
+ box.innerHTML='<table class="sample-matrix"><thead><tr><th>Tướng trong kho</th>'+head+'</tr></thead><tbody>'+body+'<tr class="matrix-total"><th>Tổng điểm</th>'+totals.map(v=>"<td><b>"+v+"</b></td>").join("")+'</tr></tbody></table>';
+ const max=Math.max(1,names.length*5),cx=180,cy=155,r=94,angle=i=>-Math.PI/2+i*2*Math.PI/cols.length;
+ const point=(i,v)=>[cx+Math.cos(angle(i))*r*Math.max(0,Math.min(max,v))/max,cy+Math.sin(angle(i))*r*Math.max(0,Math.min(max,v))/max];
+ const poly=arr=>arr.map(p=>p.map(n=>n.toFixed(1)).join(",")).join(" ");
+ let grid="";for(let l=1;l<=5;l++)grid+='<polygon points="'+poly(cols.map((_,i)=>point(i,max*l/5)))+'" fill="none" stroke="var(--line)"/>';
+ const spokes=cols.map((c,i)=>{const p=point(i,max);return '<line x1="'+cx+'" y1="'+cy+'" x2="'+p[0]+'" y2="'+p[1]+'" stroke="var(--line)"/>';}).join("");
+ const shape=cols.map((c,i)=>point(i,totals[i]));
+ const labels=cols.map((c,i)=>{const p=point(i,max*1.2);return '<text x="'+p[0]+'" y="'+(p[1]+4)+'" text-anchor="middle" fill="var(--ink)" font-size="10">'+c[1]+'</text>';}).join("");
+ radar.innerHTML='<div class="inventory-radar"><svg viewBox="0 0 360 320" aria-hidden="true">'+grid+spokes+'<polygon points="'+poly(shape)+'" fill="var(--accent)" fill-opacity=".22" stroke="var(--accent)" stroke-width="2"/>'+shape.map(p=>'<circle cx="'+p[0]+'" cy="'+p[1]+'" r="3" fill="var(--accent)"/>').join("")+labels+'</svg><div class="radar-legend">'+cols.map((c,i)=>'<span>'+c[1]+': <b>'+totals[i]+'/'+max+'</b></span>').join("")+'</div></div>';
+}
+function renderSuggestedTeams(){
+ const box=document.getElementById("suggest-result");if(!box)return;
+ const all=H.map(h=>h.name),get=(n)=>inventoryScore(n);
+ const sortTop=(scoreFn,filter=()=>true)=>all.filter(filter).map(name=>({name,score:scoreFn(get(name))})).sort((a,b)=>b.score-a.score||a.name.localeCompare(b.name,"vi")).slice(0,5);
+ const sets=[
+  ["PVP","Ưu tiên Công + Nộ + Khống chế",sortTop(s=>s.Cong+s.No+s.KhongChe)],
+  ["Boss","Ưu tiên Công + Hỗ trợ",sortTop(s=>s.Cong+s.HoTro)],
+  ["PVE","Ưu tiên Thủ + HP",sortTop(s=>s.Thu+s.HP)],
+  ["Hán","Ưu tiên tướng Hán trong danh sách hiện có",sortTop(s=>s.Cong+s.HoTro+s.Thu,n=>{const h=byName[n];return !!h&&h.phe==="Hán";})]
+ ];
+ box.innerHTML='<div class="suggest-grid">'+sets.map(([title,desc,list])=>'<div class="suggest-card"><h4>'+title+'</h4><p class="meta">'+desc+'</p><ol>'+list.map(x=>'<li>'+esc(x.name)+' <span class="meta">('+x.score+' điểm)</span></li>').join("")+'</ol></div>').join("")+'</div>';
+}
 function renderGrid(){
   const q=qEl.value.trim().toLowerCase();
   let list=H.filter(h=>(F.phe==="Tất cả"||h.phe===F.phe)&&(F.nhom==="Tất cả"||h.nhom===F.nhom)&&(F.keep==="Tất cả"||h.keep.startsWith(F.keep))
@@ -846,6 +899,8 @@ function renderGrid(){
       <div class="bars">${bar("PVP",h.pvp)}${bar("Boss",h.boss)}${bar("PVE",h.pve)}</div>
       <span class="keep ${keepCls(h.keep)}">${esc(h.keep)}</span>
     </button>`).join("") : `<p class="empty">Không có tướng nào khớp bộ lọc.</p>`;
+  renderInventoryMatrix();
+  renderSuggestedTeams();
 }
 document.getElementById("grid").addEventListener("click",e=>{const b=e.target.closest("[data-h]"); if(b) openHero(b.dataset.h)});
 
