@@ -488,6 +488,9 @@ footer{padding-top:4px}
       <h3>Đội hình tiềm năng gợi ý</h3>
       <p class="meta">Gợi ý xếp hạng từ các tiêu chí tham khảo hiện có; hãy kiểm tra kỹ năng và hiệp đồng thực tế trước khi áp dụng.</p>
       <div id="suggest-result"></div>
+      <h3 style="margin-top:16px">Radar đội hình gợi ý</h3>
+      <p class="meta">Chọn tiêu đề PVP, Boss, PVE hoặc Hán để xem radar của nhóm 5 tướng được xếp hạng cao nhất.</p>
+      <div id="suggest-radar-result" class="inventory-radar" role="img" aria-label="Radar đội hình gợi ý"></div>
     </div>
   </section>
 
@@ -884,7 +887,26 @@ function renderSuggestedTeams(){
   ["PVE","Ưu tiên Thủ + HP",sortTop(s=>s.Thu+s.HP)],
   ["Hán","Ưu tiên tướng Hán trong danh sách hiện có",sortTop(s=>s.Cong+s.HoTro+s.Thu,n=>{const h=byName[n];return !!h&&h.phe==="Hán";})]
  ];
- box.innerHTML='<div class="suggest-grid">'+sets.map(([title,desc,list])=>'<div class="suggest-card"><h4>'+title+'</h4><p class="meta">'+desc+'</p><ol>'+list.map(x=>'<li>'+esc(x.name)+' <span class="meta">('+x.score+' điểm)</span></li>').join("")+'</ol></div>').join("")+'</div>';
+ box.innerHTML='<div class="suggest-grid">'+sets.map(([title,desc,list])=>'<div class="suggest-card"><h4 role="button" tabindex="0" data-suggest-mode="'+title+'" style="cursor:pointer" title="Bấm để xem radar '+title+'">'+title+' <span class="meta">· xem radar</span></h4><p class="meta">'+desc+'</p><ol>'+list.map(x=>'<li>'+esc(x.name)+' <span class="meta">('+x.score+' điểm)</span></li>').join("")+'</ol></div>').join("")+'</div>';
+ const draw=(mode)=>{
+  const target=document.getElementById("suggest-radar-result");if(!target)return;
+  const selected=sets.find(x=>x[0]===mode)||sets[0],team=selected[2].map(x=>x.name),cols=sampleMatrixCols();
+  const totals=cols.map(c=>team.reduce((sum,name)=>sum+(Number(get(name)[c[0]])||0),0));
+  const max=Math.max(1,team.length*5),cx=180,cy=150,r=88,angle=i=>-Math.PI/2+i*2*Math.PI/cols.length;
+  const point=(i,v)=>[cx+Math.cos(angle(i))*r*Math.max(0,Math.min(max,v))/max,cy+Math.sin(angle(i))*r*Math.max(0,Math.min(max,v))/max];
+  const poly=arr=>arr.map(p=>p.map(n=>n.toFixed(1)).join(",")).join(" ");
+  let grid="";for(let level=1;level<=5;level++)grid+='<polygon points="'+poly(cols.map((_,i)=>point(i,max*level/5)))+'" fill="none" stroke="var(--line)"/>';
+  const spokes=cols.map((c,i)=>{const p=point(i,max);return '<line x1="'+cx+'" y1="'+cy+'" x2="'+p[0]+'" y2="'+p[1]+'" stroke="var(--line)"/>';}).join("");
+  const shape=cols.map((c,i)=>point(i,totals[i]));
+  const labels=cols.map((c,i)=>{const p=point(i,max*1.18);return '<text x="'+p[0]+'" y="'+(p[1]+4)+'" text-anchor="middle" fill="var(--ink)" font-size="10">'+c[1]+'</text>';}).join("");
+  target.innerHTML='<div><b>Radar '+esc(selected[0])+'</b><svg viewBox="0 0 360 300" aria-hidden="true">'+grid+spokes+'<polygon points="'+poly(shape)+'" fill="var(--accent)" fill-opacity=".22" stroke="var(--accent)" stroke-width="2"/>'+shape.map(p=>'<circle cx="'+p[0]+'" cy="'+p[1]+'" r="3" fill="var(--accent)"/>').join("")+labels+'</svg><div class="radar-legend">'+cols.map((c,i)=>'<span>'+c[1]+': <b>'+totals[i]+'/'+max+'</b></span>').join("")+'</div><p class="meta">Tướng được tính: '+team.map(esc).join(", ")+'</p></div>';
+ };
+ box.querySelectorAll("[data-suggest-mode]").forEach(el=>{
+  const activate=()=>draw(el.dataset.suggestMode);
+  el.addEventListener("click",activate);
+  el.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();activate();}});
+ });
+ draw("PVP");
 }
 function renderGrid(){
   const q=qEl.value.trim().toLowerCase();
