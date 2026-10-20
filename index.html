@@ -160,15 +160,16 @@ h3.sub{font:600 19px var(--display);margin:26px 0 4px}
 .kh{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:8px}
 .kh-top{display:flex;gap:10px;align-items:center}.kh-top b{font:600 15px var(--display)}
 .kh .token{width:40px;height:40px}
-.units{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr));gap:7px;align-items:start}
+.units{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;align-items:start}
 .kh-actions{display:flex;justify-content:flex-end;margin-top:8px}.kh-actions .btn{padding:6px 10px;font-size:12px}
-.unit{display:flex;align-items:center;gap:4px;min-width:0;width:100%;border:1px solid var(--line);border-radius:6px;padding:4px 6px 4px 8px;background:var(--surface-2);font:600 13px var(--mono)}
-.unit-stars{white-space:nowrap;margin-right:auto}
-.unit button{flex:0 0 auto;border:0;background:transparent;color:var(--muted);cursor:pointer;font:600 12px var(--body);padding:3px 5px;border-radius:4px;white-space:nowrap}
+.unit{display:flex;flex-wrap:wrap;align-items:center;gap:3px;min-width:0;width:100%;border:1px solid var(--line);border-radius:6px;padding:5px 6px;background:var(--surface-2);font:600 13px var(--mono)}
+.unit-stars{display:block;flex:1 0 100%;white-space:nowrap;margin:0 0 1px}
+.unit button{flex:0 0 auto;border:0;background:transparent;color:var(--muted);cursor:pointer;font:600 12px var(--body);padding:3px 4px;border-radius:4px;white-space:nowrap}
 .unit button.up{color:var(--accent)}
 .unit button:hover{background:var(--line)}
-.unit .unit-del{font-size:15px;padding-inline:6px}
-@media(max-width:420px){.units{grid-template-columns:minmax(0,1fr)}.unit{gap:3px}.unit button{padding:3px 4px}}
+.unit .unit-del{font-size:15px;padding-inline:5px}
+@media(max-width:360px){.units{grid-template-columns:minmax(0,1fr)}.unit{flex-wrap:nowrap}.unit-stars{flex:1 1 auto;margin-right:auto}}
+@media(min-width:700px){.unit{flex-wrap:nowrap}.unit-stars{flex:1 1 auto;margin-right:auto}}
 .tagcore{font:600 10px var(--body);color:var(--good);border:1px solid var(--good);border-radius:4px;padding:0 4px}
 .rarity{font:600 10px var(--body);color:var(--muted)}
 .klog{margin:0;padding-left:20px;font-size:13px;display:flex;flex-direction:column;gap:4px;max-height:240px;overflow:auto}
