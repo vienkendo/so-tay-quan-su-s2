@@ -1,0 +1,11 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 20px;
+  background: #f6f7f9;
+  color: #1c2230;
+}
+h1, h2 { color: #a8322a; }
+table { border-collapse: collapse; margin-top: 10px; width: 100%; }
+th, td { border: 1px solid #ccc; padding: 5px; text-align: center; }
+canvas { margin-top: 20px; }
+h3 { cursor: pointer; }
