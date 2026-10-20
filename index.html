@@ -386,6 +386,12 @@ footer{padding-top:4px}
 .analysis-compare-card dt{color:var(--muted)}.analysis-compare-card dd{margin:0;overflow-wrap:anywhere}
 .analysis-compare-card .analysis-skill{margin-top:10px;padding-top:9px;border-top:1px solid var(--line);font-size:13px}
 @media(max-width:560px){.analysis-compare-grid{grid-template-columns:minmax(0,1fr)}.analysis-compare-card{padding:11px}}
+/* Biểu đồ radar SVG, không phụ thuộc CDN nên vẫn chạy offline */
+.radar-wrap{width:100%;max-width:460px;margin:0 auto}
+.radar-wrap svg{display:block;width:100%;height:auto;overflow:visible}
+.radar-legend{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;font-size:12px;color:var(--muted)}
+.radar-legend span{display:inline-flex;align-items:center;gap:5px}
+.radar-dot{display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--accent)}
 </style>
 </head>
 <body>
@@ -422,6 +428,7 @@ footer{padding-top:4px}
         <button class="btn ghost" type="button" data-sample-mode="Han" aria-pressed="false">Hán</button>
       </div>
       <div id="sample-team-view"></div>
+      <div class="panel" style="margin-top:12px"><h4 style="margin:0 0 6px">Biểu đồ năng lực đội hình</h4><p class="meta">Điểm trung bình PVP, Boss và PVE của các tướng trong đội hình mẫu (thang 0–5).</p><div id="sample-team-radar" role="img" aria-label="Biểu đồ radar năng lực đội hình"></div></div>
       <div id="sample-team-warnings" class="warn" aria-live="polite"></div>
       <div id="sample-upgrade-plan" class="panel" style="margin-top:16px">
         <h3>Kế hoạch nâng sao — Ban Chiêu</h3>
@@ -1096,6 +1103,21 @@ const SAMPLE_BOOKS_ALLOC={
 // Các mốc chi phí do người dùng cung cấp; chỉ cộng những mốc có trong bảng.
 const SAMPLE_STAR_COST={9:1000,11:3000,13:5000,15:7000,"Nhập Thánh":10000};
 let sampleTeamMode="PVP";
+function renderSampleRadar(team,mode){
+ const box=document.getElementById("sample-team-radar");if(!box||!team)return;
+ const axes=[{key:"pvp",label:"PVP"},{key:"boss",label:"Boss"},{key:"pve",label:"PVE"}];
+ const vals=axes.map(a=>{const ns=team.flat().map(n=>byName[n]).filter(h=>h&&Number.isFinite(Number(h[a.key])));return ns.length?ns.reduce((sum,h)=>sum+Number(h[a.key]),0)/ns.length:0;});
+ const cx=180,cy=155,r=94,angle=i=>(-Math.PI/2)+i*2*Math.PI/3;
+ const point=(i,v)=>[cx+Math.cos(angle(i))*r*Math.max(0,Math.min(5,v))/5,cy+Math.sin(angle(i))*r*Math.max(0,Math.min(5,v))/5];
+ const poly=arr=>arr.map(p=>p.map(n=>n.toFixed(1)).join(",")).join(" ");
+ let grid="";
+ for(let level=1;level<=5;level++){const pts=axes.map((_,i)=>point(i,level));grid+='<polygon points="'+poly(pts)+'" fill="none" stroke="var(--line)" stroke-width="1"/>';}
+ const spokes=axes.map((a,i)=>{const p=point(i,5);return '<line x1="'+cx+'" y1="'+cy+'" x2="'+p[0]+'" y2="'+p[1]+'" stroke="var(--line)"/>';}).join("");
+ const shape=axes.map((a,i)=>point(i,vals[i]));
+ const labels=axes.map((a,i)=>{const p=point(i,5.75);return '<text x="'+p[0]+'" y="'+(p[1]+4)+'" text-anchor="middle" fill="var(--ink)" font-size="12" font-weight="600">'+a.label+'</text>';}).join("");
+ const scores=axes.map((a,i)=>'<span>'+a.label+': <b>'+vals[i].toFixed(2)+'/5</b></span>').join("");
+ box.innerHTML='<div class="radar-wrap"><svg viewBox="0 0 360 320" aria-hidden="true">'+grid+spokes+'<polygon points="'+poly(shape)+'" fill="var(--accent)" fill-opacity=".22" stroke="var(--accent)" stroke-width="2"/>'+shape.map(p=>'<circle cx="'+p[0]+'" cy="'+p[1]+'" r="4" fill="var(--accent)"/>').join("")+labels+'</svg><div class="radar-legend">'+scores+'</div></div>';
+}
 function renderSampleTeam(mode){
  const team=SAMPLE_TEAMS[mode],view=document.getElementById("sample-team-view"),warnBox=document.getElementById("sample-team-warnings");
  if(!team||!view||!warnBox)return;
@@ -1104,6 +1126,7 @@ function renderSampleTeam(mode){
    const st=SAMPLE_HERO_STATS[name]||{},live=byName[name],books=SAMPLE_BOOKS_ALLOC[name]||[],star=live?live.sao:st.star,slotCount=live?slots(live.sao):st.slots;
    return '<div class="sample-team-cell"><strong>'+esc(name)+'</strong><small>Công: '+(st.atk??'Chưa có dữ liệu')+' · Ô: '+(slotCount??'—')+' · Sao: '+(star??'?')+'★</small>'+(books.length?'<details class="sample-team-book"><summary>Công pháp ('+books.length+')</summary>'+books.map(esc).join(' · ')+'</details>':'')+'</div>';
  }).join('')+'</div>').join('');
+ renderSampleRadar(team,mode);
  const warnings=[],names=team.flat();
  if(names.includes("Lữ Bố")){
    const maxAtk=Math.max(...names.map(n=>(SAMPLE_HERO_STATS[n]||{}).atk||0));
