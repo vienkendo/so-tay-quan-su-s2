@@ -354,6 +354,9 @@ footer{padding-top:4px}
 
 /* Đội hình mẫu PVP/Boss */
 .sample-team-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:12px 0}.sample-team-row-label{font-size:11px;color:var(--muted);margin:12px 0 5px}.sample-team-cell{border:1px solid var(--line);border-radius:10px;padding:10px 6px;text-align:center;min-width:0;background:var(--card)}.sample-team-cell strong{display:block;overflow-wrap:anywhere}.sample-team-cell small{display:block;color:var(--muted);margin-top:5px}.sample-team-book{font-size:12px;color:var(--muted);margin:8px 0}.sample-warn{padding:9px 11px;margin:7px 0;border-radius:8px;background:rgba(209,69,59,.09);border:1px solid rgba(209,69,59,.35)}.sample-ok{padding:9px 11px;margin:7px 0;border-radius:8px;background:rgba(55,155,95,.09);border:1px solid rgba(55,155,95,.3)}@media(max-width:520px){.sample-team-grid{gap:5px}.sample-team-cell{padding:8px 3px;font-size:12px}}
+
+/* Thí Luyện Cổ Đế Viêm */
+.codviem-table{width:100%;border-collapse:collapse;font-size:13px}.codviem-table th,.codviem-table td{padding:9px 10px;text-align:left;border-bottom:1px solid var(--line);white-space:nowrap}.codviem-table th{color:var(--muted);font-weight:700;background:var(--surface-2)}.codviem-table tr:last-child td{border-bottom:0}.table-wrap{width:100%;overflow-x:auto;border:1px solid var(--line);border-radius:10px}@media(max-width:520px){.codviem-table{font-size:12px}.codviem-table th,.codviem-table td{padding:8px 7px}}
 </style>
 </head>
 <body>
@@ -368,6 +371,7 @@ footer{padding-top:4px}
       <button role="tab" id="t-cp" aria-selected="false" data-tab="cp">Công pháp</button>
       <button role="tab" id="t-sao" aria-selected="false" data-tab="sao">Nâng sao</button>
       <button role="tab" id="t-quy" aria-selected="false" data-tab="quy">Quy tắc</button>
+      <button role="tab" id="t-codviem" aria-selected="false" data-tab="codviem">Cổ Đế Viêm</button>
       <button role="tab" id="t-camnang" aria-selected="false" data-tab="camnang">Cẩm nang</button>
     </nav>
   </div>
@@ -536,6 +540,71 @@ footer{padding-top:4px}
         <li>Chưa có dữ liệu: Tôn Sách (kỹ năng), kho công pháp server mới, chỉ số các tướng ngoài Lữ Bố, Lý Bạch, Triệu Vân.</li>
         <li>Dòng bị cắt từ server cũ: Quỷ Cốc Tử 13★, Can Tương (vế sau TC), Điêu Thuyền và Chân Cơ (13★, Nhập Thánh).</li>
       </ul></div>
+    </div>
+  </section>
+
+
+  <section id="codviem" hidden>
+    <h2>Thí Luyện Cổ Đế Viêm</h2>
+    <p class="lead">Theo dõi đội hình đánh boss và đọc lại thống kê trận. Số liệu bên dưới được chép từ ảnh kết quả bạn gửi; do ảnh không hiển thị rõ tên từng tướng trong bảng xám, hàng được ghi theo vị trí thay vì đoán tên.</p>
+    <div class="cols2">
+      <div class="panel">
+        <h3>Quy tắc sự kiện</h3>
+        <ul>
+          <li>Mỗi ngày có thể khiêu chiến không giới hạn; lấy ST mỗi trận để thống kê.</li>
+          <li>Lần đầu trong ngày đạt mục tiêu ST sẽ nhận thưởng tiến độ ngày; tiến độ làm mới lúc 5:00.</li>
+          <li>Khi sự kiện kết thúc, dùng ST cao nhất kỳ này để xếp hạng và phát thưởng.</li>
+          <li>Khi khiêu chiến boss, ra trận Cổ Đế kỳ này giúp toàn bộ tướng nhận buff thuộc tính; Thức Tỉnh Cổ Đế bậc càng cao thì buff càng cao.</li>
+        </ul>
+      </div>
+      <div class="panel">
+        <h3>Đọc kết quả hiện tại</h3>
+        <p><b>Trạng thái trong ảnh:</b> hiệp 4/5.</p>
+        <p>Đội của bạn có một tướng đạt <b>20,7 vạn sát thương</b> (MVP) và một tướng hồi phục <b>33,6 vạn</b>. Một tướng nhận <b>66,8 vạn sát thương</b>, cao nhất ở cột chịu ST.</p>
+        <p class="meta">Chưa đủ dữ liệu để kết luận nguyên nhân thất bại hoặc xác định chính xác tên tướng theo từng hàng. Hãy dùng bảng dưới để so sánh vai trò và các lần đánh tiếp theo.</p>
+      </div>
+    </div>
+    <div class="panel" style="margin-top:14px">
+      <h3>Đội của bạn — số liệu từ ảnh</h3>
+      <div class="table-wrap">
+        <table class="codviem-table">
+          <thead><tr><th>Vị trí</th><th>Sát thương</th><th>Trị liệu</th><th>Chịu ST</th></tr></thead>
+          <tbody>
+            <tr><td>Tướng 1</td><td>15.227</td><td>0</td><td>57,4 vạn</td></tr>
+            <tr><td>Tướng 2</td><td>0</td><td>22,9 vạn</td><td>66,8 vạn</td></tr>
+            <tr><td>Tướng 3</td><td>13.986</td><td>0</td><td>50,1 vạn</td></tr>
+            <tr><td><b>Tướng 4 · MVP</b></td><td><b>20,7 vạn</b></td><td>0</td><td>46,5 vạn</td></tr>
+            <tr><td>Tướng 5</td><td>9.253</td><td>0</td><td>62,9 vạn</td></tr>
+            <tr><td>Tướng 6</td><td>5.818</td><td><b>33,6 vạn</b></td><td>57,1 vạn</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <h3 style="margin-top:18px">Đội boss — số liệu từ ảnh</h3>
+      <div class="table-wrap">
+        <table class="codviem-table">
+          <thead><tr><th>Vị trí</th><th>Sát thương</th><th>Trị liệu</th><th>Chịu ST</th></tr></thead>
+          <tbody>
+            <tr><td>Boss 1</td><td>71,1 vạn</td><td>0</td><td>21,7 vạn</td></tr>
+            <tr><td>Boss 2</td><td>35,9 vạn</td><td>0</td><td>9.253</td></tr>
+            <tr><td>Boss 3</td><td>54,8 vạn</td><td>0</td><td>5.818</td></tr>
+            <tr><td>Boss 4</td><td>38,8 vạn</td><td>0</td><td>9.496</td></tr>
+            <tr><td><b>Boss 5 · ST cao nhất</b></td><td><b>122 vạn</b></td><td>0</td><td>4.662</td></tr>
+            <tr><td>Boss 6</td><td>17,9 vạn</td><td>0</td><td>4.662</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="meta">Lưu ý: số liệu và thứ tự hàng được chép theo những gì đọc được trên ảnh; không quy đổi các giá trị không có đơn vị “vạn”, và không gán tên tướng khi ảnh chưa đủ rõ.</p>
+    </div>
+    <div class="panel" style="margin-top:14px">
+      <h3>Ghi chú lần đánh tiếp theo</h3>
+      <label for="codviem-note">Ghi lại thay đổi đội hình, kết quả hoặc điều cần thử</label>
+      <textarea id="codviem-note" rows="4" placeholder="Ví dụ: đổi vị trí chủ lực, ghi ST cao nhất, ghi lý do hết thời gian..."></textarea>
+      <div class="row-actions" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
+        <button class="btn" type="button" id="codviem-save">Lưu ghi chú trên thiết bị</button>
+        <button class="btn ghost" type="button" id="codviem-clear">Xóa ghi chú</button>
+        <span id="codviem-status" class="meta" aria-live="polite"></span>
+      </div>
+      <p class="meta">Ghi chú chỉ lưu trong trình duyệt hiện tại, không đồng bộ sang thiết bị khác.</p>
     </div>
   </section>
 
@@ -991,7 +1060,22 @@ document.getElementById("sample-team-modes")?.addEventListener("click",e=>{const
 renderSampleTeam(sampleTeamMode);
 renderSampleUpgrade();
 
-const lastTab=store.get("tab","doi"); if(["doi","tuong","vs","kho","cp","sao","quy"].includes(lastTab)) showTab(lastTab);
+
+/* Ghi chú Thí Luyện Cổ Đế Viêm — tách khóa lưu, không đụng dữ liệu kho/đội hình. */
+const codviemNote=document.getElementById("codviem-note");
+const codviemStatus=document.getElementById("codviem-status");
+try{if(codviemNote)codviemNote.value=localStorage.getItem("stqs2_codviem_note")||"";}catch(e){}
+document.getElementById("codviem-save")?.addEventListener("click",()=>{
+  try{localStorage.setItem("stqs2_codviem_note",codviemNote?.value||"");if(codviemStatus)codviemStatus.textContent="Đã lưu ghi chú trên thiết bị này.";}
+  catch(e){if(codviemStatus)codviemStatus.textContent="Không lưu được; trình duyệt có thể đang chặn lưu trữ.";}
+});
+document.getElementById("codviem-clear")?.addEventListener("click",()=>{
+  if(codviemNote)codviemNote.value="";
+  try{localStorage.removeItem("stqs2_codviem_note");if(codviemStatus)codviemStatus.textContent="Đã xóa ghi chú.";}
+  catch(e){if(codviemStatus)codviemStatus.textContent="Không xóa được dữ liệu lưu.";}
+});
+
+const lastTab=store.get("tab","doi"); if(["doi","tuong","vs","kho","cp","sao","quy","camnang","codviem"].includes(lastTab)) showTab(lastTab);
 </script>
 </body>
 </html>
