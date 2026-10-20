@@ -42,6 +42,17 @@ header{position:sticky;top:0;z-index:10;background:var(--surface);border-bottom:
 nav{display:flex;gap:4px;flex-wrap:wrap}
 nav button{font:600 14px var(--body);border:0;background:transparent;color:var(--muted);padding:8px 12px;border-radius:6px;cursor:pointer}
 nav button[aria-selected="true"]{background:var(--surface-2);color:var(--ink);box-shadow:inset 0 -2px 0 var(--accent)}
+
+/* Header gọn khi xoay điện thoại sang ngang */
+@media (orientation:landscape) and (max-height:600px){
+  .bar{padding:4px 12px;gap:5px}
+  .brand{gap:8px;flex:1 1 100%;margin-right:0}
+  .seal{width:30px;height:30px;font-size:16px}
+  .brand h1{font-size:18px}
+  nav{width:100%;flex-wrap:nowrap;gap:3px;overflow-x:auto;overflow-y:hidden;scrollbar-width:thin;white-space:nowrap}
+  nav button{flex:0 0 auto;padding:5px 9px;font-size:13px}
+  main{padding-top:12px}
+}
 main{max-width:1120px;margin:0 auto;padding:20px 16px 48px}
 section[hidden]{display:none}
 h2{font:600 24px var(--display);margin:4px 0 4px;text-wrap:balance}
