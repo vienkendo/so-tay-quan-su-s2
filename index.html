@@ -387,6 +387,17 @@ footer{padding-top:4px}
       </div>
       <div id="sample-team-view"></div>
       <div id="sample-team-warnings" class="warn" aria-live="polite"></div>
+      <div id="sample-upgrade-plan" class="panel" style="margin-top:16px">
+        <h3>Kế hoạch nâng sao — Ban Chiêu</h3>
+        <p class="meta">Theo các mốc chi phí đã nhập; những cấp không có trong bảng chi phí sẽ không được cộng vào tổng.</p>
+        <div class="khobar" style="margin-top:8px">
+          <label for="sample-upgrade-target">Mục tiêu</label>
+          <select id="sample-upgrade-target" aria-label="Sao mục tiêu Ban Chiêu">
+            <option value="11" selected>11★</option><option value="13">13★</option><option value="15">15★</option>
+          </select>
+        </div>
+        <div id="sample-upgrade-result" aria-live="polite"></div>
+      </div>
     </div>
   </section>
 
@@ -929,15 +940,18 @@ const SAMPLE_TEAMS={
  Boss:[["Lý Long Cơ","Ban Chiêu","Vương Chiêu Quân"],["Lữ Bố","Tây Thi","Điêu Thuyền"]]
 };
 const SAMPLE_HERO_STATS={
- "Lữ Bố":{atk:5000,slots:6},"Lý Long Cơ":{atk:4200,slots:6},
- "Vương Chiêu Quân":{atk:3000,slots:2},"Võ Tắc Thiên":{atk:2800,slots:2},
- "Tây Thi":{atk:3500,slots:6},"Điêu Thuyền":{atk:2600,slots:5},"Ban Chiêu":{atk:2700,slots:5}
+ "Lữ Bố":{atk:5000,slots:6,star:12},"Lý Long Cơ":{atk:4200,slots:6,star:13},
+ "Vương Chiêu Quân":{atk:3000,slots:2,star:8},"Võ Tắc Thiên":{atk:2800,slots:2,star:8},
+ "Tây Thi":{atk:3500,slots:6,star:12},"Điêu Thuyền":{atk:2600,slots:5,star:11},"Ban Chiêu":{atk:2700,slots:5,star:10}
 };
 const SAMPLE_BOOKS_ALLOC={
  "Lữ Bố":["Tây Thi","Tôn Sách","Lý Long Cơ","Chân Cơ","Vệ Thanh","Trương Công Cẩn"],
  "Lý Long Cơ":["Triệu Vân","Hoắc Khứ Bệnh","Tôn Sách","Bạch Khởi","Liêm Pha","Thái Bình Công Chúa"],
- "Vương Chiêu Quân":["Thái Bình Công Chúa","Trương Mạn Thành"]
+ "Vương Chiêu Quân":["Thái Bình Công Chúa","Trương Mạn Thành"],
+ "Ban Chiêu":["Hồng Phất Nữ","Thái Bình Công Chúa","Thuần Vu Quỳnh","Trương Mạn Thành","Liêm Pha"]
 };
+// Các mốc chi phí do người dùng cung cấp; chỉ cộng những mốc có trong bảng.
+const SAMPLE_STAR_COST={9:1000,11:3000,13:5000,15:7000,"Nhập Thánh":10000};
 let sampleTeamMode="PVP";
 function renderSampleTeam(mode){
  const team=SAMPLE_TEAMS[mode],view=document.getElementById("sample-team-view"),warnBox=document.getElementById("sample-team-warnings");
@@ -945,15 +959,37 @@ function renderSampleTeam(mode){
  document.querySelectorAll("[data-sample-mode]").forEach(b=>{const active=b.dataset.sampleMode===mode;b.setAttribute("aria-pressed",String(active));b.classList.toggle("ghost",!active);});
  view.innerHTML=team.map((row,i)=>'<div class="sample-team-row-label">'+(i===0?'Hàng sau':'Hàng trước')+'</div><div class="sample-team-grid">'+row.map(name=>{
    const st=SAMPLE_HERO_STATS[name]||{},books=SAMPLE_BOOKS_ALLOC[name]||[];
-   return '<div class="sample-team-cell"><strong>'+esc(name)+'</strong><small>Công: '+(st.atk??'Chưa có dữ liệu')+' · Ô: '+(st.slots??'—')+'</small>'+(books.length?'<details class="sample-team-book"><summary>Công pháp ('+books.length+')</summary>'+books.map(esc).join(' · ')+'</details>':'')+'</div>';
+   return '<div class="sample-team-cell"><strong>'+esc(name)+'</strong><small>Công: '+(st.atk??'Chưa có dữ liệu')+' · Ô: '+(st.slots??'—')+' · Sao: '+(st.star??'?')+'★</small>'+(books.length?'<details class="sample-team-book"><summary>Công pháp ('+books.length+')</summary>'+books.map(esc).join(' · ')+'</details>':'')+'</div>';
  }).join('')+'</div>').join('');
  const warnings=[],names=team.flat(),maxAtk=Math.max(...names.map(n=>(SAMPLE_HERO_STATS[n]||{}).atk||0));
  if((SAMPLE_HERO_STATS["Lữ Bố"]?.atk||0)<maxAtk)warnings.push('Lữ Bố chưa có Công cao nhất trong đội '+mode+'.');
  [...new Set(names)].forEach(n=>{const st=SAMPLE_HERO_STATS[n],books=SAMPLE_BOOKS_ALLOC[n]||[];if(!st)warnings.push(n+': chưa có dữ liệu số ô công pháp.');else if(books.length>st.slots)warnings.push(n+' vượt số ô công pháp ('+books.length+'/'+st.slots+').');});
  warnBox.innerHTML=warnings.length?warnings.map(w=>'<div class="sample-warn">⚠️ '+esc(w)+'</div>').join(''):'<div class="sample-ok">✓ Không phát hiện vi phạm theo các dữ liệu mẫu đã nhập.</div><p class="meta">Lưu ý: kiểm tra này chỉ xét các quy tắc được khai báo trong dữ liệu mẫu.</p>';
 }
+function calcSampleUpgrade(hero,targetStar){
+ const currentStar=(SAMPLE_HERO_STATS[hero]||{}).star||0;
+ let totalCost=0,steps=[];
+ for(let s=currentStar+1;s<=targetStar;s++){
+   if(SAMPLE_STAR_COST[s]){
+     totalCost+=SAMPLE_STAR_COST[s];
+     steps.push("Nâng "+hero+" lên "+s+"★: "+SAMPLE_STAR_COST[s].toLocaleString("vi-VN")+" nguyên liệu");
+   }
+ }
+ return {currentStar,totalCost,steps};
+}
+function renderSampleUpgrade(){
+ const target=Number(document.getElementById("sample-upgrade-target")?.value||11);
+ const box=document.getElementById("sample-upgrade-result");
+ if(!box)return;
+ const plan=calcSampleUpgrade("Ban Chiêu",target);
+ box.innerHTML='<p><b>Ban Chiêu:</b> '+plan.currentStar+'★ → '+target+'★</p>'+
+   '<p><b>Tổng nguyên liệu theo bảng:</b> '+plan.totalCost.toLocaleString("vi-VN")+'</p>'+
+   (plan.steps.length?'<ul>'+plan.steps.map(s=>'<li>'+esc(s)+'</li>').join('')+'</ul>':'<p class="meta">Không có mốc chi phí nào trong khoảng này được khai báo.</p>');
+}
+document.getElementById("sample-upgrade-target")?.addEventListener("change",renderSampleUpgrade);
 document.getElementById("sample-team-modes")?.addEventListener("click",e=>{const b=e.target.closest("[data-sample-mode]");if(b){sampleTeamMode=b.dataset.sampleMode;renderSampleTeam(sampleTeamMode);}});
 renderSampleTeam(sampleTeamMode);
+renderSampleUpgrade();
 
 const lastTab=store.get("tab","doi"); if(["doi","tuong","vs","kho","cp","sao","quy"].includes(lastTab)) showTab(lastTab);
 </script>
