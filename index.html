@@ -683,6 +683,7 @@ const DATA = {"heroes": [{"name": "Lữ Bố", "phe": "3Q", "nhom": "Công", "sa
 const H = DATA.heroes, byName = Object.fromEntries(H.map(h=>[h.name,h]));
 const CURRENT_STARS={"Lữ Bố":12,"Điêu Thuyền":10};
 Object.entries(CURRENT_STARS).forEach(([name,star])=>{if(byName[name])byName[name].sao=star});
+H.forEach(h=>{h._baseSao=h.sao});
 DATA.teams.splice(1,0,{name:"Xếp hạng Công – sau buff",mode:"Công",score:"Công / sát thương trong trận",front:["Lý Long Cơ","Lý Thế Dân","Vương Chiêu Quân"],back:["Lữ Bố","Điêu Thuyền","Ban Chiêu"],why:{"Lý Long Cơ":"Ô 1 – gắn [Trường Hận] cùng làn với Lữ Bố; đây là khuếch đại sát thương, không làm tăng chỉ số Công.","Lý Thế Dân":"Ô 2 – giữ đội sống để Lữ Bố tích Nộ và nhận đủ lượt buff.","Vương Chiêu Quân":"Ô 3 – sau tuyệt chiêu, cả đội +15% Công trong 1 hiệp và có thể cộng dồn; ưu tiên để buff trúng Lữ Bố.","Lữ Bố":"Ô 4 – nguồn Công/Sát thương chính. Phải giữ Công nền cao nhất đội để nhận các hiệu ứng nhắm Công cao nhất.","Điêu Thuyền":"Ô 5 – đã 10★ nên có liên kết 9★: tăng Công cho tướng Công cao nhất. Chưa có hiệu ứng chuyển khống chế của 11★.","Ban Chiêu":"Ô 6 – hồi máu giữ nhịp; 8★ chưa có buff Bạo Kích 11★ nên không tính như buff đã kích hoạt."},note:"Dùng cho phụ bản xếp hạng Công hoặc sát thương sau buff. Công nền là chỉ số trước khi vào trận; ưu tiên giữ Lữ Bố cao nhất. Công trong trận tăng từ Vương Chiêu Quân và liên kết Điêu Thuyền. [Trường Hận] của Lý Long Cơ làm mục tiêu chịu thêm sát thương, nên tăng kết quả gây sát thương nhưng không phải Công. Không đưa Vệ Thanh, Quan Vũ hoặc Lý Thế Dân vào vị trí có Công nền vượt Lữ Bố."});
 const PHE_COLOR = {"3Q":"var(--q3)","Hán":"var(--han)","Tần":"var(--tan)","Đường":"var(--duong)"};
 const esc = s => String(s ?? "").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
@@ -811,7 +812,7 @@ function renderUp(){
   const have=+cashEl.value||0;
   document.getElementById("upbody").innerHTML=DATA.ups.map(u=>{
     const st=u.cost==null?`<span>Không rõ</span>`: have>=u.cost?`<span class="ok">Đủ</span>`:`<span class="no">Thiếu ${(u.cost-have).toLocaleString("vi-VN")}</span>`;
-    return `<tr><td><b>${esc(u.name)}</b></td><td class="num">${u.cur}→${u.next}</td><td>${esc(u.unlock)}</td><td class="num">${esc(u.copy)}</td><td>${esc(u.fodder)} <span class="num">(${esc(u.fodderHave)})</span></td><td class="num">${u.cost==null?"–":u.cost.toLocaleString("vi-VN")}</td><td>${st}</td><td>${esc(u.note)}</td></tr>`}).join("");
+    return `<tr><td><b>${esc(u.name)}</b></td><td class="num">${byName[u.name]?.sao??u.cur}→${u.next}</td><td>${esc(u.unlock)}</td><td class="num">${esc(u.copy)}</td><td>${esc(u.fodder)} <span class="num">(${esc(u.fodderHave)})</span></td><td class="num">${u.cost==null?"–":u.cost.toLocaleString("vi-VN")}</td><td>${st}</td><td>${esc(u.note)}</td></tr>`}).join("");
 }
 document.getElementById("prio").innerHTML=DATA.pr.map(p=>`<li><b>${esc(p.hero)}</b> ${esc(p.ms)}: ${esc(p.gain)}</li>`).join("");
 
@@ -850,8 +851,12 @@ function ksave(){try{localStorage.setItem("kho2",JSON.stringify({k:K,log:KLOG,un
 function snap(){KUNDO.push(JSON.stringify({k:K,orb:ORB,log:KLOG}))}
 const nid=()=>K.reduce((m,u)=>Math.max(m,u.id),0)+1;
 const today=()=>new Date().toLocaleString("vi-VN",{day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit"});
-function syncHeroes(){H.forEach(h=>{const us=K.filter(u=>u.name===h.name);if(us.length){h.sao=Math.max(...us.map(u=>u.star));h.ban=us.length}else{h.ban=0}});
- const c=document.getElementById("cash"); if(c){c.value=ORB;renderUp()} renderGrid();renderTeam();}
+function syncHeroes(){H.forEach(h=>{const us=K.filter(u=>u.name===h.name);if(us.length){h.sao=Math.max(...us.map(u=>u.star));h.ban=us.length}else{h.sao=h._baseSao??h.sao;h.ban=0}});
+ const c=document.getElementById("cash");if(c){c.value=ORB;renderUp()}renderGrid();renderTeam();
+ const sp=document.getElementById("slotplan");if(sp){const core=[...new Set(DATA.teams.filter(t=>t.mode==="PVP"||t.mode==="Boss").flatMap(t=>[...t.front,...t.back]))];sp.querySelectorAll("tbody tr").forEach((tr,i)=>{const h=byName[core[i]],td=tr.children;if(!h)return;if(td[1])td[1].textContent=h.sao+"★";if(td[2])td[2].textContent=slots(h.sao);if(td[3])td[3].textContent=nextSlot(h.sao)?nextSlot(h.sao)+"★":"–";});}
+ const al=document.getElementById("alloc");if(al)al.querySelectorAll(".ab").forEach(el=>{const n=el.querySelector(".ab-h b")?.textContent,h=byName[n];if(!h)return;const m=el.querySelector(".ab-h .meta");if(m)m.textContent=h.sao+"★ · "+slots(h.sao)+" ô";const bk=el.querySelector(".bk");if(bk){bk.querySelectorAll(".empty-slot").forEach(x=>x.remove());for(let k=0;k<Math.max(0,slots(h.sao)-(DATA.alloc[n]||[]).length);k++){const x=document.createElement("span");x.className="bchip empty-slot";x.textContent="Ô trống";bk.appendChild(x);}}});
+ try{renderSampleTeam(sampleTeamMode);renderSampleUpgrade()}catch(e){}
+}
 const kfEl=document.getElementById("kFilter");
 ["Tất cả","3Q","Hán","Tần","Đường","SSR+","SSR (nguyên liệu)"].forEach(v=>{const b=document.createElement("button");b.textContent=v;b.dataset.v=v;b.setAttribute("aria-pressed",v===kf);
  b.onclick=()=>{kf=v;[...kfEl.children].forEach(x=>x.setAttribute("aria-pressed",x.dataset.v===v));krender()};kfEl.appendChild(b)});
@@ -1040,8 +1045,8 @@ function renderSampleTeam(mode){
  if(!team||!view||!warnBox)return;
  document.querySelectorAll("[data-sample-mode]").forEach(b=>{const active=b.dataset.sampleMode===mode;b.setAttribute("aria-pressed",String(active));b.classList.toggle("ghost",!active);});
  view.innerHTML=team.map((row,i)=>'<div class="sample-team-row-label">'+(i===0?'Hàng sau':'Hàng trước')+'</div><div class="sample-team-grid">'+row.map(name=>{
-   const st=SAMPLE_HERO_STATS[name]||{},books=SAMPLE_BOOKS_ALLOC[name]||[];
-   return '<div class="sample-team-cell"><strong>'+esc(name)+'</strong><small>Công: '+(st.atk??'Chưa có dữ liệu')+' · Ô: '+(st.slots??'—')+' · Sao: '+(st.star??'?')+'★</small>'+(books.length?'<details class="sample-team-book"><summary>Công pháp ('+books.length+')</summary>'+books.map(esc).join(' · ')+'</details>':'')+'</div>';
+   const st=SAMPLE_HERO_STATS[name]||{},live=byName[name],books=SAMPLE_BOOKS_ALLOC[name]||[],star=live?live.sao:st.star,slotCount=live?slots(live.sao):st.slots;
+   return '<div class="sample-team-cell"><strong>'+esc(name)+'</strong><small>Công: '+(st.atk??'Chưa có dữ liệu')+' · Ô: '+(slotCount??'—')+' · Sao: '+(star??'?')+'★</small>'+(books.length?'<details class="sample-team-book"><summary>Công pháp ('+books.length+')</summary>'+books.map(esc).join(' · ')+'</details>':'')+'</div>';
  }).join('')+'</div>').join('');
  const warnings=[],names=team.flat();
  if(names.includes("Lữ Bố")){
@@ -1052,7 +1057,7 @@ function renderSampleTeam(mode){
  warnBox.innerHTML=warnings.length?warnings.map(w=>'<div class="sample-warn">⚠️ '+esc(w)+'</div>').join(''):'<div class="sample-ok">✓ Không phát hiện vi phạm theo các dữ liệu mẫu đã nhập.</div><p class="meta">Lưu ý: kiểm tra này chỉ xét các quy tắc được khai báo trong dữ liệu mẫu.</p>';
 }
 function calcSampleUpgrade(hero,targetStar){
- const currentStar=(SAMPLE_HERO_STATS[hero]||{}).star||0;
+ const currentStar=byName[hero]?.sao??(SAMPLE_HERO_STATS[hero]||{}).star??0;
  let totalCost=0,steps=[];
  for(let s=currentStar+1;s<=targetStar;s++){
    if(SAMPLE_STAR_COST[s]){
