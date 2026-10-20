@@ -521,6 +521,7 @@ footer{padding-top:4px}
     </div>
     <div class="filters" id="kFilter"></div>
     <div id="kList" class="klist"></div>
+    <div class="panel" style="margin-top:16px"><h3>Ma trận đánh giá kho tướng</h3><p class="meta">Tổng hợp các tướng đang có trong kho. Điểm là ước lượng theo dữ liệu mẫu, không phải chỉ số chính thức của game.</p><div id="kho-matrix-result" class="sample-matrix-wrap"></div><h3 style="margin-top:16px">Radar sức mạnh kho</h3><div id="kho-radar-chart" class="radar-wrap" role="img" aria-label="Biểu đồ radar tổng điểm kho tướng"></div></div>
     <div class="panel" style="margin-top:16px"><h3>Lịch sử</h3><ol id="kLog" class="klog"></ol></div>
   </section>
 
@@ -942,6 +943,31 @@ function validateUpgrade(u,ids){
  if(fodder<rule.fc)return `Cần chọn ${rule.fc} tướng ${u.phe} ${rule.fs}★ làm nguyên liệu.`;
  return "";
 }
+function renderKhoMatrix(){
+ const matrixBox=document.getElementById("kho-matrix-result"),radarBox=document.getElementById("kho-radar-chart");
+ if(!matrixBox||!radarBox)return;
+ const groups={};K.forEach(u=>{(groups[u.name]=groups[u.name]||[]).push(u)});
+ const names=Object.keys(groups).sort((a,b)=>a.localeCompare(b,"vi"));
+ const cols=sampleMatrixCols();
+ if(!names.length){matrixBox.innerHTML='<p class="empty">Kho chưa có tướng.</p>';radarBox.innerHTML="";return;}
+ const scored=names.map(name=>{const maxStar=Math.max(...groups[name].map(u=>u.star));const sc=sampleHeroMatrixScore(name);return {name,count:groups[name].length,star:maxStar,sc,known:!!SAMPLE_HERO_STATS[name]};});
+ const headers=cols.map(c=>'<th>'+c[1]+'</th>').join("");
+ const rows=scored.map(item=>'<tr><td>'+esc(item.name)+' <span class="meta">×'+item.count+'</span></td>'+cols.map(c=>{const v=item.known?item.sc[c[0]]:"—";return '<td class="'+(v===5?"score-high":v===1?"score-low":"")+'">'+v+'</td>';}).join("")+'</tr>').join("");
+ const known=scored.filter(x=>x.known);
+ const totals=cols.map(c=>'<td><b>'+known.reduce((sum,x)=>sum+x.sc[c[0]],0)+'</b></td>').join("");
+ matrixBox.innerHTML='<table class="sample-matrix"><thead><tr><th>Tướng trong kho</th>'+headers+'</tr></thead><tbody>'+rows+'<tr class="matrix-total"><th>Tổng điểm ('+known.length+' tướng có dữ liệu)</th>'+totals+'</tr></tbody></table>';
+ const totalsByCol=cols.map(c=>known.reduce((sum,x)=>sum+x.sc[c[0]],0));
+ const max=Math.max(1,known.length*5),cx=180,cy=155,r=94,angle=i=>-Math.PI/2+i*2*Math.PI/cols.length;
+ const point=(i,v)=>[cx+Math.cos(angle(i))*r*Math.max(0,Math.min(max,v))/max,cy+Math.sin(angle(i))*r*Math.max(0,Math.min(max,v))/max];
+ const poly=arr=>arr.map(p=>p.map(n=>n.toFixed(1)).join(",")).join(" ");
+ let grid="";
+ for(let level=1;level<=5;level++)grid+='<polygon points="'+poly(cols.map((_,i)=>point(i,max*level/5)))+'" fill="none" stroke="var(--line)" stroke-width="1"/>';
+ const spokes=cols.map((c,i)=>{const p=point(i,max);return '<line x1="'+cx+'" y1="'+cy+'" x2="'+p[0]+'" y2="'+p[1]+'" stroke="var(--line)"/>';}).join("");
+ const shape=cols.map((c,i)=>point(i,totalsByCol[i]));
+ const labels=cols.map((c,i)=>{const p=point(i,max*1.22);return '<text x="'+p[0]+'" y="'+(p[1]+4)+'" text-anchor="middle" fill="var(--ink)" font-size="10" font-weight="600">'+c[1]+'</text>';}).join("");
+ const legend=cols.map((c,i)=>'<span>'+c[1]+': <b>'+totalsByCol[i]+'/'+max+'</b></span>').join("");
+ radarBox.innerHTML='<svg viewBox="0 0 360 320" aria-hidden="true">'+grid+spokes+'<polygon points="'+poly(shape)+'" fill="var(--accent)" fill-opacity=".22" stroke="var(--accent)" stroke-width="2"/>'+shape.map(p=>'<circle cx="'+p[0]+'" cy="'+p[1]+'" r="3" fill="var(--accent)"/>').join("")+labels+'</svg><div class="radar-legend">'+legend+'</div>';
+}
 function krender(){
  document.getElementById("orb").value=ORB;
  const groups={};K.forEach(u=>{(groups[u.name]=groups[u.name]||[]).push(u)});
@@ -954,6 +980,7 @@ function krender(){
   <div class="kh-actions"><button class="btn ghost" data-copy-add="${esc(n)}" title="Thêm nhanh một bản trùng">＋ Bản trùng</button></div></div>`}).join("")||'<p class="empty">Không có tướng.</p>';
  document.getElementById("kLog").innerHTML=KLOG.slice().reverse().map(l=>`<li>${esc(l)}</li>`).join("")||'<li class="meta">Chưa có thao tác.</li>';
  document.getElementById("kUndo").disabled=!KUNDO.length;
+ renderKhoMatrix();
 }
 document.getElementById("orb").addEventListener("change",e=>{snap();ORB=Math.max(0,+e.target.value||0);KLOG.push(`${today()} · Sửa cầu cam = ${ORB.toLocaleString("vi-VN")}`);ksave();krender();syncHeroes()});
 document.getElementById("kUndo").onclick=()=>{const s=KUNDO.pop();if(!s)return;const o=JSON.parse(s);K=o.k;ORB=o.orb;KLOG=o.log;ksave();krender();syncHeroes()};
