@@ -161,6 +161,7 @@ h3.sub{font:600 19px var(--display);margin:26px 0 4px}
 .kh-top{display:flex;gap:10px;align-items:center}.kh-top b{font:600 15px var(--display)}
 .kh .token{width:40px;height:40px}
 .units{display:flex;flex-wrap:wrap;gap:6px}
+.kh-actions{display:flex;justify-content:flex-end;margin-top:8px}.kh-actions .btn{padding:6px 10px;font-size:12px}.unit [data-edit-star]{font-size:11px;padding:3px 5px}
 .unit{display:flex;align-items:center;gap:4px;border:1px solid var(--line);border-radius:6px;padding:3px 4px 3px 8px;background:var(--surface-2);font:600 13px var(--mono)}
 .unit button{border:0;background:transparent;color:var(--muted);cursor:pointer;font:600 12px var(--body);padding:2px 5px;border-radius:4px}
 .unit button.up{color:var(--accent)}
@@ -872,7 +873,8 @@ function krender(){
  document.getElementById("kList").innerHTML=names.map(n=>{const us=groups[n].sort((a,b)=>b.star-a.star),u0=us[0],h=byName[n];
   const tok=h?token(h):`<span class="token" style="background:${PHE_COLOR[u0.phe]||"var(--muted)"};font-size:11px">${esc(short(n))}</span>`;
   return `<div class="kh"><div class="kh-top">${tok}<div><b>${esc(n)}</b> ${CORE.has(n)?'<span class="tagcore">Đội chính</span>':""}<div class="meta">${esc(u0.phe)} · <span class="rarity">${u0.r}</span> · ${us.length} bản</div></div></div>
-  <div class="units">${us.map(u=>`<span class="unit">${stars(u.star)}<button class="up" data-up="${u.id}" title="Nâng sao">▲ Nâng</button><button data-del="${u.id}" title="Xóa bản này">✕</button></span>`).join("")}</div></div>`}).join("")||'<p class="empty">Không có tướng.</p>';
+  <div class="units">${us.map(u=>`<span class="unit">${stars(u.star)}<button class="up" data-up="${u.id}" title="Nâng sao">▲ Nâng</button><button class="up" data-edit-star="${u.id}" title="Sửa số sao">✎ Sao</button><button data-del="${u.id}" title="Xóa bản này">✕</button></span>`).join("")}</div>
+  <div class="kh-actions"><button class="btn ghost" data-copy-add="${esc(n)}" title="Thêm nhanh một bản trùng">＋ Bản trùng</button></div></div>`}).join("")||'<p class="empty">Không có tướng.</p>';
  document.getElementById("kLog").innerHTML=KLOG.slice().reverse().map(l=>`<li>${esc(l)}</li>`).join("")||'<li class="meta">Chưa có thao tác.</li>';
  document.getElementById("kUndo").disabled=!KUNDO.length;
 }
@@ -883,7 +885,9 @@ function modal(title,html,onok,okText="Xác nhận"){
  document.getElementById("dlg-body").innerHTML=html+`<div class="err" id="mErr"></div><div class="acts"><button class="btn ghost" id="mNo">Hủy</button><button class="btn" id="mOk">${okText}</button></div>`;
  document.getElementById("mNo").onclick=()=>dlg.close();document.getElementById("mOk").onclick=()=>{const r=onok();if(r)document.getElementById("mErr").textContent=r;else dlg.close()};dlg.showModal();}
 document.getElementById("kList").addEventListener("click",e=>{
- const d=e.target.closest("[data-del]"),up=e.target.closest("[data-up]");
+ const d=e.target.closest("[data-del]"),up=e.target.closest("[data-up]"),editStar=e.target.closest("[data-edit-star]"),copyAdd=e.target.closest("[data-copy-add]");
+ if(copyAdd){const name=copyAdd.dataset.copyAdd,base=K.find(x=>x.name===name);if(!base)return;snap();const star=base.r==="SSR"?4:5;K.push({id:nid(),name:base.name,phe:base.phe,star,r:base.r});KLOG.push(`${today()} · Thêm nhanh 1 bản trùng ${base.name} ${stars(star)}`);ksave();krender();syncHeroes();return}
+ if(editStar){const u=K.find(x=>x.id==editStar.dataset.editStar);if(!u)return;modal(`Sửa số sao · ${u.name}`,`<div class="form"><label for="editStarValue">Số sao hiện tại</label><input id="editStarValue" type="number" min="1" max="20" step="1" value="${u.star}"></div><p class="meta">Chỉ sửa số sao của bản tướng này; không thay đổi số bản trong kho.</p>`,()=>{const value=Number(document.getElementById("editStarValue").value);if(!Number.isInteger(value)||value<1||value>20)return "Nhập số sao nguyên từ 1 đến 20.";if(value===u.star)return "";snap();const before=u.star;u.star=value;KLOG.push(`${today()} · Sửa sao ${u.name}: ${stars(before)} → ${stars(value)}`);ksave();krender();syncHeroes();},"Lưu sao");return}
  if(d){const u=K.find(x=>x.id==d.dataset.del);modal(`Xóa ${u.name} ${stars(u.star)}?`,`<p>Dùng khi bản này đã bị tiêu hao ở việc khác hoặc nhập nhầm.</p>`,()=>{snap();K=K.filter(x=>x!==u);KLOG.push(`${today()} · Xóa ${u.name} ${stars(u.star)}`);ksave();krender();syncHeroes()},"Xóa");return}
  if(!up)return; const u=K.find(x=>x.id==up.dataset.up), R=RULE[u.star]||{copy:null,fs:null,fc:null,orb:null};
  const cand=K.filter(x=>x.id!==u.id&&(x.name===u.name||x.phe===u.phe)).sort((a,b)=>{const rk=x=>x.name===u.name?0:x.r==="SSR"?1:CORE.has(x.name)?3:2;return rk(a)-rk(b)||b.star-a.star||a.name.localeCompare(b.name,"vi")});
