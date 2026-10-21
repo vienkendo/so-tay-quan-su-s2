@@ -42,4 +42,5 @@ DB=[
 ("Tào Nhân","3Q",["aoe","sub"],"SSR cam · Tuyệt chiêu 170% ST lên hàng trước địch, bản thân +10% Thủ 1 hiệp; đánh thường 100%. Tiềm năng thiên Công. 6★ +2 Nộ cơ bản · 7★ Tăng ST +6% · 8★ Công +8% · 9★ sau tuyệt chiêu bản thân +1 Nộ · 10★ sau tuyệt chiêu 1 đồng đội ngẫu nhiên +1 Nộ"),
 ("Lỗ Ban","Tần",["back","rage+"],"SSR cam · Tuyệt chiêu 150% ST lên hàng sau địch và +2 Nộ cho 1 đồng đội ngẫu nhiên; đánh thường 100%. 6★ +2 Nộ cơ bản · 7★ Công +8% · 8★ Né +8% · 9★ sau tuyệt chiêu 30% khiến mục tiêu −1 Nộ · 10★ tỉ lệ giảm Nộ lên 65%"),
 ("Vệ Tử Phu","Hán",["sub","tank"],"SSR cam · Đơn thể: tuyệt chiêu 315% ST lên 1 địch, bản thân +20% Thủ tới hết trận (không cộng dồn); tiềm năng thiên Thủ/Né/Bạo. 6★ +2 Nộ · 7★ Thủ +8% · 8★ Bạo +8% · 9★ Miễn ST +15% · 10★ sau kỹ năng +10% Thủ cộng dồn, 2 hiệp"),
+("Huyền Trang","Đường",["aoe","rage+","buff","shield"],"SSR+ · Hỗ trợ: TC 70% toàn địch + debuff ngẫu nhiên (Trúng −10% / Tăng ST −8% / Miễn ST −8%); 9★ toàn đội +1 Nộ · 11★ bản thân và tướng Công cao nhất +2 Nộ · 13★ khiên 15% HP cho tướng ít HP nhất"),
 ]
