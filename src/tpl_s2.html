@@ -436,22 +436,24 @@ h3 { cursor: pointer; }
 .bktable th{white-space:nowrap}.bkrow2>td{vertical-align:middle}.bkname{display:flex;align-items:center;gap:10px;white-space:nowrap}.bkico{width:40px;height:40px;flex:none;border-radius:8px;object-fit:cover;border:2px solid var(--line);background:var(--surface-2)}.bkico.q0{border-color:#7b4bb0}.bkico.q1{border-color:#d98a1f}.bkico.q2{border-color:#c0392b}
 .ghform{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:10px 0}.ghform label{display:flex;flex-direction:column;gap:3px;font-size:12px;color:var(--muted)}.ghform input{width:100%}
 
-/* Thẻ tướng kiểu game */
+/* Thẻ tướng kiểu game – mô phỏng thẻ trong Tam Quốc Tứ Thời Ca */
 .kview{display:flex;gap:6px;margin:6px 0 10px}.kview button{font:600 12px var(--body);border:1px solid var(--line);background:var(--surface);color:var(--muted);padding:5px 12px;border-radius:999px;cursor:pointer}.kview button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
-.klist.gcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:10px}
-.gcard{position:relative;aspect-ratio:1/2;border-radius:10px;overflow:hidden;cursor:pointer;border:3px solid #d9a23a;background:linear-gradient(180deg,#f6d27a,#c98a1e);box-shadow:0 4px 10px rgba(0,0,0,.18)}
-.gcard.r-SSR{border-color:#d98a1f;background:linear-gradient(180deg,#f3c27a,#b8661a)}.gcard.r-SR{border-color:#8a5cc8;background:linear-gradient(180deg,#c9b2ee,#6b45a8)}.gcard.r-R{border-color:#4a86c8;background:linear-gradient(180deg,#b5d3f2,#2f6aa8)}
-.gcard.core{outline:2px solid var(--accent);outline-offset:2px}
-.gart{position:absolute;inset:0 0 34% 0;display:grid;place-items:center;overflow:hidden}.gart img{width:100%;height:100%;object-fit:cover;object-position:50% 20%}
-.gph{font:700 20px var(--display);color:#fff8e7;text-shadow:0 1px 3px rgba(0,0,0,.5)}
-.grar{position:absolute;top:4px;left:4px;font:900 italic 13px var(--body);color:#ffe7a6;background:linear-gradient(180deg,#e2403a,#a0161b);padding:1px 6px;border-radius:4px;text-shadow:0 1px 0 #600;box-shadow:0 1px 3px rgba(0,0,0,.35)}
-.glv{position:absolute;top:4px;right:5px;font:800 15px var(--body);color:#fff;text-shadow:0 0 3px #000,0 1px 2px #000}
-.gcnt{position:absolute;top:26px;right:5px;font:700 11px var(--body);color:#fff;background:rgba(0,0,0,.55);padding:0 5px;border-radius:8px}
-.gfoot{position:absolute;left:0;right:0;bottom:0;height:36%;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding-top:6px;background:linear-gradient(180deg,rgba(40,25,8,.15),rgba(40,25,8,.85) 30%);color:#fff}
-.gname{font:700 13px var(--display);text-align:center;line-height:1.15;padding:0 3px;text-shadow:0 1px 2px #000}
-.gstars{font-size:15px;letter-spacing:-1px;line-height:1.2;margin-top:2px;text-shadow:0 1px 1px rgba(0,0,0,.6)}.gstars.g{color:#ffd54a}.gstars.r{color:#ff4a3d}.gstars.c{background:linear-gradient(90deg,#ff5f6d,#ffc371,#5ee7a0,#56ccf2,#b06ab3);-webkit-background-clip:text;background-clip:text;color:transparent}
-.gphe{position:absolute;bottom:4px;left:50%;transform:translateX(-50%);font:700 10px var(--body);padding:1px 8px;border-radius:3px;color:#fff;background:#8a6a2a;border:1px solid rgba(255,255,255,.4)}
-.gphe.p-3Q{background:#2f62b3}.gphe.p-Hán{background:#2f8a57}.gphe.p-Tần{background:#b07d12}.gphe.p-Đường{background:#7b4bb0}
+.klist.gcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(98px,1fr));gap:10px 8px}
+.gcard{--fr:#e9c46a;--fr2:#8a5a12;position:relative;aspect-ratio:9/20;border-radius:6px;overflow:hidden;cursor:pointer;background:linear-gradient(180deg,#f7e3a6,#d9a441);border:2px solid var(--fr);box-shadow:0 0 0 1px var(--fr2),0 3px 8px rgba(0,0,0,.25)}
+.gcard::after{content:"";position:absolute;inset:3px;border:1px solid rgba(255,244,205,.85);border-radius:3px;pointer-events:none;z-index:3}
+.gcard.r-SSR{--fr:#e7a24a;--fr2:#7a3d0c}.gcard.r-SR{--fr:#b48ae6;--fr2:#4b2a7a;background:linear-gradient(180deg,#e2d3f6,#8d66c8)}.gcard.r-R{--fr:#7fb3e6;--fr2:#204f80;background:linear-gradient(180deg,#d6e8fa,#4c86c4)}
+.gcard.core{box-shadow:0 0 0 1px var(--fr2),0 0 0 3px var(--accent),0 3px 8px rgba(0,0,0,.25)}
+.gart{position:absolute;inset:0;z-index:1}.gart.full img{width:100%;height:100%;object-fit:cover;object-position:50% 12%}.gart.small{display:flex;justify-content:center;align-items:flex-start;padding-top:26%}.gart.small img{width:84%;aspect-ratio:1;object-fit:cover;border-radius:50%;border:2px solid rgba(255,244,205,.9);box-shadow:0 2px 8px rgba(0,0,0,.35)}
+.gart::after{content:"";position:absolute;inset:auto 0 0 0;height:38%;background:linear-gradient(180deg,rgba(0,0,0,0),rgba(30,18,4,.55) 70%,rgba(30,18,4,.7))}
+.gph{display:grid;place-items:center;height:100%;font:700 20px var(--display);color:#fff8e7;text-shadow:0 1px 3px rgba(0,0,0,.5)}
+.grar{position:absolute;z-index:4;top:5px;left:5px;font:900 italic 16px/1 "Arial Black",Impact,sans-serif;color:#ff2a1f;letter-spacing:-.5px;-webkit-text-stroke:1px #ffe48a;paint-order:stroke fill;text-shadow:0 1px 2px rgba(0,0,0,.45)}
+.glv{position:absolute;z-index:4;top:5px;right:7px;font:800 15px/1 var(--body);color:#dff8ff;text-shadow:0 0 2px #000,0 0 3px #000,0 1px 2px #000}
+.gcnt{position:absolute;z-index:4;top:22px;right:6px;font:700 10px var(--body);color:#fff;background:rgba(0,0,0,.55);padding:0 5px;border-radius:8px}
+.gfoot{position:absolute;z-index:4;left:0;right:0;bottom:20px;display:flex;flex-direction:column;align-items:center;gap:1px}
+.gname{font:700 13px/1.1 var(--display);color:#fff;text-align:center;padding:0 4px;text-shadow:0 0 2px #2a1a05,0 0 3px #2a1a05,0 1px 2px #000}
+.gstars{font-size:17px;line-height:1;letter-spacing:-1.5px;-webkit-text-stroke:.7px #5a3a08;text-shadow:0 1px 2px rgba(0,0,0,.55)}.gstars.g{color:#ffd23f}.gstars.r{color:#ff3b2f;-webkit-text-stroke-color:#5a0a05}.gstars.c{color:#f2b6ff;-webkit-text-stroke-color:#3a2a6a;text-shadow:0 0 3px #8fe9ff,0 1px 2px rgba(0,0,0,.55)}
+.gphe{position:absolute;z-index:5;bottom:0;left:50%;transform:translateX(-50%);min-width:28px;padding:2px 6px 6px;font-size:9px;font:700 10px/1 var(--display);color:#3a2405;text-align:center;background:linear-gradient(180deg,#f5d77e,#c9921f);clip-path:polygon(0 0,100% 0,100% 70%,50% 100%,0 70%);filter:drop-shadow(0 0 1px #6b4410)}
+.gphe.p-3Q{background:linear-gradient(180deg,#8fb6ef,#2f62b3);color:#fff}.gphe.p-Hán{background:linear-gradient(180deg,#8fd6a8,#2f8a57);color:#fff}.gphe.p-Tần{background:linear-gradient(180deg,#f5d77e,#c9921f);color:#3a2405}.gphe.p-Đường{background:linear-gradient(180deg,#c9a8ee,#7b4bb0);color:#fff}
 </style>
 </head>
 <body>
@@ -1127,11 +1129,11 @@ var HART=/*__HEROART__*/{};
 function heroImg(n){return HART[n]||(typeof ICONS!=="undefined"&&ICONS[n])||""}
 const PHE_SHORT={"3Q":"3Q","Hán":"Hán","Tần":"Tần","Đường":"Đường"};
 function starRow(s){s=+s||0;const tier=s<=5?"g":s<=10?"r":"c",k=s<=5?s:s<=10?s-5:Math.min(5,s-10);return `<span class="gstars ${tier}" aria-label="${s} sao">${"★".repeat(Math.max(k,0))}</span>`}
-function heroCard(n,us){const u0=us[0],lv=((X.hlv||{})[n])||LV||"",img=heroImg(n),r=u0.r||"SSR+";
+function heroCard(n,us){const u0=us[0],lv=((X.hlv||{})[n])||LV||"",img=heroImg(n),full=!!HART[n],r=u0.r||"SSR+";
  return `<div class="gcard r-${r.replace("+","p")} ${CORE.has(n)?"core":""}" tabindex="0" data-gc="${esc(n)}">
-  <div class="gart">${img?`<img src="${img}" alt="" loading="lazy">`:`<span class="gph">${esc(short(n))}</span>`}</div>
+  <div class="gart ${full?"full":"small"}">${img?`<img src="${img}" alt="" loading="lazy">`:`<span class="gph">${esc(short(n))}</span>`}</div>
   <span class="grar">${esc(r)}</span>${lv?`<span class="glv">${lv}</span>`:""}${us.length>1?`<span class="gcnt">×${us.length}</span>`:""}
-  <div class="gfoot"><div class="gname">${esc(n)}</div>${starRow(u0.star)}<span class="gphe p-${esc(u0.phe)}">${esc(PHE_SHORT[u0.phe]||u0.phe)}</span></div></div>`}
+  <div class="gfoot"><div class="gname">${esc(n)}</div>${starRow(u0.star)}</div><span class="gphe p-${esc(u0.phe)}">${esc(PHE_SHORT[u0.phe]||u0.phe)}</span></div>`}
 function _kr0(){
  document.getElementById("orb").value=ORB;document.getElementById("kLv").value=LV||"";const vm=document.getElementById("vsMy");if(vm)vm.value=LV||"";
  const groups={};K.forEach(u=>{(groups[u.name]=groups[u.name]||[]).push(u)});
