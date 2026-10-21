@@ -47,12 +47,14 @@ if REPO:
     css = re.search(r"(?s)<style>\n?(.*?)</style>", g).group(1)
     js = re.search(r"(?s)<script>\n?(.*?)</script>", g).group(1)
     body = re.search(r"(?s)<body[^>]*>(.*?)<script>", g).group(1).rstrip()
+    import hashlib
+    VER = hashlib.md5((css + js).encode()).hexdigest()[:8]   # chống cache trình duyệt
     head = ('<!doctype html>\n<html lang="vi">\n<head>\n<meta charset="utf-8">\n'
             '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">\n'
             '<title>Sổ Tay Quân Sư S2</title>\n<meta name="theme-color" content="#17130f">\n'
             '<link rel="icon" href="assets/images/site-icon-fantasy.jpg">\n'
-            '<link rel="stylesheet" href="style.css">\n</head>\n<body>\n')
-    open(REPO + "/index.html", "w", encoding="utf-8").write(head + body + '\n<script src="script.js"></script>\n</body>\n</html>\n')
+            '<link rel="stylesheet" href="style.css?v=%s">\n</head>\n<body>\n' % VER)
+    open(REPO + "/index.html", "w", encoding="utf-8").write(head + body + '\n<script src="script.js?v=%s"></script>\n</body>\n</html>\n' % VER)
     open(REPO + "/style.css", "w", encoding="utf-8").write(css)
     open(REPO + "/script.js", "w", encoding="utf-8").write("/* Sinh tự động từ s2build/tpl_s2.html – không sửa tay, sửa template rồi chạy make.py */\n" + js)
     print("github", len(body), len(css), len(js))

@@ -82,6 +82,31 @@ heroes.append(dict(name="Huyền Trang",phe="Đường",nhom="Trợ",sao=5,role=
   tn="Tư Mã Ý – Công +15%",pvp=4,boss=4,pve=4,keep="Phương án – nguồn Nộ cho Lữ Bố",gear="HP > Thủ > Miễn ST; Công thấp hơn carry",books="",ban=1,
   stat="Cấp 160 · HP 32,6 vạn · Công 43.687 · Thủ 10.121 · Lực chiến 737.638 (5★, 21/10). Tiềm năng: bậc 1–5 Thủ +120, HP +10%, Thủ +120 & HP +3500, Né +10%, Kháng Bạo +10%; 6★ Nộ +2 · 7★ Miễn ST +8% · 8★ HP +10% · 10★ Thủ +6% · 12★ Thủ +4% · 14★ Thủ +6% · 15★ HP +10%."))
 
+heroes.append(dict(name="Gia Cát Lượng",phe="3Q",nhom="Thuật Sĩ",sao=5,role="Khống chế diện rộng – Choáng toàn địch, giảm Thủ, cắt Nộ",
+  base="ĐT 100% 1 địch; TC 132% ST toàn địch, 20% [Choáng] 1 hiệp (mục tiêu HP >50%: tỉ lệ +10%)",
+  s9="Choáng thành công: địch −10% Thủ, cộng dồn, 2 hiệp",
+  s11="Đánh thường 30% kèm [Choáng] 1 hiệp",
+  s13="Choáng mục tiêu tổng 4 lần: lần kế tiếp thêm 1 hiệp Choáng",
+  nt="Choáng thành công: mục tiêu −1 Nộ",
+  tn="Tôn Sách – Thủ +15%",pvp=4,boss=2,pve=4,keep="Phương án (khống chế PVP)",gear="HP, Thủ, Trúng; Công thấp hơn carry",books="",ban=1,
+  stat="Cấp 160 · HP 32,2 vạn · Công 44.142 · Thủ 10.166 · Lực chiến 737.633 (5★, 21/10). Tiềm năng: bậc 1–5 Thủ +120, Thủ +10%, Thủ +120 & HP +3500, Né +10%, Kháng Bạo +10%; 6★ Nộ +2 · 7★ Miễn ST +8% · 8★ Thủ +10% · 10★ HP +6% · 12★ Thủ +4% · 14★ HP +6% · 15★ HP +10%. Boss thường miễn khống chế – chưa kiểm chứng."))
+heroes.append(dict(name="Võ Tắc Thiên",phe="Đường",nhom="Thuật Sĩ",sao=5,role="Giải trừ buff địch + cấp Nộ cho cả đội",
+  base="ĐT 100% 1 địch; TC 90% ST toàn địch, 45% xóa 1 buff của mỗi mục tiêu",
+  s9="Sau khi dùng kỹ năng: 60% toàn đội +1 Nộ",
+  s11="Mỗi lần địch nhận 1 buff: 35% bị xóa (mỗi địch tối đa 1 lần/hiệp)",
+  s13="Mỗi lần tướng phe ta nhận Nộ: 60% nhận thêm 1 Nộ",
+  nt="Mỗi lần xóa buff có lợi: địch chịu ST 12% HP tối đa (không quá 20% HP Võ Tắc Thiên) và −1 Nộ",
+  tn="Thượng Quan Uyển Nhi – HP +15%",pvp=5,boss=3,pve=4,keep="Phương án – nguồn Nộ + phá khiên/buff",gear="HP, Thủ; Công thấp hơn carry",books="",ban=1,
+  stat="Cấp 160 · HP 32,2 vạn · Công 45.391 · Thủ 9.926 · Lực chiến 737.633 (5★, 21/10). Tiềm năng: bậc 1–5 Công +350, Công +10%, Công +350 & HP +3500, Thủ +10%, Né +10%; 6★ Nộ +2 · 7★ Miễn ST +8% · 8★ HP +10% · 10★ Thủ +6% · 12★ Thủ +4% · 14★ Thủ +6% · 15★ HP +10%."))
+heroes.append(dict(name="Bạch Khởi",phe="Tần",nhom="Thủ",sao=5,role="Tank phản [Huyết Tích] – đỡ đòn, rải ST theo hiệp lên kẻ tấn công, 11★ Miễn ST cho cả đội",
+  base="ĐT 100% 1 địch; TC 110% ST hàng trước địch, 20% gắn [Huyết Tích] 2 hiệp (mỗi hiệp −HP = 30% Công, bỏ qua Thủ)",
+  s9="Mỗi lần bị tấn công: 40% gắn [Huyết Tích] lên kẻ tấn công, 2 hiệp",
+  s11="Đầu trận hi sinh 10% HP hiện tại, toàn đội +8% Miễn ST 4 hiệp (cộng dồn)",
+  s13="Khi gắn [Huyết Tích]: đồng đội ít HP nhất hồi 15% HP đã mất của Bạch Khởi",
+  nt="Sau khi tử trận: toàn đội hồi HP = tổng HP đã hi sinh × 40%",
+  tn="Quỷ Cốc Tử – HP +15%",pvp=3,boss=3,pve=4,keep="Phương án (đội Tần Huyết Tích)",gear="HP > Thủ > Miễn ST",books="",ban=1,
+  stat="Cấp 160 · HP 31,6 vạn · Công 42.795 · Thủ 10.345 · Lực chiến 737.604 (5★, 21/10). Tiềm năng: bậc 1–5 Thủ +80, Thủ +8%, Thủ +80 & HP +3000, Né +8%, Kháng Bạo +8%; 6★ Nộ +2 · 7★ Miễn ST +6% · 8★ HP +8% · 10★ HP +6% · 12★ Kháng Bạo +4% · 14★ Công +6% · 15★ HP +10%."))
+
 UP=[dict(name="Vương Chiêu Quân",cur=5,next=6,unlock="Nộ cơ bản +2 · HP/Công/Thủ 100%→120% · giới hạn cấp 100→145",copy="0/1 (bản 3★)",
   fodder="Tướng Hán 5★",fodderHave="0/1",cost=None,note="Đang kẹt vì chưa có bản trùng. Nguyên liệu Hán: dùng Lưu Bang hoặc Ngu Cơ; KHÔNG dùng Ban Chiêu, Hàn Tín.")]
 PR=[dict(hero="Bước 0",ms="Top 6",gain="Đưa 6 tướng PVP vào Top 6 để chia sẻ cấp; đẩy cùng lên cấp 100"),
