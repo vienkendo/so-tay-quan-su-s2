@@ -116,6 +116,15 @@ heroes.append(dict(name="Dương Ngọc Hoàn",phe="Đường",nhom="Thuật Sĩ
   tn="Lỗ Trí Thâm – Thủ +15%",pvp=4,boss=2,pve=3,keep="Phương án (PVP – khắc chế carry Nộ)",gear="Công, Trúng; Công thấp hơn carry",books="",ban=1,
   stat="Cấp 160 · HP 34,3 vạn · Công 46.855 · Thủ 10.161 · Lực chiến 774.474 (5★, 21/10). Tiềm năng: bậc 1–5 Công +300, Công +8%, Công +700, Bạo +8%, Trúng +8%; 6★ Nộ +2 · 7★ Tăng ST +6% · 8★ Tăng ST +6% · 10★ Thủ +6% · 12★ ST Bạo +4% · 14★ Công +6% · 15★ Công +10%. Boss thường không phụ thuộc Nộ như tướng PVP – giá trị thấp ở Boss."))
 
+heroes.append(dict(name="Hoắc Khứ Bệnh",phe="Hán",nhom="Công",sao=5,role="Carry đánh thường toàn địch – phản kích khi bị đánh, 11★ đánh thường ×2 ST",
+  base="ĐT 30% ST toàn địch; TC 90% ST toàn địch, sau đó truy kích thêm 1 lần đánh thường",
+  s9="Mỗi lần bị tấn công: 32% đánh thường phản kích (tối đa 3 lần/hiệp)",
+  s11="Đánh thường gây ×2 ST",
+  s13="Chịu ST trực tiếp: 50% đánh thường phản kích (tối đa 5 lần/hiệp)",
+  nt="Tấn công kèm 35% hút HP; mỗi 3 lần tấn công, đòn kế tiếp +80% ST chung cuộc",
+  tn="Vệ Thanh – Công +15%",pvp=4,boss=3,pve=5,keep="Chưa sở hữu – carry thay thế (Hán)",gear="Công, Bạo Kích, Hút HP",books="",ban=1,
+  stat="Chưa sở hữu (ảnh Đồ Giám). Tiềm năng: bậc 1–5 Công +350, Công +10%, Công +800, Bạo +10%, Trúng +10%; 6★ Nộ +2 · 7★ Tăng ST +8% · 8★ Công +10% · 10★ Công +6% · 12★ Công +4% · 14★ Công +6% · 15★ đánh thường +10% ST. ⚠ Là carry thứ 2 – nếu ra trận cùng Lữ Bố sẽ tranh 'Công cao nhất'."))
+
 UP=[dict(name="Vương Chiêu Quân",cur=5,next=6,unlock="Nộ cơ bản +2 · HP/Công/Thủ 100%→120% · giới hạn cấp 100→145",copy="0/1 (bản 3★)",
   fodder="Tướng Hán 5★",fodderHave="0/1",cost=None,note="Đang kẹt vì chưa có bản trùng. Nguyên liệu Hán: dùng Lưu Bang hoặc Ngu Cơ; KHÔNG dùng Ban Chiêu, Hàn Tín.")]
 PR=[dict(hero="Bước 0",ms="Top 6",gain="Đưa 6 tướng PVP vào Top 6 để chia sẻ cấp; đẩy cùng lên cấp 100"),
