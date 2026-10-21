@@ -2,7 +2,7 @@
 
 Sổ tay xây đội, quản lý kho tướng và tài nguyên cho server mới của **Tam Quốc Tứ Thời Ca**.
 
-- **Bản GitHub Pages:** https://vienkendo.github.io/so-tay-quan-su-s2/ — Kho lưu trong trình duyệt (Kho → *Sao lưu / Khôi phục* để chuyển máy).
+- **Bản GitHub Pages:** https://vienkendo.github.io/so-tay-quan-su-s2/ — Kho lưu trong trình duyệt; bật **Kho → Đồng bộ GitHub** để đồng bộ nhiều máy qua repo riêng tư (`kho.json`).
 - **Bản web Claude:** cùng mã nguồn, Kho đồng bộ đám mây theo tài khoản Claude, có thêm đọc ảnh bằng Claude.
 
 ## Các mục

@@ -27,7 +27,18 @@ Trước đó repo (khởi tạo từ một bản HTML cũ ngày 19/10) và bả
   - Trang bị: chưa có dữ liệu.
 - **Kho mặc định** = kho thật lúc 21/10 (135 bản, 12.473 cầu cam), trong `src/kho_default.json`.
 
-## 3. Lưu trữ
+## 3. Đồng bộ trên bản GitHub
+
+- **Cách hoạt động:** Kho → **Đồng bộ GitHub** lưu `kho.json` vào repo riêng tư (mặc định `vienkendo/so-tay-data`) qua GitHub Contents API.
+- **Token:** fine-grained, chỉ cấp quyền *Contents: Read and write* cho đúng repo đó. Mỗi máy nhập 1 lần, lưu ở `localStorage.ghsync`.
+- **Khi mở trang:** đọc bản trên GitHub.
+  - Nếu máy này có thay đổi chưa đẩy (`gh_dirty`) mà bản GitHub không mới hơn lần đồng bộ trước (`gh_ts`), máy này đẩy lên.
+  - Nếu bản GitHub mới hơn, trang lấy bản đó; dữ liệu cũ của máy vẫn lấy lại được bằng nút Hoàn tác.
+- **Ghi:** mỗi lần lưu, sau 0,6 giây đẩy lên (1 commit). Nếu sha lệch thì đọc lại sha rồi thử lại 1 lần.
+- **Tự kéo bản mới:** mỗi 60 giây khi tab đang mở và khi quay lại tab (có dùng ETag).
+- **Kiểm thử:** giả lập API bằng Playwright với 2 máy (kết nối, sửa, máy kia nhận) và token sai.
+
+## 3b. Lưu trữ
 
 | Khóa | Nội dung |
 |---|---|
@@ -37,12 +48,14 @@ Trước đó repo (khởi tạo từ một bản HTML cũ ngày 19/10) và bả
 | `x.tt` | Thần thú: `{own, manh, camPick, food}` |
 | `x.lp` | Linh phù: `{<thú>: [HP, Công, Thủ, Tăng/Giảm ST]}`, chỉ số phẩm −1..9 |
 | `x.cdv` | Ghi chú Cổ Đế Viêm |
+| `x.bdlv` | Cấp Bảo Điển (Lv130 ngày 21/10) |
 | `localStorage.vs2` | Đội địch đang nhập ở Đối đầu |
 
 Trên web Claude, cùng cấu trúc được lưu ở `data/users/me/kho`.
 
 ## 4. Còn thiếu dữ liệu (cần ảnh từ người chơi)
 
+- Hiệu ứng công pháp mới: Quỷ Cốc Tử, Lỗ Trí Thâm (Cam), Lý Thế Dân (Đỏ).
 - Kỹ năng các tướng SR: Tuân Úc, Mị Nguyệt, Liêm Pha, Võ Tòng, Thái Bình Công Chúa, Khương Duy…
 - Linh phù: số phù cùng bậc để ghép, giá trị ô Tăng/Giảm ST, điều kiện mở kỹ năng linh thú.
 - Thần thú: hiệu quả ở các mốc sao thấp (hiện chỉ có mốc 15★), cách nâng sao/bậc.

@@ -425,3 +425,4 @@ h3 { cursor: pointer; }
 .lprow{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:6px 0;font-size:13px}
 .lprow select{max-width:62%}
 .ttt td{vertical-align:top}
+.ghform{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:10px 0}.ghform label{display:flex;flex-direction:column;gap:3px;font-size:12px;color:var(--muted)}.ghform input{width:100%}

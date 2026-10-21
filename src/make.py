@@ -22,6 +22,7 @@ def fill(kdef, korb, footer):
             .replace("/*__BOOKICONS__*/{}", "{}")
             .replace("/*__KHO__*/[]", json.dumps(kdef, ensure_ascii=False))
             .replace("/*__KORB__*/0", str(korb))
+            .replace("/*__KX__*/null", json.dumps(kho.get("x") if kdef else None, ensure_ascii=False))
             .replace("/*__EDB__*/[]", json.dumps(en["DB"], ensure_ascii=False)))
     return s.replace("File chạy offline, không cần kết nối mạng.", footer)
 
