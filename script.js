@@ -276,7 +276,7 @@ function upPlan(){
   if(!R||R.fs==null){out.push({u,st:"unk"});continue}
   const miss=[], pick=[];
   if(R.copy){const c=us.slice(1).sort((a,b)=>a.star-b.star).find(x=>!used.has(x.id)); if(c) pick.push(c); else miss.push(`1 bản trùng ${n}`)}
-  const pool=K.filter(x=>x.phe===u.phe&&x.name!==n&&x.star===R.fs&&x.r!=="SR"&&x.r!=="R"&&!CORE.has(x.name)&&!(window.KEEPSET&&KEEPSET.has(x.name))&&!used.has(x.id)&&!pick.includes(x))
+  const pool=K.filter(x=>x.phe===u.phe&&x.name!==n&&x.star===R.fs&&x.r!=="SR"&&x.r!=="R"&&!CORE.has(x.name)&&!(window.KEEPSET&&KEEPSET.has(x.name))&&!(window.PLAN&&PLAN.res[x.name]&&K.filter(u=>u.name===x.name).length<=1)&&!used.has(x.id)&&!pick.includes(x))
    .sort((a,b)=>(a.r==="SSR"?0:1)-(b.r==="SSR"?0:1));
   const f=pool.slice(0,R.fc); pick.push(...f); if(f.length<R.fc) miss.push(`${R.fc-f.length} tướng ${u.phe} ${R.fs}★ (không tính tướng đội chính)`);
   if(R.orb!=null&&ORB<R.orb) miss.push(`${(R.orb-ORB).toLocaleString("vi-VN")} cầu cam${dTxt(R.orb-ORB)}`);
@@ -504,7 +504,7 @@ function pickBook(hn,i){const n=SLOTN(Math.max(0,...K.filter(u=>u.name===hn).map
  document.querySelectorAll("#dlg-body [data-bp]").forEach(btn=>btn.onclick=()=>{a[i]=btn.dataset.bp?+btn.dataset.bp:null;ksave();renderBooks();dlg.close()});}
 document.addEventListener("click",e=>{const b=e.target.closest("[data-pk]");if(b)pickBook(b.dataset.pk,+b.dataset.i)});
 
-function bookHeroes(){const T=[...new Set(DATA.teams.flatMap(t=>[...t.back,...t.front]))];const st=n=>Math.max(0,...((typeof K!=="undefined"&&K)||[]).filter(u=>u.name===n).map(u=>+u.star||0));
+function bookHeroes(){const T=[...new Set(DATA.teams.flatMap(t=>[...t.back,...t.front]))].filter(n=>!window.KEEPSET||KEEPSET.has(n));const st=n=>Math.max(0,...((typeof K!=="undefined"&&K)||[]).filter(u=>u.name===n).map(u=>+u.star||0));
  const ex=window.KEEPSET?[...KEEPSET].filter(n=>!T.includes(n)).sort((a,b)=>st(b)-st(a)):[];return [...T,...ex]}
 function bookPref(n){if(BOOKPREF[n])return BOOKPREF[n];const t=((typeof EDB!=="undefined"&&EDB[n])||{}).tags||[],P=[];const add=a=>a.forEach(x=>{if(!P.includes(x))P.push(x)});
  if(t.includes("carry"))add(["Lý Bạch","Trương Công Cẩn","Bách Lý Hề","Tuân Úc","Điển Vi"]);
@@ -1010,7 +1010,7 @@ function computePlan(){const own=ownedStars(),modes=DATA.teams.map((t,i)=>{const
   if(score(n)>=4&&r.length)res[n]=`vai trò hiếm: ${r.map(k=>TAGN[k]||k).join(", ")}`;else mat[n]=score(n)?`điểm cao nhất ${score(n)}/5, không vào đội nào`:"chưa có dữ liệu đánh giá"});
  const cnt={};(K||[]).forEach(u=>{(cnt[u.name]=cnt[u.name]||{n:0,r:u.r,phe:u.phe}).n++});
  return {modes,keep,res,mat,cnt,own}}
-function renderPlan(){const box=document.getElementById("planBox");if(!box||!window.KREADY)return;const P=PLAN=computePlan();window.KEEPSET=new Set(Object.keys(P.keep));
+function renderPlan(){const box=document.getElementById("planBox");if(!box||!window.KREADY)return;const P=PLAN=computePlan();window.KEEPSET=new Set(Object.keys(P.keep));try{renderUpHint();renderRoad()}catch(e){}
  const team=(r,cur)=>r?`<div class="pteam">${[...r.front,...r.back].map((n,k)=>`<span class="pchip ${k<3?"f":"b"}">${token(byName[n])}<span>${esc(n)}<small>${P.own[n]}★</small></span></span>`).join("")}</div>`:'<p class="meta">Chưa đủ tướng.</p>';
  const card1=`<div class="panel"><h3>1. Đánh đội nào</h3>${P.modes.map(m=>`<div class="pmode"><div class="pmh"><b>${esc(m.name)}</b>${!m.now?"":(m.now.v-m.now.cur)<0.05?'<span class="chip on">đội đang dùng đã tối ưu</span>':(m.now.v-m.now.cur)<1.5?`<span class="chip">chênh ít (+${(m.now.v-m.now.cur).toFixed(1)}) – giữ đội đang dùng cũng được</span>`:`<span class="chip warn">nên đổi: +${(m.now.v-m.now.cur).toFixed(1)} điểm</span>`}</div>${team(m.now)}
   ${(m.alt||[]).slice(1).map(r=>`<details><summary class="meta">Phương án: ${PROFILES[r.prof].n}</summary>${team(r)}</details>`).join("")}<details><summary class="meta">Đội lâu dài khi max sao</summary>${team(m.late)}</details></div>`).join("")}<p class="meta">Bấm tab <b>Đội hình</b> để xem chi tiết, áp dụng đội đề xuất hoặc giữ đội mẫu.</p></div>`;
