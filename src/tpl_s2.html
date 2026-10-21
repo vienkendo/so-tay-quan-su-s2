@@ -1466,6 +1466,7 @@ const MODES={
  tb:{n:"PVE ngày – Trang bị",d:"1 trận phân thắng thua."},
  cp:{n:"PVE ngày – Công pháp",d:"1 trận phân thắng thua."},
  ntd:{n:"PVE – Trấn thủ Nhai Đình",d:"Leo tháp: mỗi tầng phải thắng liên tục 12 đợt địch mới qua tầng. Mỗi tầng giới hạn số tướng ra trận (1→6 người, hết 6 quay lại 1) và có ô Buff riêng – đặt tướng vào ô Buff để nhận Buff. Thắng đủ số đợt nhất định được chọn thêm Buff. Thưởng mốc ở đợt 6, 9, 12.",wave:true},
+ cde:{n:"Event – Thí Luyện Cổ Đế",dmg:true,r:5,d:"Đánh đội boss 6 tướng (Lv200) trong 5 hiệp, tính TỔNG sát thương; mốc thưởng 5 vạn / 10 vạn / 40 vạn / 150 vạn, xếp hạng theo ST cao nhất. Buff khiêu chiến: cho Viêm Đế (Cổ Đế kỳ này) ra trận → toàn đội +25% Công (Thức Tỉnh càng cao càng mạnh). Mục tiêu là dồn ST, không cần thắng."},
  bang:{n:"PVE – Rèn luyện Bang",dmg:true,r:5,d:"Đánh đội địch 6 tướng theo chương, CHỈ 5 HIỆP: mỗi lần khiêu chiến TÍCH LŨY sát thương, lần nào cũng có thưởng. 2 lượt/ngày (mua thêm bằng KNB), reset 5:00. Mục tiêu là DỒN SÁT THƯƠNG TỐI ĐA, không cần thắng."},
  nam:{n:"PVE – Nam chinh Bắc chiến",d:"Mỗi ải 1 trận. Có 3 điều kiện sao, phải đạt cả 3 trong CÙNG một trận mới được 3 sao (ví dụ: Vượt PB · Tướng tử vong ≤1 · Tối đa ra trận 2 tướng phe Tam Quốc). Một số chương cần đủ sao chương trước mới mở; tổng sao quyết định thưởng ngày.",cond:true}};
 const RND=()=>MODES[VS.mode||"pvp"].r||15;
