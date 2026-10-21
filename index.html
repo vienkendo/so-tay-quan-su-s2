@@ -6,7 +6,7 @@
 <title>Sổ Tay Quân Sư S2</title>
 <meta name="theme-color" content="#17130f">
 <link rel="icon" href="assets/images/site-icon-fantasy.jpg">
-<link rel="stylesheet" href="style.css?v=80a50706">
+<link rel="stylesheet" href="style.css?v=fe07e11b">
 </head>
 <body>
 
@@ -16,7 +16,6 @@
     <nav role="tablist" aria-label="Mục">
       <button role="tab" id="t-doi" aria-selected="true" data-tab="doi">Đội hình</button>
       <button role="tab" id="t-tuong" aria-selected="false" data-tab="tuong">Tướng</button>
-      <button role="tab" id="t-phan-tich" aria-selected="false" data-tab="phan-tich">Phân tích</button>
       <button role="tab" id="t-vs" aria-selected="false" data-tab="vs">Đối đầu</button>
       <button role="tab" id="t-kho" aria-selected="false" data-tab="kho">Kho</button>
       <button role="tab" id="t-trotran" aria-selected="false" data-tab="trotran">Trợ trận</button>
@@ -57,27 +56,8 @@
     </div>
     <div class="filters" id="filters"></div>
     <div class="grid" id="grid"></div>
-  </section>
-
-  <section id="phan-tich" hidden>
-    <h2>Công cụ phân tích tướng</h2>
-    <p class="lead">Lọc danh sách theo phe và nhóm, hoặc đặt hai tướng cạnh nhau để so sánh vai trò, sao hiện tại, điểm tham khảo và mô tả kỹ năng. Dữ liệu lấy từ danh sách tướng hiện có trong sổ tay.</p>
-    <div class="panel">
-      <h3>Lọc tướng</h3>
-      <div class="tools">
-        <select id="analysis-phe" aria-label="Lọc theo phe">
-          <option value="">Tất cả phe</option><option value="3Q">3Q</option><option value="Hán">Hán</option><option value="Tần">Tần</option><option value="Đường">Đường</option>
-        </select>
-        <select id="analysis-nhom" aria-label="Lọc theo nhóm">
-          <option value="">Tất cả nhóm</option><option value="Công">Công</option><option value="Thủ">Thủ</option><option value="Trợ">Trợ</option><option value="Thuật Sĩ">Thuật Sĩ</option>
-        </select>
-        <input id="analysis-q" type="search" placeholder="Tìm tên hoặc kỹ năng…" aria-label="Tìm tướng trong phân tích">
-      </div>
-      <p class="meta" id="analysis-count" aria-live="polite"></p>
-      <div class="grid" id="analysis-results"></div>
-    </div>
-    <div class="panel" style="margin-top:18px">
-      <h3>So sánh hai tướng</h3>
+    <div class="panel" id="cmpPanel" style="margin-top:18px">
+      <h3>So sánh hai tướng</h3><p class="meta">Chọn 2 tướng, hoặc mở chi tiết một tướng rồi bấm "So sánh".</p>
       <div class="tools">
         <label for="analysis-hero1">Tướng 1</label><select id="analysis-hero1" aria-label="Chọn tướng thứ nhất"></select>
         <label for="analysis-hero2">Tướng 2</label><select id="analysis-hero2" aria-label="Chọn tướng thứ hai"></select>
@@ -85,6 +65,7 @@
       <div id="analysis-compare" aria-live="polite"></div>
     </div>
   </section>
+
 
   <section id="vs" hidden>
     <h2>Đối đầu</h2>
@@ -387,6 +368,6 @@
   <div class="dh"><div id="dlg-token"></div><div><h3 id="dlg-title"></h3><div class="meta" id="dlg-meta"></div></div><button class="x" id="dlg-x" aria-label="Đóng">×</button></div>
   <div class="db" id="dlg-body"></div>
 </dialog>
-<script src="script.js?v=80a50706"></script>
+<script src="script.js?v=fe07e11b"></script>
 </body>
 </html>
