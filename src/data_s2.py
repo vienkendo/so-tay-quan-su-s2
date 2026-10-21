@@ -64,6 +64,15 @@ TEAMS=[
        "Ban Chiêu":"11★ +30% Bạo Kích cho Lý Bạch"},
   note="Tình Nghĩa: Lý Bạch + Triệu Vân (Công +15%), Ban Chiêu + Vương Chiêu Quân (HP +15%). ⚠ Lý Bạch phải có Công cao hơn Triệu Vân; nếu lên cấp 100 vẫn thấp hơn, thay Triệu Vân bằng Thái Văn Cơ."),
 ]
+heroes.append(dict(name="Mạc Tà",phe="Tần",nhom="Thuật Sĩ",sao=5,role="Đánh lan [Huyết Tích] – sát thương theo hiệp bỏ qua Thủ lên toàn địch; 11★ khuếch đại ST cho cả đội",
+  base="ĐT 57% ST hàng trước địch; TC 70% ST toàn địch, 65% gắn [Huyết Tích] (mỗi hiệp −HP = 30% Công Mạc Tà, bỏ qua Thủ, 2 hiệp)",
+  s9="Sau đánh thường: 100% gắn [Huyết Tích] lên mục tiêu, 2 hiệp",
+  s11="[Huyết Tích] do Mạc Tà gắn làm mục tiêu −12% Giảm ST (cả đội đánh mạnh hơn)",
+  s13="[Huyết Tích] của địch biến mất/bị xóa: ngẫu nhiên lan sang nhân vật liền kề, cài lại 2 hiệp",
+  nt="ST [Huyết Tích] tăng theo ST trực tiếp địch phải chịu hoặc ST Huyết Tích, mỗi lần +1%, tối đa +100%",
+  tn="Can Tương – HP +15%",pvp=3,boss=4,pve=4,keep="Phương án (Rèn luyện Bang, PVE)",gear="Công, Bạo Kích – nhưng Công phải thấp hơn carry",books="",ban=1,
+  stat="Cấp 160 · HP 31,7 vạn · Công 45.642 · Thủ 9.988 · Lực chiến 737.638 (5★, 21/10). Tiềm năng: bậc 1–5 Công +350, Công +10%, Công +350 & HP +3500, Thủ +10%, Né +10%; 6★ Nộ +2 · 7★ Tăng ST +8% · 8★ Miễn ST +8% · 10★ Thủ +6% · 12★ Công +4% · 14★ HP +6% · 15★ HP +10%. Lên 9★ cần 3 bản, 11★ cần 4 bản."))
+
 UP=[dict(name="Vương Chiêu Quân",cur=5,next=6,unlock="Nộ cơ bản +2 · HP/Công/Thủ 100%→120% · giới hạn cấp 100→145",copy="0/1 (bản 3★)",
   fodder="Tướng Hán 5★",fodderHave="0/1",cost=None,note="Đang kẹt vì chưa có bản trùng. Nguyên liệu Hán: dùng Lưu Bang hoặc Ngu Cơ; KHÔNG dùng Ban Chiêu, Hàn Tín.")]
 PR=[dict(hero="Bước 0",ms="Top 6",gain="Đưa 6 tướng PVP vào Top 6 để chia sẻ cấp; đẩy cùng lên cấp 100"),
