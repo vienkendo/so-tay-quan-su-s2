@@ -845,7 +845,7 @@ function radarSVG(series,max){const cx=180,cy=150,r=92,N=RADAR_AX.length,ang=i=>
  return `<svg viewBox="0 0 360 300" role="img" aria-label="Biểu đồ radar vai trò">${g}${sh}${lb}</svg>`}
 function teamTotals(names){const t={};RADAR_AX.forEach(([k])=>t[k]=0);names.filter(Boolean).forEach(n=>{const s=radarScore(n);RADAR_AX.forEach(([k])=>t[k]+=s[k])});RADAR_AX.forEach(([k])=>t[k]=+t[k].toFixed(1));return t}
 function teamGaps(t){const w=[];if(t.dmg<4)w.push("thiếu sát thương");if(t.tru<5)w.push("hàng trước mỏng");if(t.heal<3)w.push("ít hồi máu");if(t.ctrl<3)w.push("không có khống chế/giảm Nộ");if(t.no<3)w.push("ít nguồn Nộ");return w}
-function renderTeamRadar(){const box=document.getElementById("teamRadar");if(!box)return;
+function renderTeamRadar(){renderTeamAlt();const box=document.getElementById("teamRadar");if(!box)return;
  const T=DATA.teams,a=+(document.getElementById("trA")||{}).value||curTeam,bv=(document.getElementById("trB")||{}).value,b=bv===""||bv==null?-1:+bv;
  const ta=T[a]||T[curTeam],va=teamTotals([...ta.front,...ta.back]),series=[{v:va,c:"var(--accent)"}];let vb=null;
  if(b>=0&&T[b]&&b!==a){vb=teamTotals([...T[b].front,...T[b].back]);series.push({v:vb,c:"#2f62b3"})}
@@ -855,6 +855,17 @@ function renderTeamRadar(){const box=document.getElementById("teamRadar");if(!bo
  ${gaps.length?`<div class="warn" style="margin-top:8px">⚠ ${esc(ta.name)}: ${gaps.join(", ")}.</div>`:""}
  <div class="sample-matrix-wrap" style="margin-top:10px"><table class="sample-matrix"><thead><tr><th>${esc(ta.name)}</th>${RADAR_AX.map(([,t])=>`<th>${t}</th>`).join("")}</tr></thead><tbody>${rows}<tr class="matrix-total"><th>Tổng (tối đa 30)</th>${RADAR_AX.map(([k])=>`<td>${va[k]}</td>`).join("")}</tr></tbody></table></div>
  <p class="meta">Điểm 0–5 mỗi trục suy ra từ phân loại kỹ năng (carry, diện rộng, tank, khiên, hồi máu, khống chế, cấp Nộ, buff…), không phải chỉ số trong game. "Ô công pháp" tính theo sao hiện tại trong Kho.</p>`}
+
+/* ===== Phương án thay từ kho (theo vai trò, sao, điểm chế độ) ===== */
+const ROLEKEY=["carry","tank","heal","shield","ctrl","rage+","amp","buff","dispel","aoe","sub","back"];
+function mainRoles(n){const t=((EDB[n]||{}).tags)||[];return ROLEKEY.filter(k=>t.includes(k)).slice(0,2)}
+function renderTeamAlt(){const box=document.getElementById("teamAlt");if(!box||!window.KREADY)return;const t=DATA.teams[curTeam],key=mk(t.mode),all=[...t.front,...t.back],own=ownedStars();
+ const sc=n=>((byName[n]||{})[key]??2.5)+Math.min(own[n]||0,15)*0.12;
+ const rows=all.map((n,i)=>{const rs=mainRoles(n);if(!rs.length)return "";
+  const c=Object.keys(own).filter(x=>!all.includes(x)&&mainRoles(x).some(r=>rs.includes(r))).sort((a,b)=>sc(b)-sc(a)).slice(0,3);
+  if(!c.length)return "";const me=sc(n);
+  return `<tr><td><b>Ô ${i+1}</b> ${esc(n)} <span class="meta">${own[n]||"–"}★ · ${rs.map(r=>TAGN[r]||r).join(", ")}</span></td><td>${c.map(x=>{const d=sc(x)-me;return `<span class="chip ${d>0.3?"on":""}" title="Điểm chế độ ${(byName[x]||{})[key]??"?"}">${esc(x)} ${own[x]}★${d>0.3?" ▲":""}</span>`}).join(" ")}</td></tr>`}).join("");
+ box.innerHTML=`<h3>Phương án thay từ kho</h3><p class="meta">Tướng SSR+ trong kho cùng vai trò với từng ô, xếp theo điểm ${esc(t.mode)} + số sao hiện tại. ▲ = đang vượt tướng trong đội. Đổi tướng sẽ mất Tình Nghĩa/Chiến Sách của ô đó – kiểm tra trước khi thay.</p><div class="sample-matrix-wrap"><table class="sample-matrix ttt"><tbody>${rows||'<tr><td class="meta">Không có tướng cùng vai trò trong kho.</td></tr>'}</tbody></table></div>`}
 function initTeamRadar(){const box=document.getElementById("teamRadar");if(!box)return;const opts=DATA.teams.map((t,i)=>`<option value="${i}">${esc(t.name)}</option>`).join("");
  box.innerHTML=`<h3>Hồ sơ vai trò của đội</h3><div class="tools"><label>Đội <select id="trA">${opts}</select></label><label>So với <select id="trB"><option value="">— không —</option>${opts}</select></label></div><div id="teamRadarOut"></div>`;
  const A=document.getElementById("trA");A.value=String(curTeam);A.onchange=renderTeamRadar;document.getElementById("trB").onchange=renderTeamRadar;renderTeamRadar();
