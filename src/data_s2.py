@@ -14,7 +14,7 @@ for n,b in {"Ban Chiêu":4,"Quỷ Cốc Tử":4,"Lỗ Trí Thâm":4,"Lý Long C�
 # du lieu moi
 H["Lữ Bố"].update(s13="Cứ đánh thường 4 lần, thêm 1 đòn đánh thường lên toàn địch (100% ST)",
   nt="5 Nộ: đòn đánh thường lan cùng hàng dọc 55% ST · 10 Nộ: lan sang ô cạnh 60% ST · 15 Nộ: toàn địch trừ mục tiêu chính chịu thêm 65% ST",
-  stat="Cấp 100 · HP 50,934 · Công 8,399 · Thủ 1,469. Bậc 5 (Trúng +10%) mở khi lên 6★. Có thêm 1 thẻ dùng thử (đồng hồ xanh) – không đầu tư.",
+  stat="Cấp 167/255 · HP 42,1 vạn · Công 66.914 · Thủ 13.307 · Lực chiến 1.166.905 (ảnh 21/10). Công cao hơn Hạng Vũ (42.700) và Vệ Tử Phu (42.607) → vẫn giữ vị trí Công cao nhất.",
   gear="Bạo Kích > Trúng > Công; luôn giữ Công cao nhất đội")
 H["Triệu Vân"].update(s13="Gây ST chung cuộc +15%", nt="Mỗi 1 Nộ +3% ST chung cuộc, tối đa +60%", tn="Lý Bạch – Công +15%", pvp=1, boss=2, pve=3, keep="Cốt lõi (PVE)",
   stat="Cấp 93 · HP 49,425 · Công 8,021 · Thủ 1,439. ⚠ Công đang cao hơn Lý Bạch (cấp 80). Lý Bạch cùng khung chỉ số với Lữ Bố nên ở cấp 100 ước khoảng 8,400, chỉ nhỉnh hơn Triệu Vân rất ít – không build Công cho Triệu Vân.",
