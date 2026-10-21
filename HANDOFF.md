@@ -1,5 +1,7 @@
 # HANDOFF — Sổ Tay Quân Sư S2
 
+> **21/10/2026 – tạm ngưng bản web Claude (artifact).** Chỉ cập nhật bản GitHub Pages; Kho chính nằm ở repo riêng `so-tay-data`. `make.py` vẫn sinh `build/so_tay_quan_su_s2_web.html` nhưng không publish cho tới khi người chơi yêu cầu lại.
+
 > Bàn giao cho agent/phiên làm việc tiếp theo. Cập nhật: 2026-10-21.
 
 ## 1. Nguồn sự thật duy nhất
