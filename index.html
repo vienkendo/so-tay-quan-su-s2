@@ -6,7 +6,7 @@
 <title>Sổ Tay Quân Sư S2</title>
 <meta name="theme-color" content="#17130f">
 <link rel="icon" href="assets/images/site-icon-fantasy.jpg">
-<link rel="stylesheet" href="style.css?v=075cffdb">
+<link rel="stylesheet" href="style.css?v=fe916f66">
 </head>
 <body>
 
@@ -102,6 +102,9 @@
       <input id="blCar" placeholder="ST carry mình (vd 145vạn)" style="width:150px" title="Sát thương của carry đội mình">
       <input id="blMe" placeholder="Tổng ST mình" style="width:110px"><input id="blEn" placeholder="Tổng ST địch" style="width:110px">
       <input id="blNote" placeholder="Ghi chú (tùy chọn)" style="flex:1;min-width:140px"><button class="btn" id="blWin">Lưu: Thắng</button><button class="btn ghost" id="blLose">Lưu: Thua</button><span class="meta" id="blMsg"></span></div>
+      <details class="blgrid" style="margin-top:8px"><summary>Nhập sát thương từng ô (tự cộng tổng, tự lấy ST carry)</summary>
+        <div class="blg"><div><b>Đội mình</b><div id="blS1"></div></div><div><b>Đội địch</b><div id="blS2"></div></div></div>
+        <p class="meta">Gõ đúng như trong game: <code>69.3vạn</code>, <code>358vạn</code>, <code>68619</code>. Ô "Tổng ST" và "ST carry" ở trên tự điền.</p></details>
       <div class="khobar ocr" hidden style="margin-top:8px"><button class="btn ghost" id="ocrRes">📷 Đọc ảnh kết quả</button><span class="meta" id="ocrResMsg">Chọn ảnh bảng kết quả trận – tự điền số hiệp, sát thương, thắng/thua.</span><input type="file" id="ocrResF" accept="image/*" hidden></div>
       <div id="blList"></div></div>
   </section>
@@ -375,6 +378,6 @@
   <div class="dh"><div id="dlg-token"></div><div><h3 id="dlg-title"></h3><div class="meta" id="dlg-meta"></div></div><button class="x" id="dlg-x" aria-label="Đóng">×</button></div>
   <div class="db" id="dlg-body"></div>
 </dialog>
-<script src="script.js?v=075cffdb"></script>
+<script src="script.js?v=fe916f66"></script>
 </body>
 </html>

@@ -530,9 +530,18 @@ document.addEventListener("change",e=>{const d=e.target.dataset||{};
 document.addEventListener("click",e=>{const b=e.target.closest("[data-bkdel]");if(!b)return;const id=+b.dataset.bkdel;X.books=X.books.filter(x=>x.id!==id);Object.values(X.alloc).forEach(a=>a.forEach((v,i)=>{if(v===id)a[i]=null}));ksave();renderBooks()});
 
 /* (5) Nhật ký trận */
+(function(){const mk=(id,pre)=>{const el=document.getElementById(id);if(!el)return;el.innerHTML=Array.from({length:6},(_,i)=>`<label class="blcell"><span>Ô${i+1}</span><input data-bls="${pre}${i}" inputmode="text" placeholder="0"><small></small></label>`).join("")};mk("blS1","m");mk("blS2","e");
+ const calc=()=>{const v=p=>Array.from({length:6},(_,i)=>{const el=document.querySelector(`[data-bls="${p}${i}"]`);const n=parseLC(el.value);el.nextElementSibling.textContent=el.value.trim()?fmtLC(n):"";return n});const me=v("m"),en=v("e"),sm=me.reduce((a,b)=>a+b,0),se=en.reduce((a,b)=>a+b,0);
+  if(sm){document.getElementById("blMe").value=fmtLC(sm);const ci=(()=>{const t=DATA.teams[+document.getElementById("blTeam").value||0];const all=t?[...t.front,...t.back]:[];const c=all.findIndex(n=>((EDB[n]||{}).tags||[]).includes("carry"));return c})();document.getElementById("blCar").value=fmtLC(ci>=0&&me[ci]?me[ci]:Math.max(...me))}
+  if(se)document.getElementById("blEn").value=fmtLC(se)};
+ document.addEventListener("input",e=>{if(e.target.dataset&&e.target.dataset.bls!=null)calc()});
+ const clr=()=>document.querySelectorAll("[data-bls]").forEach(x=>{x.value="";x.nextElementSibling.textContent=""});
+ ["blWin","blLose"].forEach(id=>{const b=document.getElementById(id);if(b)b.addEventListener("click",()=>setTimeout(clr,0))});
+})();
+
 function logBattle(win){const en=VS.slots.map((s,i)=>({n:s.n,i,tags:EDB[s.n]?EDB[s.n].tags:s.tags})).filter(s=>s.n);
  if(!en.length){alertBox("Nhập đội hình địch ở trên trước khi lưu trận.");return}
- X.battles.push({t:Date.now(),win,mode:document.getElementById("blMode").value,lv:+VS.lv||0,my:+LV||0,lcMe:parseLC(VS.lcMe),lcEn:parseLC(VS.lcEn),en,note:document.getElementById("blNote").value.trim(),r:+document.getElementById("blR").value||0,car:document.getElementById("blCar").value.trim()?parseLC(document.getElementById("blCar").value):null,stMe:parseLC(document.getElementById("blMe").value),stEn:parseLC(document.getElementById("blEn").value),team:(()=>{const ti=+document.getElementById("blTeam").value||0,t=DATA.teams[ti]||DATA.teams[0];return {i:ti,name:t.name,front:t.front.slice(),back:t.back.slice()}})()});
+ X.battles.push({t:Date.now(),win,mode:document.getElementById("blMode").value,lv:+VS.lv||0,my:+LV||0,lcMe:parseLC(VS.lcMe),lcEn:parseLC(VS.lcEn),en,note:document.getElementById("blNote").value.trim(),r:+document.getElementById("blR").value||0,car:document.getElementById("blCar").value.trim()?parseLC(document.getElementById("blCar").value):null,stMe:parseLC(document.getElementById("blMe").value),stEn:parseLC(document.getElementById("blEn").value),per:(()=>{const g=p=>Array.from({length:6},(_,i)=>parseLC((document.querySelector(`[data-bls="${p}${i}"]`)||{}).value));const m=g("m"),e=g("e");return m.some(Boolean)||e.some(Boolean)?{me:m,en:e}:null})(),team:(()=>{const ti=+document.getElementById("blTeam").value||0,t=DATA.teams[ti]||DATA.teams[0];return {i:ti,name:t.name,front:t.front.slice(),back:t.back.slice()}})()});
  ["blR","blCar","blMe","blEn"].forEach(id=>document.getElementById(id).value="");
  X.battles=X.battles.slice(-200);document.getElementById("blNote").value="";ksave();renderBattles()}
 function alertBox(m){const o=document.getElementById("blMsg");if(o){o.textContent=m;setTimeout(()=>o.textContent="",4000)}}
@@ -666,7 +675,7 @@ function vsModeUI(){const s=document.getElementById("vsMode");if(!s)return;const
  document.getElementById("vsBuffTxt").value=VS.buffTxt||"";
  document.getElementById("vsModeInfo").innerHTML=`<b>${esc(MODES[M].n)}</b> – ${esc(MODES[M].d)}<br><span class="meta">Tối đa <b>${MODES[M].r||15} hiệp</b>. ${esc(COMMON15)}</span>`;
  const bm=document.getElementById("blMode");if(bm)bm.value=MODES[M].n;}
-function parseLC(s){s=String(s||"").toLowerCase().replace(/[\s.,]/g,"");if(!s)return 0;const m=s.match(/^(\d+)(?:v|vạn|van)(\d*)$/);if(m)return +m[1]*10000+(+m[2]||0);return +s.replace(/\D/g,"")||0}
+function parseLC(s){s=String(s||"").toLowerCase().replace(/\s/g,"");if(!s)return 0;let m=s.match(/^(\d+)(?:[.,](\d+))?(ức|uc|tỷ)$/);if(m)return Math.round(parseFloat(m[1]+"."+(m[2]||0))*1e8);m=s.match(/^(\d+)[.,](\d+)(?:v|vạn|van)$/);if(m)return Math.round(parseFloat(m[1]+"."+m[2])*1e4);s=s.replace(/[.,]/g,"");m=s.match(/^(\d+)(?:v|vạn|van)(\d*)$/);if(m)return +m[1]*10000+(+m[2]||0);return +s.replace(/\D/g,"")||0}
 const fmtLC=v=>v>=10000?`${Math.floor(v/10000)} vạn ${String(v%10000).padStart(4,"0")}`:String(v);
 
 function learn(){const B=(X&&X.battles)||[],L=B.filter(b=>!b.win),kind={};L.forEach(b=>{const k=battleKind(b);if(k)kind[k]=(kind[k]||0)+1});
