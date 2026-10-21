@@ -279,7 +279,7 @@ document.addEventListener("click",e=>{const b=e.target.closest("[data-uh]");if(!
  const t=document.createElement("span");t.dataset.up=b.dataset.uh;document.getElementById("kList").appendChild(t);t.click();t.remove();
  ids.forEach(id=>{const c=document.querySelector(`#dlg-body .picks input[value="${id}"]`);if(c)c.checked=true});});
 
-function krender(){_kr0();setTimeout(()=>{renderKhoCoverage();if(typeof renderTeamRadar==="function")renderTeamRadar();const sec=document.querySelector("main section:not([hidden])");if(sec&&sec.id==="thanthu")renderThanThu();if(sec&&sec.id==="linhphu")renderLinhPhu();if(sec&&sec.id==="evlist")renderEvents();if(window.cdvLoad)cdvLoad()},0);renderUpHint();renderRoad();renderBooks();renderBattles();const od=document.getElementById("kOd");if(od)od.value=X.orbDay||""}
+function krender(){_kr0();setTimeout(()=>{renderKhoCoverage();if(typeof renderTeamRadar==="function")renderTeamRadar();const sec=document.querySelector("main section:not([hidden])");if(sec&&sec.id==="thanthu")renderThanThu();if(sec&&sec.id==="linhphu")renderLinhPhu();if(sec&&sec.id==="evlist")renderEvents();if(sec&&sec.id==="quy")renderRules();if(window.cdvLoad)cdvLoad()},0);renderUpHint();renderRoad();renderBooks();renderBattles();const od=document.getElementById("kOd");if(od)od.value=X.orbDay||""}
 function snap(){KUNDO.push(JSON.stringify({k:K,orb:ORB,log:KLOG}))}
 const nid=()=>K.reduce((m,u)=>Math.max(m,u.id),0)+1;
 const today=()=>new Date().toLocaleString("vi-VN",{day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit"});
@@ -892,7 +892,7 @@ const groupOf=id=>Object.keys(SUBG).find(g=>SUBG[g].tabs.some(t=>t[0]===id));
 (function(){const _st=showTab;showTab=function(id){if(SUBG[id])id=store.get(id+"Sub",SUBG[id].def);_st(id);const g=groupOf(id),bar=document.getElementById("subnav");
  if(bar){bar.hidden=!g;if(g){bar.setAttribute("aria-label",SUBG[g].label);bar.innerHTML=SUBG[g].tabs.map(([k,t])=>`<button data-sub="${k}" aria-pressed="${k===id}">${t}</button>`).join("")}}
  if(g){const tb=document.querySelector(`nav [data-tab="${g}"]`);document.querySelectorAll("nav button").forEach(b=>b.setAttribute("aria-selected",b===tb));store.set(g+"Sub",id)}
- if(id==="thanthu")renderThanThu();if(id==="linhphu")renderLinhPhu();if(id==="evlist")renderEvents()}})();
+ if(id==="thanthu")renderThanThu();if(id==="linhphu")renderLinhPhu();if(id==="evlist")renderEvents();if(id==="quy")renderRules()}})();
 /* Lịch sự kiện */
 function EVS(){if(!Array.isArray(X.ev))X.ev=[{id:1,name:"Thí Luyện Cổ Đế Viêm",kind:"Tuần",end:"",goal:"Đạt mục tiêu ST mỗi ngày; xếp hạng theo ST cao nhất kỳ",reward:"",note:"Xem chi tiết ở tab Cổ Đế Viêm",done:false}];return X.ev}
 function evDays(d){if(!d)return null;const t=new Date(d+"T23:59:59");return Math.ceil((t-Date.now())/864e5)}
@@ -940,4 +940,43 @@ window.renderAnalysis=()=>{list();cmp()};
 })();
 
 initTeamRadar();
+/* ===== QUY TẮC ĐỘNG: suy ra từ Kho + kỹ năng + đội hình, không gán cứng tên tướng ===== */
+const MILE=[["base","Cơ bản",0],["s9","9★",9],["s11","11★",11],["s13","13★",13],["nt","Nhập Thánh",16]];
+function ownedStars(){const m={};(K||[]).forEach(u=>{if(u.r==="SR"||u.r==="R")return;m[u.name]=Math.max(m[u.name]||0,+u.star||0)});return m}
+function skillHits(re){const own=ownedStars(),out=[];Object.keys(own).forEach(n=>{const h=byName[n];if(h)MILE.forEach(([k,lab,st])=>{if(h[k]&&re.test(h[k]))out.push({n,lab,st,ok:own[n]>=st,txt:h[k]})});else{const d=(EDB[n]||{}).desc||"";if(re.test(d))out.push({n,lab:"Kỹ năng",st:0,ok:true,txt:d})}});return out}
+function teamCarry(t){const all=[...t.front,...t.back];return all.find(n=>/carry/i.test((t.why||{})[n]||""))||all.find(n=>((EDB[n]||{}).tags||[]).includes("carry"))}
+function laneOf(t,n){const i=t.front.indexOf(n);if(i>=0)return i;const j=t.back.indexOf(n);return j>=0?j:-1}
+function renderRules(){const box=document.getElementById("quyDyn");if(!box||!window.KREADY)return;const own=ownedStars(),tg=n=>((EDB[n]||{}).tags)||[],L=[];
+ // 1. carry chính trong kho
+ const carries=Object.keys(own).filter(n=>tg(n).includes("carry")).sort((a,b)=>own[b]-own[a]||((byName[b]||{}).pvp||0)-((byName[a]||{}).pvp||0));
+ const main=carries[0];
+ if(main)L.push(`<li><b>Carry chính hiện tại: ${esc(main)} ${own[main]}★</b> – sao cao nhất trong các tướng carry đang có${carries.length>1?` (kế tiếp: ${carries.slice(1,4).map(n=>`${esc(n)} ${own[n]}★`).join(", ")})`:""}. Dồn tài nguyên cho một carry trước.</li>`);
+ // 2. hiệu ứng nhắm Công cao nhất
+ const hi=skillHits(/Công cao nhất/i);
+ if(hi.length){const on=hi.filter(x=>x.ok),off=hi.filter(x=>!x.ok);
+  L.push(`<li><b>Carry phải có Công cao nhất đội</b> vì ${hi.length} hiệu ứng trong kho nhắm "tướng Công cao nhất": ${on.map(x=>`<span class="chip on">${esc(x.n)} ${x.lab} ✓</span>`).join(" ")} ${off.map(x=>`<span class="chip">${esc(x.n)} ${x.lab} (chưa mở, đang ${own[x.n]}★)</span>`).join(" ")}. Không đeo sách/trang bị Công cho hỗ trợ.</li>`)}
+ // 3. Nộ
+ if(main){const rp=Object.keys(own).filter(n=>n!==main&&tg(n).includes("rage+")),rm=Object.keys(own).filter(n=>tg(n).includes("rage-"));
+  const dep=tg(main).includes("rageDep")||/Nộ/.test(((byName[main]||{}).base||"")+((byName[main]||{}).nt||""));
+  if(dep)L.push(`<li><b>${esc(main)} mạnh theo Nộ</b> → ưu tiên nguồn cấp Nộ trong kho: ${rp.length?rp.map(n=>`${esc(n)} ${own[n]}★`).join(", "):"<i>chưa có tướng cấp Nộ</i>"}${rm.length?`; tướng giảm/cướp Nộ địch: ${rm.map(n=>`${esc(n)} ${own[n]}★`).join(", ")}`:""}.</li>`)}
+ // 4. tướng có mặt nhiều đội
+ const cnt={};DATA.teams.forEach(t=>[...t.front,...t.back].forEach(n=>cnt[n]=(cnt[n]||0)+1));const multi=Object.entries(cnt).filter(([,c])=>c>=2).sort((a,b)=>b[1]-a[1]);
+ if(multi.length)L.push(`<li><b>Tướng dùng ở nhiều đội</b> – đầu tư lợi nhiều lần: ${multi.map(([n,c])=>`${esc(n)} (${c} đội${own[n]?`, ${own[n]}★`:", chưa có"})`).join(", ")}.</li>`);
+ // 5. làn: carry cùng làn với tướng khuếch đại
+ DATA.teams.forEach(t=>{const c=teamCarry(t);if(!c)return;const amps=[...t.front,...t.back].filter(n=>n!==c&&tg(n).includes("amp"));amps.forEach(a=>{const same=laneOf(t,a)===laneOf(t,c);L.push(`<li><b>${esc(t.name)}:</b> ${esc(a)} gắn hiệu ứng tăng ST phải chịu – ${same?`đang cùng làn với ${esc(c)} ✓`:`<span style="color:var(--bad)">khác làn với ${esc(c)}</span>, nên đặt cùng cột (1-4, 2-5, 3-6)`}.</li>`)})});
+ // 6. Chiến Sách khả thi từ kho (tướng ≥6★)
+ const ph={};Object.entries(own).filter(([,s])=>s>=6).forEach(([n])=>{const p=(K.find(u=>u.name===n)||{}).phe;if(p)ph[p]=(ph[p]||0)+1});
+ const top=Object.entries(ph).sort((a,b)=>b[1]-a[1]);if(top.length)L.push(`<li><b>Chiến Sách từ kho (tướng ≥6★):</b> ${top.map(([p,c])=>`${p} ${c}`).join(" · ")}${top[0][1]>=3?` → đủ dựng đội ${top[0][0]} ≥3 tướng`:""}.</li>`);
+ // 7. độ phủ vai trò
+ const roles=[["heal","hồi máu"],["ctrl","khống chế/giảm Nộ"],["tru","trụ hàng trước"],["no","cấp Nộ"]],weak=roles.filter(([k])=>Object.keys(own).filter(n=>own[n]>=6&&radarScore(n)[k]>=3).length<=1);
+ if(weak.length)L.push(`<li><b>Kho đang mỏng:</b> ${weak.map(([,t])=>t).join(", ")} (≤1 tướng ≥6★). Ưu tiên tướng/thần thú/công pháp bù vai trò này.</li>`);
+ // 8. nguyên liệu theo phe
+ const mat={};K.forEach(u=>{if(u.r==="SR"||u.r==="R"||CORE.has(u.name))return;mat[u.phe]=mat[u.phe]||{};mat[u.phe][u.name]=(mat[u.phe][u.name]||0)+1});
+ L.push(`<li><b>Nguyên liệu nâng sao (không thuộc đội chính):</b> ${Object.entries(mat).map(([p,o])=>`${p}: ${Object.entries(o).sort((a,b)=>b[1]-a[1]).slice(0,3).map(([n,c])=>`${esc(n)}×${c}`).join(", ")}`).join(" · ")}.</li>`);
+ // 9. mốc sao đủ điều kiện
+ const ok=(typeof upPlan==="function"?upPlan():[]).filter(p=>p.st==="ok");if(ok.length)L.push(`<li><b>Nâng sao được ngay:</b> ${ok.map(p=>`${esc(p.u.name)} ${p.u.star}→${p.u.star+1}★`).join(", ")} (xem tab Nâng sao).</li>`);
+ box.innerHTML=`<ul>${L.join("")}</ul><p class="meta">Tự cập nhật khi Kho, sao hoặc đội hình thay đổi. Dựa trên mô tả kỹ năng và phân loại vai trò đã nhập.</p>`;
+ // cần kiểm tra
+ const miss=Object.keys(own).filter(n=>!byName[n]&&!((EDB[n]||{}).desc)),nb=(X.books||[]).filter(b=>!BOOKFX[b.name]).map(b=>b.name);
+ const q=document.getElementById("quyChk");if(q)q.innerHTML=`<ul>${miss.length?`<li>Chưa có kỹ năng: ${miss.map(esc).join(", ")} – gửi ảnh để đưa vào phân tích.</li>`:""}${nb.length?`<li>Công pháp chưa có hiệu ứng: ${nb.map(esc).join(", ")}.</li>`:""}<li>Boss có miễn khống chế không; khiêu khích có chặn đòn diện rộng không.</li><li>Linh phù: số phù để ghép, giá trị Tăng/Giảm ST. Thần thú: hiệu quả ở sao thấp.</li></ul>`}
 const lastTab=store.get("tab","doi"); if(["doi","tuong","phan-tich","vs","kho","cp","thanthu","linhphu","trangbi","sao","quy","evlist","codviem","camnang"].includes(lastTab)) showTab(lastTab);
