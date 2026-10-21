@@ -154,7 +154,7 @@ cashEl.addEventListener("input",()=>{store.set("cash",cashEl.value);renderUp()})
 function renderUp(){
   const have=+cashEl.value||0;
   if(!window.KREADY){document.getElementById("upbody").innerHTML="";return}
-  const names=[...new Set(DATA.teams.flatMap(t=>[...t.back,...t.front]))].filter(n=>K.some(u=>u.name===n));
+  const names=bookHeroes().filter(n=>K.some(u=>u.name===n));
   const rows=names.map(n=>{const us=K.filter(u=>u.name===n),cur=Math.max(...us.map(u=>u.star)),nx=cur+1,h=byName[n]||{},R=RULE[cur]||{copy:null,fs:null,fc:null,orb:null},u0=us[0];
     const unlock=h["s"+nx]?`${nx}★: ${h["s"+nx]}`:(nx===6?"+2 Nộ, mở 2 ô công pháp, giới hạn cấp 145":nx===10?"Mở thêm 2 ô công pháp (5 ô)":nx===12?"Mở thêm 1 ô công pháp":"Tăng chỉ số");
     const copyHave=us.length-1, copyTxt=R.copy==null?"?":R.copy?`${Math.min(copyHave,1)}/1`:"không cần";
@@ -256,7 +256,7 @@ function ghDialog(){const c=GH.cfg()||{owner:"vienkendo",repo:"so-tay-data",path
  const off=document.getElementById("ghOff");if(off)off.onclick=()=>{GH.save(null);CLOUD=null;clearInterval(GH.timer);kstat("","Đã ngắt – chỉ lưu trên máy này");dlg.close()}}
 
 function upPlan(){
- const order=[...new Set(DATA.teams.flatMap(t=>[...t.back,...t.front]))];
+ const order=bookHeroes();
  const used=new Set(), out=[];
  for(const n of order){
   const us=K.filter(u=>u.name===n).sort((a,b)=>b.star-a.star); if(!us.length) continue;
@@ -405,7 +405,7 @@ function roadmap(name,target){
 }
 function renderRoad(){
  const el=document.getElementById("road"); if(!el) return;
- const names=[...new Set(DATA.teams.flatMap(t=>[...t.back,...t.front]))].filter(n=>K.some(u=>u.name===n));
+ const names=bookHeroes().filter(n=>K.some(u=>u.name===n));
  const selN=document.getElementById("rdH"), selT=document.getElementById("rdT");
  const cur=selN&&names.includes(selN.value)?selN.value:names[0]; if(!cur){el.innerHTML='<p class="meta">Kho chưa có tướng đội chính.</p>';return}
  const st=Math.max(...K.filter(u=>u.name===cur).map(u=>u.star));
@@ -457,18 +457,18 @@ const DEFBOOKS=[{"id": 1, "max": 4, "name": "Thuần Vu Quỳnh", "q": "Tím", "
 function seedBooks(){if(!X.bseed&&!X.books.length){X.books=JSON.parse(JSON.stringify(DEFBOOKS));X.bseed=1;return true}return false}
 const BOOKFX={"Hoắc Khứ Bệnh": ["Đánh thường hút 15% HP", "5★: hút 30% HP; cứ 4 đòn đánh thường, đòn kế +40% ST chung cuộc", "Tướng đánh thường trụ lâu (Lý Long Cơ)"], "Tây Thi": ["Mỗi lần nhận Buff: 36% +1 Nộ (tối đa 2 lần/hiệp)", "5★: 60%", "Lữ Bố – đội nhiều buff (Vương Chiêu Quân, Tây Thi, Điêu Thuyền)"], "Triệu Vân": ["ST Kỹ Năng +13%", "5★: +22%", "Tướng dùng tuyệt chiêu (Lý Long Cơ: đòn tử trận)"], "Lý Long Cơ": ["ST +10%, mỗi đòn giảm 2.5%, hiệp sau hồi lại", "5★: +18%, giảm 4.5%", "Tướng ra ít đòn mỗi hiệp (Lữ Bố)"], "Tôn Sách": ["ST Đánh Thường +10%", "3★: thêm 10% hút HP; 5★: +17% & 15% hút HP", "Lữ Bố, Lý Long Cơ"], "Chân Cơ": ["Mỗi debuff trên địch: +2% ST phải chịu (tối đa 12%)", "5★: +6%/debuff, tối đa 36%", "Carry (Lữ Bố)"], "Bạch Khởi": ["Bị tấn công: 12% gắn [Vết Nứt] lên kẻ tấn công (đầu hiệp sau chịu ST 2% HP tối đa, không quá 8% ST của người gắn), 1 hiệp", "1★ 15% · 2★ 18% · 3★ 21% · 4★ 24% · 5★ 27%", "Tank hàng trước bị đánh nhiều (Hạng Vũ, Lý Thế Dân) – giá trị thấp"], "Hồng Phất Nữ": ["Trị liệu đơn thể +16%", "5★: +32%", "Healer đơn thể (Điêu Thuyền, Ban Chiêu)"], "Thượng Quan Uyển Nhi": ["Từ hiệp 2 hồi 3% HP tối đa mỗi hiệp", "5★: 5%", "Hỗ trợ cần trụ"], "Lý Tú Ninh": ["Bị khống chế: +17% Thủ đến khi hết (2 lần/trận)", "5★: +25%", "Ít giá trị"], "Thái Văn Cơ": ["Trị liệu +5%", "5★: +20%", "Healer (Tây Thi)"], "Ban Chiêu": ["Khai chiến 25% nhận [Ma Thuẫn] (chặn 1 trạng thái bất thường)", "5★: 100%", "Tướng gánh khống chế (Điêu Thuyền)"], "Lỗ Ban": ["Gây ST đơn thể: 30% giảm 1 Nộ địch", "5★: 100%", "Tướng đánh đơn thể nhiều đòn"], "Vệ Thanh": ["Địch mất 1% HP: ST +0.25%", "5★: +0.75%/1%", "Carry kết liễu (Lữ Bố)"], "Thái Bình Công Chúa": ["HP +6.5%", "5★: +8%", "Tank, healer, khiên theo HP"], "Trương Mạn Thành": ["Giảm ST Bạo +4.5%", "5★: +5%", "Tướng hàng trước, hỗ trợ (PVP)"], "Thuần Vu Quỳnh": ["Thủ +5.5%", "5★: +8%", "Tank"], "Tuân Úc": ["Lực Công +5.5%", "5★: +8%", "Chỉ carry (tránh đẩy Công hỗ trợ vượt Lữ Bố)"], "Bách Lý Hề": ["ST +4%", "5★: +5%", "DPS phụ"], "Liêm Pha": ["Miễn ST +4%", "5★: +5%", "Mọi tướng cần trụ"], "Trương Công Cẩn": ["Bạo Kích +4%", "5★: +5%", "Carry thiếu Bạo Kích"], "Khương Duy": ["ST Bạo +3.5%", "5★: +5%", "Ít giá trị (ST Bạo đang dư)"], "Lữ Bố": ["Đánh thường 8% đánh thêm 1 lần (1 lần/hiệp); 1★ 12%, 2★ 16%", "3★: +10% ST đánh thường; 5★: +13% ST ĐT & 25% đánh thêm", "Lữ Bố (carry đánh thường)"], "Lý Bạch": ["Bạo Kích +10%, ST Bạo +10%; 1★ 13%/13%", "2★+: phá Khiên Vô Địch (đơn thể 100%); 5★: 25%/25%", "Carry bạo kích (Lữ Bố)"], "Điển Vi": ["Bạo kích → địch −4% nhận trị liệu (tối đa 20%, 2 hiệp)", "5★: −12%/lần, tối đa 60%", "Carry bạo kích khi gặp đội nhiều hồi máu"], "Quỷ Cốc Tử": ["Gây ST đơn thể: 20% cướp 1 Nộ của địch", "1★ 28% · 2★ 36% · 3★ 44% · 4★ 52% · 5★ 60%", "Lữ Bố (đánh thường đơn thể, mạnh theo Nộ)"], "Lỗ Trí Thâm": ["Mỗi lần bị tấn công: +1% Thủ, tối đa 10%, 3 hiệp", "1★ 1.2%/12% · 2★ 1.4%/14% · 3★ 1.6%/16% · 4★ 1.8%/18% · 5★ 2%/20%", "Tank hàng trước"], "Lý Thế Dân": ["Bị tấn công: nhận [Khiên] 2% HP, cộng dồn tối đa 50%, 7 hiệp", "1★ 2.5%/62.5% · 2★ 3%/75% · 3★ 3.5%/87.5% · 4★ 3.5%/105% + 15% giảm 1 Nộ kẻ tấn công · 5★ 4%/120% + 20%", "Tank/hàng trước bị đánh nhiều (Lý Thế Dân, Vương Chiêu Quân)"]};
 const BOOKPREF={"Lữ Bố": ["Lữ Bố", "Lý Bạch", "Quỷ Cốc Tử", "Điển Vi", "Tây Thi", "Lý Long Cơ", "Trương Công Cẩn", "Bách Lý Hề", "Tuân Úc"], "Lý Long Cơ": ["Liêm Pha", "Thuần Vu Quỳnh", "Trương Mạn Thành", "Lý Tú Ninh", "Bách Lý Hề"], "Ban Chiêu": ["Hồng Phất Nữ", "Liêm Pha", "Thuần Vu Quỳnh", "Trương Mạn Thành"], "Điêu Thuyền": ["Ban Chiêu", "Hồng Phất Nữ", "Liêm Pha", "Thuần Vu Quỳnh"], "Vương Chiêu Quân": ["Liêm Pha", "Thuần Vu Quỳnh", "Thái Bình Công Chúa", "Trương Mạn Thành"], "Lý Thế Dân": ["Lý Thế Dân", "Thuần Vu Quỳnh", "Liêm Pha", "Lỗ Trí Thâm", "Thái Bình Công Chúa", "Trương Mạn Thành"], "Lý Bạch": ["Trương Công Cẩn", "Bách Lý Hề", "Tuân Úc", "Khương Duy"], "Quỷ Cốc Tử": ["Liêm Pha", "Thuần Vu Quỳnh", "Bách Lý Hề"], "Triệu Vân": ["Bách Lý Hề", "Trương Công Cẩn", "Liêm Pha"], "*": ["Liêm Pha", "Thuần Vu Quỳnh", "Trương Mạn Thành"], "Hàn Tín": ["Lý Thế Dân", "Thuần Vu Quỳnh", "Liêm Pha", "Lỗ Trí Thâm"]};
-function suggestBooks(){const heroes=[...new Set(DATA.teams.flatMap(t=>[...t.back,...t.front]))].map(n=>({n,s:Math.max(0,...K.filter(u=>u.name===n).map(u=>u.star))})).filter(h=>h.s>=6);
+function suggestBooks(){const heroes=bookHeroes().map(n=>({n,s:Math.max(0,...K.filter(u=>u.name===n).map(u=>u.star))})).filter(h=>h.s>=6);
  const used={},al={};const byN=Object.fromEntries(X.books.map(b=>[b.name,b]));
- heroes.forEach(h=>{const n=SLOTN(h.s);al[h.n]=[];(BOOKPREF[h.n]||BOOKPREF["*"]).forEach(bn=>{const b=byN[bn];if(!b||al[h.n].length>=n)return;if((used[b.id]||0)>=b.max)return;al[h.n].push(b.id);used[b.id]=(used[b.id]||0)+1});
+ heroes.forEach(h=>{const n=SLOTN(h.s);al[h.n]=[];(bookPref(h.n)).forEach(bn=>{const b=byN[bn];if(!b||al[h.n].length>=n)return;if((used[b.id]||0)>=b.max)return;al[h.n].push(b.id);used[b.id]=(used[b.id]||0)+1});
   while(al[h.n].length<n)al[h.n].push(null)});
  return al}
 
 const BKBASE={Tím:2,Cam:1,Đỏ:1};
 function bookCopies(q,from,to){let n=0;for(let k=from;k<to;k++)n+=(BKBASE[q]||1)*Math.pow(2,k);return n}
 function bookAdvice(){
- const heroes=[...new Set(DATA.teams.flatMap(t=>[...t.back,...t.front]))].map(n=>({n,s:Math.max(0,...K.filter(u=>u.name===n).map(u=>u.star))})).filter(h=>SLOTN(h.s)>0);
+ const heroes=bookHeroes().map(n=>({n,s:Math.max(0,...K.filter(u=>u.name===n).map(u=>u.star))})).filter(h=>SLOTN(h.s)>0);
  const byN=Object.fromEntries(X.books.map(b=>[b.name,b])),want={};
- heroes.forEach(h=>(BOOKPREF[h.n]||BOOKPREF["*"]).slice(0,SLOTN(h.s)).forEach(bn=>{if(byN[bn])(want[bn]=want[bn]||[]).push(h.n)}));
+ heroes.forEach(h=>(bookPref(h.n)).slice(0,SLOTN(h.s)).forEach(bn=>{if(byN[bn])(want[bn]=want[bn]||[]).push(h.n)}));
  const L=[];const bdLv={Đỏ:10,Cam:5,Tím:1};
  const lb=byN["Lý Bạch"];if(lb&&lb.star<2)L.push([10,`<b>Lý Bạch → 2★</b>: mở phá Khiên Vô Địch (khắc Biển Thước), Bạo Kích +13%/ST Bạo +13%, đeo được 3 người. Cần <b>${bookCopies('Đỏ',lb.star,2)} bản trùng</b>. Mỗi sao +${bdLv.Đỏ} cấp Bảo Điển.`]);
  const lv=byN["Lữ Bố"];if(lv&&lv.star<3)L.push([9,`<b>Lữ Bố → ${lv.star<2?"2★ rồi ":""}3★</b>: đánh thêm 12%→16%, tới 3★ có thêm +10% ST đánh thường – Lữ Bố gánh ~45% sát thương nên đây là cuốn sinh lời nhất. Cần <b>${bookCopies('Đỏ',lv.star,3)} bản trùng</b>.`]);
@@ -476,7 +476,7 @@ function bookAdvice(){
  const dv=byN["Điển Vi"];if(dv&&dv.star<1)L.push([4,`<b>Điển Vi → 1★</b> khi hay gặp đội nhiều hồi máu (Tháp, PVP): giảm trị liệu 6%/lần, tối đa 30%.`]);
  L.push([2,`<b>Chi phí lên sao (bản trùng, mỗi sao gấp đôi)</b>: Tím 2→4→8→16→32 (0→5★ tổng 62) · Cam/Đỏ 1→2→4→8→16 (tổng 31). 1 cuốn = 500 cuộn (Tím) / 2000 (Cam). ⇒ Sách Tím: ưu tiên mua NHIỀU LOẠI khác nhau để có thêm người đeo; chỉ dồn sao sách Đỏ/Cam cốt lõi.`]);L.push([1,`<b>Bản dư</b>: sách Đỏ +10, Cam +5, Tím +1 cấp Bảo Điển mỗi sao. Hiện Lv${X.bdlv||130} – mốc Lv160 cho cả đội Tăng ST +6%, Giảm ST +6%. Ưu tiên dồn bản dư vào sách Đỏ/Cam.`]);
  return `<ol class="prio">${L.sort((a,b)=>b[0]-a[0]).map(x=>`<li>${x[1]}</li>`).join("")}</ol>`}
-function bestFor(hn){const pref=BOOKPREF[hn]||BOOKPREF["*"];const own=new Set(X.books.map(b=>b.name));return pref.filter(bn=>own.has(bn))}
+function bestFor(hn){const pref=bookPref(hn);const own=new Set(X.books.map(b=>b.name));return pref.filter(bn=>own.has(bn))}
 function bestFill(hn){const n=SLOTN(Math.max(0,...K.filter(u=>u.name===hn).map(u=>u.star)));const cur=(X.alloc[hn]||[]).slice(0,n);
  const usedB={};Object.entries(X.alloc).forEach(([h,arr])=>{if(h!==hn)arr.forEach(id=>{if(id)usedB[id]=(usedB[id]||0)+1})});
  const out=[],skip=[];bestFor(hn).forEach(bn=>{if(out.length>=n)return;const b=X.books.find(x=>x.name===bn);if((usedB[b.id]||0)>=b.max){skip.push(bn);return}out.push(b.id)});
@@ -486,16 +486,25 @@ function bestFill(hn){const n=SLOTN(Math.max(0,...K.filter(u=>u.name===hn).map(u
 document.addEventListener("click",e=>{const b=e.target.closest("[data-best]");if(b)bestFill(b.dataset.best)});
 function pickBook(hn,i){const n=SLOTN(Math.max(0,...K.filter(u=>u.name===hn).map(u=>u.star)));const a=X.alloc[hn]=X.alloc[hn]||[];
  const usedB={};Object.entries(X.alloc).forEach(([h,arr])=>arr.slice(0,99).forEach(id=>{if(id)usedB[id]=(usedB[id]||0)+1}));
- const pref=BOOKPREF[hn]||BOOKPREF["*"];const list=X.books.slice().sort((x,y)=>{const px=pref.indexOf(x.name),py=pref.indexOf(y.name);return (px<0?99:px)-(py<0?99:py)||BQ.indexOf(y.q)-BQ.indexOf(x.q)});
+ const pref=bookPref(hn);const list=X.books.slice().sort((x,y)=>{const px=pref.indexOf(x.name),py=pref.indexOf(y.name);return (px<0?99:px)-(py<0?99:py)||BQ.indexOf(y.q)-BQ.indexOf(x.q)});
  modal(`Chọn công pháp – ${hn} (ô ${i+1}/${n})`,`<div class="bpick"><button class="bk empty" data-bp="">Bỏ trống ô này</button>${list.map(b=>{const u=usedB[b.id]||0,full=u>=b.max&&a[i]!==b.id,on=a.includes(b.id)&&a[i]!==b.id,rk=pref.indexOf(b.name);
   return `<button class="bkrow q${BQ.indexOf(b.q)} ${full||on?"dim":""}" data-bp="${b.id}">${BIMG(b.name)?`<img src="${BIMG(b.name)}" alt="">`:""}<span><b>${esc(b.name)}</b> <small>${b.q} ${b.star}★ · đeo ${u}/${b.max}${rk>=0&&rk<4?" · ★ hợp":""}${on?" · đã đeo ở ô khác":""}${full?" · đã đủ người":""}</small><br><small class="meta">${esc((BOOKFX[b.name]||["Chưa có dữ liệu"])[0])}</small></span></button>`}).join("")}</div>`,()=>{},"Đóng");
  document.querySelectorAll("#dlg-body [data-bp]").forEach(btn=>btn.onclick=()=>{a[i]=btn.dataset.bp?+btn.dataset.bp:null;ksave();renderBooks();dlg.close()});}
 document.addEventListener("click",e=>{const b=e.target.closest("[data-pk]");if(b)pickBook(b.dataset.pk,+b.dataset.i)});
+
+function bookHeroes(){const T=[...new Set(DATA.teams.flatMap(t=>[...t.back,...t.front]))];const st=n=>Math.max(0,...((typeof K!=="undefined"&&K)||[]).filter(u=>u.name===n).map(u=>+u.star||0));
+ const ex=window.KEEPSET?[...KEEPSET].filter(n=>!T.includes(n)).sort((a,b)=>st(b)-st(a)):[];return [...T,...ex]}
+function bookPref(n){if(BOOKPREF[n])return BOOKPREF[n];const t=((typeof EDB!=="undefined"&&EDB[n])||{}).tags||[],P=[];const add=a=>a.forEach(x=>{if(!P.includes(x))P.push(x)});
+ if(t.includes("carry"))add(["Lý Bạch","Trương Công Cẩn","Bách Lý Hề","Tuân Úc","Điển Vi"]);
+ if(t.includes("tank")||t.includes("shield"))add(["Lý Thế Dân","Thuần Vu Quỳnh","Liêm Pha","Lỗ Trí Thâm","Thái Bình Công Chúa","Trương Mạn Thành"]);
+ if(t.includes("heal"))add(["Hồng Phất Nữ","Thái Văn Cơ","Liêm Pha","Thái Bình Công Chúa"]);
+ if(!t.includes("carry")&&(t.includes("aoe")||t.includes("dot")||t.includes("sub")))add(["Triệu Vân","Bách Lý Hề"]);
+ add(["Liêm Pha","Thuần Vu Quỳnh","Trương Mạn Thành","Thái Bình Công Chúa"]);return P}
 function renderBooks(){
  if(seedBooks())setTimeout(ksave,0);
  X.books.forEach(b=>{b.max=(+b.star||0)+1});
  const el=document.getElementById("cp2"); if(!el) return;
- const heroes=[...new Set(DATA.teams.flatMap(t=>[...t.back,...t.front]))].map(n=>({n,s:Math.max(0,...K.filter(u=>u.name===n).map(u=>u.star))})).filter(h=>h.s>0);
+ const heroes=bookHeroes().map(n=>({n,s:Math.max(0,...K.filter(u=>u.name===n).map(u=>u.star))})).filter(h=>h.s>0);
  const usedB={}; Object.values(X.alloc).flat().filter(Boolean).forEach(id=>usedB[id]=(usedB[id]||0)+1);
  const opt=(sel)=>`<option value="">— Ô trống —</option>`+X.books.map(b=>`<option value="${b.id}" ${b.id==sel?"selected":""}>${esc(b.name)} (${b.q} ${b.star}★)${BOOKFX[b.name]?" – "+esc(BOOKFX[b.name][0].slice(0,28)):""}</option>`).join("");
  el.innerHTML=`<div class="panel"><h3>Kho công pháp của bạn</h3><p class="meta" style="margin:0 0 8px">Đã nạp theo ảnh Bảo Điển Kỳ Sách (Lv${X.bdlv||130}). Số người đeo = sao + 1 (0★: 1 người, 1★: 2 người…), tự tính khi sửa sao.</p>
@@ -735,7 +744,7 @@ function vsRun(){
  // chấm điểm tướng sở hữu
  const own={}; K.filter(u=>u.r==="SSR+").forEach(u=>{own[u.name]=Math.max(own[u.name]||0,u.star)});
  const tagOf=n=>(EDB[n]||{tags:[]}).tags;
- const sc={},why={};
+ const sc={},why={},EXV={};
  Object.entries(own).forEach(([n,st])=>{const tg=tagOf(n),h=byName[n];let s=(h&&h.pvp!=null?h.pvp:2.5)+Math.min(st-5,6)*0.8;const w=[];let cb=0;const add=(v,m)=>{cb+=v;w.push(m)};
   if(backHeal.length&&(tg.includes("back")||tg.includes("aoe")))add(1.5,"đánh tới healer hàng sau")
   if(carries.length&&tg.includes("exec"))add(0.8,"kết liễu từng mục tiêu")
@@ -745,13 +754,13 @@ function vsRun(){
   if(drain.length&&(tg.includes("rage+")||tg.includes("immune")))add(0.8,"bù Nộ / không phụ thuộc Nộ")
   if(ctrl.length&&(tg.includes("cleanse")||tg.includes("immune")))add(1,"chống khống chế")
   if(en.some(e=>e.tags.includes("rageDep")||e.tags.includes("carry"))&&tg.includes("rage-"))add(0.8,"cướp Nộ carry địch")
-  const ma=modeAdj(tg,en),la=learnAdj(tg);if(ma[1])w.push(ma[1]);if(la[1])w.push(la[1]);sc[n]=s+Math.min(cb,2)+ma[0]+la[0];why[n]=w;});
+  const ma=modeAdj(tg,en),la=learnAdj(tg);if(ma[1])w.push(ma[1]);if(la[1])w.push(la[1]);sc[n]=s+Math.min(cb,2)+ma[0]+la[0];EXV[n]=Math.min(cb,2)+ma[0]+la[0];why[n]=w;});
  const CC=MODES[VS.mode||"pvp"].cond?(VS.cond||{}):{};const capN=CC.vsPheMax===undefined||CC.vsPheMax===""?99:+CC.vsPheMax,capP=CC.vsPhe||"3Q";
  const pheOf=n=>(K.find(u=>u.name===n)||byName[n]||EDB[n]||{}).phe;
  const okPhe=n=>pheOf(n)!==capP||pick.filter(x=>pheOf(x)===capP).length<capN;
  const pick=[],take=n=>{if(n&&!pick.includes(n)&&okPhe(n))pick.push(n)};
  const best=f=>Object.keys(sc).filter(n=>!pick.includes(n)&&okPhe(n)&&f(tagOf(n))).sort((a,b)=>sc[b]-sc[a])[0];
- const carry=best(t=>t.includes("carry")); take(carry);
+ let carry=best(t=>t.includes("carry")); take(carry);
  take(best(t=>t.includes("heal")));
  take(best(t=>t.includes("tank")||t.includes("shield")));
  if(carry==="Lữ Bố"&&own["Lý Long Cơ"]) take("Lý Long Cơ");
@@ -763,6 +772,9 @@ function vsRun(){
  if(backHeal.length&&pick.length>=4&&!pick.some(reach)){const hb=Object.keys(sc).filter(n=>!pick.includes(n)&&reach(n)&&(pheOf(n)!==capP||true)).sort((a,b)=>sc[b]-sc[a])[0];
   if(hb){const locked=new Set([carry,pick[1],pick[2],"Lý Long Cơ"]);const out=pick.filter(n=>!locked.has(n)).sort((a,b)=>sc[a]-sc[b])[0];
    if(out){pick.splice(pick.indexOf(out),1,hb);why[hb]=[...(why[hb]||[]),`thay ${out} để có người đánh tới healer hàng sau`];}}}
+ {const md=VS.mode||"pvp";if(NMAX===6&&capN>=6){const key=/pvp|thap/.test(md)?"pvp":MODES[md].dmg?"boss":"pve",prof=MODES[md].dmg?"dmg":"bal";
+  const r=bestTeams(0,null,prof,false,{key,extra:EXV});if(r){pick.splice(0,pick.length,...r.front,...r.back);carry=r.carry||carry;
+   T.push(["lo","Cách chọn đội",`Duyệt toàn bộ tổ hợp 6 tướng SSR+ trong kho: điểm ${key.toUpperCase()} × sao + synergy kỹ năng + điểm khắc chế đội địch này${MODES[md].dmg?" (ưu tiên dồn sát thương)":""}. Điểm đội: ${r.v.toFixed(1)}.`])}}}
  // xếp ô
  const isFront=n=>{const t=tagOf(n);return t.includes("tank")||t.includes("shield")||n==="Lý Long Cơ"||t.includes("ctrl")};
  let front=pick.filter(isFront).sort((a,b)=>(a==="Lý Long Cơ")-(b==="Lý Long Cơ")).reverse(), back=pick.filter(n=>!isFront(n));
@@ -909,12 +921,12 @@ function heroFlags(n,st){const tg=tagsOf(n),t=skillText(n,st);let f=0;
  if(tg.includes("dot")||/Huyết Tích/i.test(t))f|=F_BLEED;if(tg.includes("aoe")||/toàn địch/i.test(t))f|=F_AOE;
  if(tg.includes("rageDep")||((f&F_CARRY)&&/Nộ/.test(t)))f|=F_DEP;return f}
 const PROFILES={bal:{n:"Cân bằng",d:"điểm cao nhất tổng thể"},dmg:{n:"Dồn sát thương",d:"ưu tiên diện rộng, khuếch đại, nguồn Nộ"},tough:{n:"Trụ & khống chế",d:"ưu tiên trụ, hồi máu, khống chế"}};
-function bestTeams(i,ownOv,prof,noPrune){prof=prof||"bal";const t=DATA.teams[i],key=mk(t.mode),own=ownOv||ownedStars();
+function bestTeams(i,ownOv,prof,noPrune,opt){prof=prof||"bal";opt=opt||{};const t=DATA.teams[i],key=opt.key||mk(t.mode),own=ownOv||ownedStars(),EX=opt.extra||{};
  const P=Object.keys(own).filter(n=>byName[n]);if(P.length<6)return null;
  const H=P.map(n=>{const st=own[n]||0,f=heroFlags(n,st),h=byName[n],tn=h.tn||"",pn=tn.split(" – ")[0].split(" (")[0].trim();
   let syn=0;if(f&F_RAGE)syn+=0.8;if(f&F_AMP)syn+=0.6;if(f&F_BLEED)syn+=0.5;if(f&F_CTRL)syn+=0.8;syn+=1.0;
   if(prof==="dmg"&&(f&(F_AOE|F_AMP|F_RAGE)))syn+=0.6;if(prof==="tough"&&(f&(F_TANK|F_HEAL|F_CTRL)))syn+=0.6;
-  return {n,st,f,val:heroVal(n,key,own),phe:h.phe,pn,pc:/Công/.test(tn.split("–")[1]||""),ub:0,syn}}).sort((a,b)=>(b.val+b.syn)-(a.val+a.syn));
+  return {n,st,f,val:heroVal(n,key,own)+(EX[n]||0),phe:h.phe,pn,pc:/Công/.test(tn.split("–")[1]||""),ub:0,syn}}).sort((a,b)=>(b.val+b.syn)-(a.val+a.syn));
  H.forEach(x=>x.ub=x.val+x.syn);const N=H.length,idx=new Map(H.map((x,k)=>[x.n,k]));H.forEach(x=>x.pi=idx.has(x.pn)?idx.get(x.pn):-1);
  const CSMAX=Math.max(...CSACH.map(c=>(c[2]+c[3])/8));
  function evalSet(S){let v=0,fl=0,nc=0,nt=0,nh=0,nr=0,na=0,nb=0,nx=0,ndm=0,ntf=0,mc=-1;const phe={};
@@ -1056,7 +1068,7 @@ const groupOf=id=>Object.keys(SUBG).find(g=>SUBG[g].tabs.some(t=>t[0]===id));
 (function(){const _st=showTab;showTab=function(id){if(SUBG[id])id=store.get(id+"Sub",SUBG[id].def);_st(id);const g=groupOf(id),bar=document.getElementById("subnav");
  if(bar){bar.hidden=!g;if(g){bar.setAttribute("aria-label",SUBG[g].label);bar.innerHTML=SUBG[g].tabs.map(([k,t])=>`<button data-sub="${k}" aria-pressed="${k===id}">${t}</button>`).join("")}}
  if(g){const tb=document.querySelector(`nav [data-tab="${g}"]`);document.querySelectorAll("nav button").forEach(b=>b.setAttribute("aria-selected",b===tb));store.set(g+"Sub",id)}
- if(id==="thanthu")renderThanThu();if(id==="linhphu")renderLinhPhu();if(id==="evlist")renderEvents();if(id==="quy")renderRules();if(id==="kho"&&window.PLAN)_kr0();if(id==="plan"&&window.KREADY)renderPlan()}})();
+ if(id==="thanthu")renderThanThu();if(id==="linhphu")renderLinhPhu();if(id==="evlist")renderEvents();if(id==="quy")renderRules();if(id==="kho"&&window.PLAN)_kr0();if(id==="cp"&&window.PLAN)renderBooks();if(id==="plan"&&window.KREADY)renderPlan()}})();
 /* Lịch sự kiện */
 function EVS(){if(!Array.isArray(X.ev))X.ev=[{id:1,name:"Thí Luyện Cổ Đế Viêm",kind:"Tuần",end:"",goal:"Đạt mục tiêu ST mỗi ngày; xếp hạng theo ST cao nhất kỳ",reward:"",note:"Xem chi tiết ở tab Cổ Đế Viêm",done:false}];return X.ev}
 function evDays(d){if(!d)return null;const t=new Date(d+"T23:59:59");return Math.ceil((t-Date.now())/864e5)}
