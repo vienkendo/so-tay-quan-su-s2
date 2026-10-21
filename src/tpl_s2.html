@@ -432,6 +432,7 @@ h3 { cursor: pointer; }
 .lprow{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:6px 0;font-size:13px}
 .lprow select{max-width:62%}
 .ttt td{vertical-align:top}
+.bktable th{white-space:nowrap}.bkrow2>td{vertical-align:middle}.bkname{display:flex;align-items:center;gap:10px;white-space:nowrap}.bkico{width:40px;height:40px;flex:none;border-radius:8px;object-fit:cover;border:2px solid var(--line);background:var(--surface-2)}.bkico.q0{border-color:#7b4bb0}.bkico.q1{border-color:#d98a1f}.bkico.q2{border-color:#c0392b}
 .ghform{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:10px 0}.ghform label{display:flex;flex-direction:column;gap:3px;font-size:12px;color:var(--muted)}.ghform input{width:100%}
 </style>
 </head>
@@ -811,6 +812,8 @@ h3 { cursor: pointer; }
 </dialog>
 
 <script>
+var BICON=/*__BOOKICONS__*/{};function BIMG(n){return BICON[n]||(typeof ICONS!=="undefined"&&ICONS[n])||""}
+
 const DATA = /*__DATA__*/null;
 const H = DATA.heroes, byName = Object.fromEntries(H.map(h=>[h.name,h]));
 const PHE_COLOR = {"3Q":"var(--q3)","Hán":"var(--han)","Tần":"var(--tan)","Đường":"var(--duong)"};
@@ -980,7 +983,7 @@ function renderSlotPlan(){ const core=[...new Set(DATA.teams.slice(0,2).flatMap(
   document.getElementById("slotplan").innerHTML=`<div class="rowlab">Ô công pháp của đội chính (PVP + Boss) – kỳ sách sẽ phân khi có kho công pháp server mới</div><div class="tablewrap"><table style="min-width:620px"><thead><tr><th>Tướng</th><th>Sao</th><th>Ô đang có</th><th>Ô kế</th><th>Kỳ sách gợi ý (đeo theo thứ tự)</th></tr></thead><tbody>${
    core.map(n=>{const h=byName[n],nx=nextSlot(h.sao);return `<tr><td><b>${esc(n)}</b></td><td class="num">${h.sao}★</td><td class="num">${slots(h.sao)}</td><td class="num">${nx?nx+"★":"–"}</td><td>${esc(h.books)}</td></tr>`}).join("")}</tbody></table></div>`;}
 renderSlotPlan();
-const BK=Object.fromEntries(DATA.books.map(b=>[b[0],b])), BICON=/*__BOOKICONS__*/{};
+const BK=Object.fromEntries(DATA.books.map(b=>[b[0],b]));
 const TIER={"Đỏ":"#c0392b","Cam":"#d98a1f","Tím":"#7b4bb0"};
 const used={}; Object.values(DATA.alloc).flat().forEach(b=>used[b]=(used[b]||0)+1);
 const bchip=n=>`<span class="bchip" style="--tier:${TIER[BK[n][1]]}">${BICON[n]?`<img src="${BICON[n]}" alt="">`:""}${esc(n)}</span>`;
@@ -1268,7 +1271,7 @@ function pickBook(hn,i){const n=SLOTN(Math.max(0,...K.filter(u=>u.name===hn).map
  const usedB={};Object.entries(X.alloc).forEach(([h,arr])=>arr.slice(0,99).forEach(id=>{if(id)usedB[id]=(usedB[id]||0)+1}));
  const pref=BOOKPREF[hn]||BOOKPREF["*"];const list=X.books.slice().sort((x,y)=>{const px=pref.indexOf(x.name),py=pref.indexOf(y.name);return (px<0?99:px)-(py<0?99:py)||BQ.indexOf(y.q)-BQ.indexOf(x.q)});
  modal(`Chọn công pháp – ${hn} (ô ${i+1}/${n})`,`<div class="bpick"><button class="bk empty" data-bp="">Bỏ trống ô này</button>${list.map(b=>{const u=usedB[b.id]||0,full=u>=b.max&&a[i]!==b.id,on=a.includes(b.id)&&a[i]!==b.id,rk=pref.indexOf(b.name);
-  return `<button class="bkrow q${BQ.indexOf(b.q)} ${full||on?"dim":""}" data-bp="${b.id}">${ICONS[b.name]?`<img src="${ICONS[b.name]}" alt="">`:""}<span><b>${esc(b.name)}</b> <small>${b.q} ${b.star}★ · đeo ${u}/${b.max}${rk>=0&&rk<4?" · ★ hợp":""}${on?" · đã đeo ở ô khác":""}${full?" · đã đủ người":""}</small><br><small class="meta">${esc((BOOKFX[b.name]||["Chưa có dữ liệu"])[0])}</small></span></button>`}).join("")}</div>`,()=>{},"Đóng");
+  return `<button class="bkrow q${BQ.indexOf(b.q)} ${full||on?"dim":""}" data-bp="${b.id}">${BIMG(b.name)?`<img src="${BIMG(b.name)}" alt="">`:""}<span><b>${esc(b.name)}</b> <small>${b.q} ${b.star}★ · đeo ${u}/${b.max}${rk>=0&&rk<4?" · ★ hợp":""}${on?" · đã đeo ở ô khác":""}${full?" · đã đủ người":""}</small><br><small class="meta">${esc((BOOKFX[b.name]||["Chưa có dữ liệu"])[0])}</small></span></button>`}).join("")}</div>`,()=>{},"Đóng");
  document.querySelectorAll("#dlg-body [data-bp]").forEach(btn=>btn.onclick=()=>{a[i]=btn.dataset.bp?+btn.dataset.bp:null;ksave();renderBooks();dlg.close()});}
 document.addEventListener("click",e=>{const b=e.target.closest("[data-pk]");if(b)pickBook(b.dataset.pk,+b.dataset.i)});
 function renderBooks(){
@@ -1278,16 +1281,16 @@ function renderBooks(){
  const heroes=[...new Set(DATA.teams.flatMap(t=>[...t.back,...t.front]))].map(n=>({n,s:Math.max(0,...K.filter(u=>u.name===n).map(u=>u.star))})).filter(h=>h.s>0);
  const usedB={}; Object.values(X.alloc).flat().filter(Boolean).forEach(id=>usedB[id]=(usedB[id]||0)+1);
  const opt=(sel)=>`<option value="">— Ô trống —</option>`+X.books.map(b=>`<option value="${b.id}" ${b.id==sel?"selected":""}>${esc(b.name)} (${b.q} ${b.star}★)${BOOKFX[b.name]?" – "+esc(BOOKFX[b.name][0].slice(0,28)):""}</option>`).join("");
- el.innerHTML=`<div class="panel"><h3>Kho công pháp của bạn</h3><p class="meta" style="margin:0 0 8px">Đã nạp theo ảnh Bảo Điển Kỳ Sách (Lv61). Số người đeo = sao + 1 (0★: 1 người, 1★: 2 người…), tự tính khi sửa sao.</p>
- <div class="tablewrap" style="border:0"><table style="min-width:560px"><thead><tr><th>Công pháp</th><th>Phẩm</th><th>Sao</th><th>Số người đeo tối đa</th><th>Đang đeo</th><th>Hiệu ứng (theo server cũ)</th><th></th></tr></thead><tbody>
- ${X.books.map(b=>`<tr><td><b>${esc(b.name)}</b></td><td>${b.q}</td><td><input type="number" min="0" max="10" data-bk="${b.id}" data-f="star" value="${b.star}" style="width:56px"></td><td class="num">${b.max}</td><td class="num ${(usedB[b.id]||0)>b.max?"bad":""}">${usedB[b.id]||0}/${b.max}</td><td class="meta" style="max-width:320px">${BOOKFX[b.name]?esc(BOOKFX[b.name][0])+"<br><i>"+esc(BOOKFX[b.name][1])+"</i>":"<span style='color:#f0a35e'>Chưa có dữ liệu – gửi ảnh chi tiết</span>"}</td><td><button class="btn ghost" data-bkdel="${b.id}">✕</button></td></tr>`).join("")||'<tr><td colspan="7" class="meta">Chưa có công pháp. Thêm ở dòng dưới.</td></tr>'}
+ el.innerHTML=`<div class="panel"><h3>Kho công pháp của bạn</h3><p class="meta" style="margin:0 0 8px">Đã nạp theo ảnh Bảo Điển Kỳ Sách (Lv${X.bdlv||130}). Số người đeo = sao + 1 (0★: 1 người, 1★: 2 người…), tự tính khi sửa sao.</p>
+ <div class="tablewrap" style="border:0"><table class="bktable" style="min-width:560px"><thead><tr><th>Công pháp</th><th>Phẩm</th><th>Sao</th><th>Người đeo tối đa</th><th>Đang đeo</th><th>Hiệu ứng</th><th></th></tr></thead><tbody>
+ ${X.books.map(b=>`<tr class="bkrow2"><td><div class="bkname">${BIMG(b.name)?`<img class="bkico q${BQ.indexOf(b.q)}" src="${BIMG(b.name)}" alt="" loading="lazy">`:`<span class="bkico q${BQ.indexOf(b.q)}"></span>`}<b>${esc(b.name)}</b></div></td><td>${b.q}</td><td><input type="number" min="0" max="10" data-bk="${b.id}" data-f="star" value="${b.star}" style="width:56px"></td><td class="num">${b.max}</td><td class="num ${(usedB[b.id]||0)>b.max?"bad":""}">${usedB[b.id]||0}/${b.max}</td><td class="meta" style="max-width:320px">${BOOKFX[b.name]?esc(BOOKFX[b.name][0])+"<br><i>"+esc(BOOKFX[b.name][1])+"</i>":"<span style='color:#f0a35e'>Chưa có dữ liệu – gửi ảnh chi tiết</span>"}</td><td><button class="btn ghost" data-bkdel="${b.id}">✕</button></td></tr>`).join("")||'<tr><td colspan="7" class="meta">Chưa có công pháp. Thêm ở dòng dưới.</td></tr>'}
  </tbody></table></div>
  <div class="khobar"><input id="bkN" placeholder="Tên công pháp" style="flex:1;min-width:140px"><select id="bkQ">${BQ.map(q=>`<option>${q}</option>`).join("")}</select><input id="bkS" type="number" min="0" value="0" style="width:60px" title="Sao"><button class="btn" id="bkAdd">Thêm công pháp</button></div></div>
  <div class="panel" style="margin-top:12px"><h3>Phân công pháp cho đội <button class="btn" id="bkSug" style="margin-left:8px;font-size:13px;padding:4px 12px">Gợi ý phân sách</button></h3><p class="meta">Gợi ý theo thứ tự ưu tiên: Lữ Bố trước, rồi đội PVP; tôn trọng "Số người đeo tối đa". Bấm xong vẫn chỉnh tay được.</p><p class="meta">Số ô theo sao hiện tại trong Kho (6★: 2 · 9★: 3 · 10★: 5 · 12★: 6 · 14★: 7 · 15★: 8).</p>
  <p class="meta" id="cpMsg" style="color:#f0a35e"></p><div class="cpgrid">${heroes.filter(h=>SLOTN(h.s)>0).map(h=>{const n=SLOTN(h.s),a=(X.alloc[h.n]||[]).slice(0,n);const ids=a.filter(Boolean);const dup=ids.length!==new Set(ids).size;
   return `<div class="cpcard"><div class="cph">${token(byName[h.n]||{name:h.n,phe:""})}<div><b>${esc(h.n)}</b><div class="meta">${h.s}★ · ${ids.length}/${n} ô${PRIO.has(h.n)?" · PVP":""}</div></div><button class="btn ghost" data-best="${esc(h.n)}" style="margin-left:auto;font-size:12px;padding:3px 10px">Xếp tốt nhất</button></div>
   <div class="meta" style="margin:-2px 0 8px">Tốt nhất: ${bestFor(h.n).slice(0,n+1).map((bn,k)=>{const b=X.books.find(x=>x.name===bn);const on=b&&ids.includes(b.id);return `<span style="${on?"color:#5ec27a":""}">${k+1}. ${esc(bn)}${on?" ✓":""}</span>`}).join(" › ")}</div>
-  <div class="bchips">${Array.from({length:n},(_,i)=>{const b=X.books.find(x=>x.id===a[i]);return b?`<button class="bk q${BQ.indexOf(b.q)}" data-pk="${esc(h.n)}" data-i="${i}" title="${esc((BOOKFX[b.name]||[""])[0])}">${ICONS[b.name]?`<img src="${ICONS[b.name]}" alt="">`:""}<span>${esc(b.name)}<small>${b.q} ${b.star}★</small></span></button>`:`<button class="bk empty" data-pk="${esc(h.n)}" data-i="${i}">＋ Ô trống</button>`}).join("")}</div>
+  <div class="bchips">${Array.from({length:n},(_,i)=>{const b=X.books.find(x=>x.id===a[i]);return b?`<button class="bk q${BQ.indexOf(b.q)}" data-pk="${esc(h.n)}" data-i="${i}" title="${esc((BOOKFX[b.name]||[""])[0])}">${BIMG(b.name)?`<img src="${BIMG(b.name)}" alt="">`:""}<span>${esc(b.name)}<small>${b.q} ${b.star}★</small></span></button>`:`<button class="bk empty" data-pk="${esc(h.n)}" data-i="${i}">＋ Ô trống</button>`}).join("")}</div>
   ${dup?'<span class="chip warn">⚠ Trùng sách</span>':""}</div>`}).join("")}</div>
  ${heroes.some(h=>SLOTN(h.s)===0)?`<p class="meta">Chưa đủ 6★ (chưa có ô): ${heroes.filter(h=>SLOTN(h.s)===0).map(h=>esc(h.n)).join(", ")}</p>`:""}
  ${Object.entries(usedB).filter(([id,c])=>{const b=X.books.find(x=>x.id==id);return b&&c>b.max}).map(([id,c])=>{const b=X.books.find(x=>x.id==id);return `<p><span class="chip warn">⚠ ${esc(b.name)} đang đeo ${c}/${b.max} – vượt giới hạn</span></p>`}).join("")}</div>

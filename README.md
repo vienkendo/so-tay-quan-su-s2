@@ -24,13 +24,14 @@ Sổ tay xây đội, quản lý kho tướng và tài nguyên cho server mới 
 
 ```
 index.html, script.js, style.css   ← SINH TỰ ĐỘNG, không sửa tay
-assets/                            ← favicon, ảnh
+assets/                            ← favicon, ảnh; assets/icons/books/*.jpg = icon công pháp (96×96)
 src/
   tpl_s2.html       template duy nhất (HTML + CSS + JS)
   data_s2.py        tướng đang dùng, đội hình, thứ tự nâng sao
   heroes_base.py    dữ liệu kỹ năng gốc 27 tướng
   enemy_db.py       phân loại vai trò mọi tướng (dùng cho Đối đầu, radar)
   icons_s2.json     icon tướng (base64)
+  book_icons.json   tên công pháp → đường dẫn icon trong assets/icons/books/
   kho_default.json  kho mặc định khi trình duyệt chưa có dữ liệu
   make.py           build
 ```
