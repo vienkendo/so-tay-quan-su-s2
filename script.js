@@ -544,16 +544,16 @@ document.addEventListener("click",e=>{const b=e.target.closest("[data-bkdel]");i
 /* (5) Nhật ký trận */
 (function(){const mk=(id,pre)=>{const el=document.getElementById(id);if(!el)return;el.innerHTML=Array.from({length:6},(_,i)=>`<label class="blcell"><span>Ô${i+1}</span><input data-bls="${pre}${i}" inputmode="text" placeholder="0"><small></small></label>`).join("")};mk("blS1","m");mk("blS2","e");
  const calc=()=>{const v=p=>Array.from({length:6},(_,i)=>{const el=document.querySelector(`[data-bls="${p}${i}"]`);const n=parseLC(el.value);el.nextElementSibling.textContent=el.value.trim()?fmtLC(n):"";return n});const me=v("m"),en=v("e"),sm=me.reduce((a,b)=>a+b,0),se=en.reduce((a,b)=>a+b,0);
-  if(sm){document.getElementById("blMe").value=fmtLC(sm);const ci=(()=>{const t=DATA.teams[+document.getElementById("blTeam").value||0];const all=t?[...t.front,...t.back]:[];const c=all.findIndex(n=>((EDB[n]||{}).tags||[]).includes("carry"));return c})();document.getElementById("blCar").value=fmtLC(ci>=0&&me[ci]?me[ci]:Math.max(...me))}
+  if(sm){document.getElementById("blMe").value=fmtLC(sm);const ci=(()=>{const bv=document.getElementById("blTeam").value,t=bv==="vs"&&window.VSLAST?VSLAST:DATA.teams[+bv||0];const all=t?[...t.front,...t.back]:[];const c=all.findIndex(n=>((EDB[n]||{}).tags||[]).includes("carry"));return c})();document.getElementById("blCar").value=fmtLC(ci>=0&&me[ci]?me[ci]:Math.max(...me))}
   if(se)document.getElementById("blEn").value=fmtLC(se)};
  document.addEventListener("input",e=>{if(e.target.dataset&&e.target.dataset.bls!=null)calc()});
  const clr=()=>document.querySelectorAll("[data-bls]").forEach(x=>{x.value="";x.nextElementSibling.textContent=""});
  ["blWin","blLose"].forEach(id=>{const b=document.getElementById(id);if(b)b.addEventListener("click",()=>setTimeout(clr,0))});
 })();
 
-function logBattle(win){const en=VS.slots.map((s,i)=>({n:s.n,i,tags:EDB[s.n]?EDB[s.n].tags:s.tags})).filter(s=>s.n);
+function logBattle(win){const en=VS.slots.map((s,i)=>({n:s.n,i,st:s.st||VS.st||"",lv:s.lv||"",tags:EDB[s.n]?EDB[s.n].tags:s.tags})).filter(s=>s.n);
  if(!en.length){alertBox("Nhập đội hình địch ở trên trước khi lưu trận.");return}
- X.battles.push({t:Date.now(),win,mode:document.getElementById("blMode").value,lv:+VS.lv||0,my:+LV||0,lcMe:parseLC(VS.lcMe),lcEn:parseLC(VS.lcEn),en,note:document.getElementById("blNote").value.trim(),r:+document.getElementById("blR").value||0,car:document.getElementById("blCar").value.trim()?parseLC(document.getElementById("blCar").value):null,stMe:parseLC(document.getElementById("blMe").value),stEn:parseLC(document.getElementById("blEn").value),per:(()=>{const g=p=>Array.from({length:6},(_,i)=>parseLC((document.querySelector(`[data-bls="${p}${i}"]`)||{}).value));const m=g("m"),e=g("e");return m.some(Boolean)||e.some(Boolean)?{me:m,en:e}:null})(),team:(()=>{const ti=+document.getElementById("blTeam").value||0,t=DATA.teams[ti]||DATA.teams[0];return {i:ti,name:t.name,front:t.front.slice(),back:t.back.slice()}})()});
+ X.battles.push({t:Date.now(),win,mode:document.getElementById("blMode").value,lv:+VS.lv||0,my:+LV||0,lcMe:parseLC(VS.lcMe),lcEn:parseLC(VS.lcEn),en,note:document.getElementById("blNote").value.trim(),r:+document.getElementById("blR").value||0,car:document.getElementById("blCar").value.trim()?parseLC(document.getElementById("blCar").value):null,stMe:parseLC(document.getElementById("blMe").value),stEn:parseLC(document.getElementById("blEn").value),per:(()=>{const g=p=>Array.from({length:6},(_,i)=>parseLC((document.querySelector(`[data-bls="${p}${i}"]`)||{}).value));const m=g("m"),e=g("e");return m.some(Boolean)||e.some(Boolean)?{me:m,en:e}:null})(),team:(()=>{const v=document.getElementById("blTeam").value;if(v==="vs"&&window.VSLAST)return {i:"vs",name:"Gợi ý Đối đầu",front:VSLAST.front.slice(),back:VSLAST.back.slice()};const ti=+v||0,t=DATA.teams[ti]||DATA.teams[0];return {i:ti,name:t.name,front:t.front.slice(),back:t.back.slice()}})()});
  ["blR","blCar","blMe","blEn"].forEach(id=>document.getElementById(id).value="");
  X.battles=X.battles.slice(-200);document.getElementById("blNote").value="";ksave();renderBattles()}
 function alertBox(m){const o=document.getElementById("blMsg");if(o){o.textContent=m;setTimeout(()=>o.textContent="",4000)}}
@@ -565,7 +565,7 @@ function battleKind(b){const mx=/PVP/.test(b.mode)?20:15;if(/Rèn luyện/.test(
  if(b.stMe&&b.stEn&&b.stEn>b.stMe*2.5)return "Lệch sức mạnh (ST địch > 2,5× mình)";
  return b.r?"Thua giằng co":"";}
 function renderBattles(){
- const bt=document.getElementById("blTeam");if(bt&&!bt.options.length){bt.innerHTML=DATA.teams.map((t,i)=>`<option value="${i}">Đội: ${esc(t.name)}</option>`).join("")}if(bt&&typeof curTeam!=="undefined"&&document.activeElement!==bt)bt.value=String(curTeam);
+ const bt=document.getElementById("blTeam");if(bt&&!bt.options.length){bt.innerHTML=DATA.teams.map((t,i)=>`<option value="${i}">Đội: ${esc(t.name)}</option>`).join("")}if(bt&&typeof curTeam!=="undefined"&&document.activeElement!==bt&&bt.value!=="vs")bt.value=String(curTeam);
  const el=document.getElementById("blList"); if(!el) return; const B=X.battles;
  const W=B.filter(b=>b.win&&!/Rèn luyện/.test(b.mode)).length,L=B.filter(b=>!b.win&&!/Rèn luyện/.test(b.mode)).length;
  const cnt=arr=>{const c={};arr.forEach(b=>new Set(b.en.flatMap(s=>s.tags||[])).forEach(t=>c[t]=(c[t]||0)+1));return c};
@@ -640,15 +640,15 @@ function vsSlots(){
   const known=EDB[s.n]; const tags=known?known.tags:s.tags;
   return `<div class="vslot ${i<3?"front":"back"}"><div class="rowlab">Ô ${i+1} · ${i<3?"Hàng trước":"Hàng sau"}</div>
    <input list="edl" data-slot="${i}" value="${esc(s.n)}" placeholder="Tên tướng địch" aria-label="Ô ${i+1}">
-   ${s.n?`<div class="slv"><label>Cấp <input type="number" min="1" data-slv="${i}" value="${s.lv||""}" placeholder="${esc(VS.lv||"")}"></label><label>Sao <input type="number" min="1" max="20" data-sst="${i}" value="${s.st||""}" placeholder="?"></label></div>`:""}
+   ${s.n?`<div class="slv"><label>Cấp <input type="number" min="1" data-slv="${i}" value="${s.lv||""}" placeholder="${esc(VS.lv||"")}"></label><label>Sao <input type="number" min="1" max="20" data-sst="${i}" value="${s.st||""}" placeholder="${esc(VS.st||"?")}"></label></div>`:""}
    <div class="tagrow">${known?tags.map(t=>`<span class="tg fixed" aria-pressed="true">${TAGN[t]||t}</span>`).join("")+`<span class="meta" style="font-size:11px">${esc(known.desc)}</span>`
      :s.n?EDIT.map(t=>`<button class="tg" data-slot="${i}" data-tag="${t}" aria-pressed="${tags.includes(t)}">${TAGN[t]}</button>`).join("")+'<span class="meta" style="font-size:11px">Tướng chưa có dữ liệu – chọn vai trò</span>':""}</div></div>`}).join("");
- document.getElementById("vsLv").value=VS.lv;document.getElementById("vsLcMe").value=VS.lcMe||"";document.getElementById("vsLcEn").value=VS.lcEn||""; document.getElementById("vsMy").value=LV||"";
+ document.getElementById("vsLv").value=VS.lv;document.getElementById("vsSt").value=VS.st||"";document.getElementById("vsLcMe").value=VS.lcMe||"";document.getElementById("vsLcEn").value=VS.lcEn||""; document.getElementById("vsMy").value=LV||"";
 }
 document.getElementById("vsSlots").addEventListener("change",e=>{const d=e.target.dataset;if(d.slv!=null){VS.slots[d.slv].lv=+e.target.value||"";vsSave();return}if(d.sst!=null){VS.slots[d.sst].st=+e.target.value||"";vsSave();return}const i=d.slot;if(i==null||e.target.tagName!=="INPUT")return;const old=VS.slots[i]||{};VS.slots[i]={n:e.target.value.trim(),tags:[],lv:old.lv,st:old.st};vsSave();vsSlots()});
 document.getElementById("vsSlots").addEventListener("click",e=>{const b=e.target.closest("button[data-tag]");if(!b)return;const s=VS.slots[b.dataset.slot],t=b.dataset.tag;s.tags=s.tags.includes(t)?s.tags.filter(x=>x!==t):[...s.tags,t];vsSave();vsSlots()});
 document.getElementById("vsClr").onclick=()=>{VS={slots:Array.from({length:6},()=>({n:"",tags:[]})),lv:"",my:"",mode:VS.mode,lcMe:VS.lcMe};vsSave();vsSlots();document.getElementById("vsOut").innerHTML=""};
-document.getElementById("vsLv").addEventListener("change",e=>{VS.lv=e.target.value;vsSave()});["vsLcMe","vsLcEn"].forEach(id=>document.getElementById(id).addEventListener("change",e=>{VS[id==="vsLcMe"?"lcMe":"lcEn"]=e.target.value;vsSave()}));document.getElementById("vsMy").addEventListener("change",e=>setLv(e.target.value));
+document.getElementById("vsLv").addEventListener("change",e=>{VS.lv=e.target.value;vsSave()});document.getElementById("vsSt").addEventListener("change",e=>{VS.st=+e.target.value||"";vsSave();vsSlots()});["vsLcMe","vsLcEn"].forEach(id=>document.getElementById(id).addEventListener("change",e=>{VS[id==="vsLcMe"?"lcMe":"lcEn"]=e.target.value;vsSave()}));document.getElementById("vsMy").addEventListener("change",e=>setLv(e.target.value));
 const partner=n=>{const h=byName[n];return h?(h.tn||"").split(" – ")[0].split(" (")[0].trim():""};
 
 const MODES={
@@ -739,7 +739,7 @@ Chỉ trả về JSON: {"win":true,"rounds":13,"maxRounds":15,"mine":[{"dmg":441
   msg.innerHTML=`✓ ${d.win===true?"<b>Thắng</b>":d.win===false?"<b>Thua</b>":"?"} · ${d.rounds||"?"} hiệp · ST mình ${fmtLC(me)} / địch ${fmtLC(en)}. Ô "ST carry" đã điền ST cao nhất đội mình (${fmtLC(top)}) – nếu carry gây 0 ST, sửa thành 0.${zero?` Có ${zero} tướng mình 0 ST & 0 hồi.`:""} Rồi bấm ${d.win===true?"Lưu: Thắng":d.win===false?"Lưu: Thua":"Lưu"}.`;
  }catch(e){msg.textContent="✗ "+(OCRERR[e&&e.code]||"Không đọc được ảnh này – thử ảnh rõ hơn hoặc nhập tay.")}}
 function vsRun(){
- const en=VS.slots.map((s,i)=>({...s,i,tags:EDB[s.n]?EDB[s.n].tags:s.tags})).filter(s=>s.n);
+ const en=VS.slots.map((s,i)=>({...s,i,st:s.st||VS.st||"",tags:EDB[s.n]?EDB[s.n].tags:s.tags})).filter(s=>s.n);
  if(!en.length){document.getElementById("vsOut").innerHTML='<p class="empty">Nhập ít nhất 1 tướng địch.</p>';return}
  const has=t=>en.filter(s=>s.tags.includes(t)); const pos=s=>`Ô${s.i+1}`;
  const carries=has("carry"),heals=has("heal"),tanks=[...new Set([...has("tank"),...has("shield")])],ctrl=has("ctrl"),drain=has("rage-"),backHeal=heals.filter(s=>s.i>=3),shields=has("shield"),buffs=has("buff");
@@ -805,6 +805,7 @@ function vsRun(){
  // Lý Long Cơ ô1, carry ô4 cùng làn
  if(front.includes("Lý Long Cơ")) front=["Lý Long Cơ",...front.filter(n=>n!=="Lý Long Cơ")];
  let slots=[...front,...Array(Math.max(0,3-front.length)).fill(""),...back].slice(0,6); while(slots.length<6)slots.push("");
+ window.VSLAST={front:slots.slice(0,3).filter(Boolean),back:slots.slice(3).filter(Boolean)};{const bt=document.getElementById("blTeam");if(bt){if(!bt.querySelector('option[value="vs"]'))bt.insertAdjacentHTML("afterbegin",'<option value="vs">Đội: gợi ý ở Đối đầu</option>');bt.value="vs"}}
  const BF=(MODES[VS.mode||"pvp"].wave&&VS.buff)||[];
  if(BF.length){const pri=[carry,...pick.filter(n=>n!==carry).sort((a,b)=>sc[b]-sc[a])];const placed=new Set();
   BF.forEach(bi=>{const n=pri.find(x=>x&&!placed.has(x));if(!n)return;placed.add(n);const cur=slots.indexOf(n);if(cur===bi)return;const tmp=slots[bi];slots[bi]=n;slots[cur]=tmp;});
