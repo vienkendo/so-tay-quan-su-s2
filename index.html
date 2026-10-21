@@ -22,13 +22,13 @@
       <button role="tab" id="t-trotran" aria-selected="false" data-tab="trotran">Trợ trận</button>
       <button role="tab" id="t-sao" aria-selected="false" data-tab="sao">Nâng sao</button>
       <button role="tab" id="t-quy" aria-selected="false" data-tab="quy">Quy tắc</button>
-      <button role="tab" id="t-codviem" aria-selected="false" data-tab="codviem">Cổ Đế Viêm</button>
+      <button role="tab" id="t-sukien" aria-selected="false" data-tab="sukien">Sự kiện</button>
       <button role="tab" id="t-camnang" aria-selected="false" data-tab="camnang">Cẩm nang</button>
     </nav>
   </div>
 </header>
 <main>
-  <div class="subnav" id="subnav" hidden role="group" aria-label="Trợ trận"><button data-sub="cp">Công pháp</button><button data-sub="thanthu">Thần thú</button><button data-sub="linhphu">Linh phù</button><button data-sub="trangbi">Trang bị</button></div>
+  <div class="subnav" id="subnav" hidden role="group"></div>
   <section id="doi">
     <h2>Đội hình tối ưu</h2>
     <p class="lead">Xếp theo tiềm năng tối đa (đủ sao và Nhập Thánh). Bấm vào tướng để xem chi tiết kỹ năng.</p>
@@ -253,6 +253,12 @@
       </ul></div>
     </div>
   </section>
+  <section id="evlist" hidden>
+    <h2>Lịch sự kiện</h2>
+    <p class="lead">Theo dõi các sự kiện theo tuần, tháng: hạn kết thúc, mục tiêu, phần thưởng và ghi chú. Lưu cùng Kho nên đồng bộ giữa các máy.</p>
+    <div class="panel" id="evBox"></div>
+  </section>
+
   <section id="codviem" hidden>
     <h2>Thí Luyện Cổ Đế Viêm</h2>
     <p class="lead">Theo dõi đội hình đánh boss và đọc lại thống kê trận. Số liệu bên dưới được chép từ ảnh kết quả bạn gửi; do ảnh không hiển thị rõ tên từng tướng trong bảng xám, hàng được ghi theo vị trí thay vì đoán tên.</p>

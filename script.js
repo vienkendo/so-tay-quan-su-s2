@@ -279,7 +279,7 @@ document.addEventListener("click",e=>{const b=e.target.closest("[data-uh]");if(!
  const t=document.createElement("span");t.dataset.up=b.dataset.uh;document.getElementById("kList").appendChild(t);t.click();t.remove();
  ids.forEach(id=>{const c=document.querySelector(`#dlg-body .picks input[value="${id}"]`);if(c)c.checked=true});});
 
-function krender(){_kr0();setTimeout(()=>{renderKhoCoverage();if(typeof renderTeamRadar==="function")renderTeamRadar();const sec=document.querySelector("main section:not([hidden])");if(sec&&sec.id==="thanthu")renderThanThu();if(sec&&sec.id==="linhphu")renderLinhPhu();if(window.cdvLoad)cdvLoad()},0);renderUpHint();renderRoad();renderBooks();renderBattles();const od=document.getElementById("kOd");if(od)od.value=X.orbDay||""}
+function krender(){_kr0();setTimeout(()=>{renderKhoCoverage();if(typeof renderTeamRadar==="function")renderTeamRadar();const sec=document.querySelector("main section:not([hidden])");if(sec&&sec.id==="thanthu")renderThanThu();if(sec&&sec.id==="linhphu")renderLinhPhu();if(sec&&sec.id==="evlist")renderEvents();if(window.cdvLoad)cdvLoad()},0);renderUpHint();renderRoad();renderBooks();renderBattles();const od=document.getElementById("kOd");if(od)od.value=X.orbDay||""}
 function snap(){KUNDO.push(JSON.stringify({k:K,orb:ORB,log:KLOG}))}
 const nid=()=>K.reduce((m,u)=>Math.max(m,u.id),0)+1;
 const today=()=>new Date().toLocaleString("vi-VN",{day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit"});
@@ -885,11 +885,30 @@ function renderLinhPhu(){const g=document.getElementById("lpGrid");if(!g||!windo
  ${empty.length?`<div class="warn" style="margin-top:8px">Ô trống nên lấp ngay (đeo phù Lam cũng có lợi): ${empty.map(esc).join(", ")}.</div>`:""}
  <p class="meta" style="margin-top:6px">Ưu tiên ghép: <b>Công</b> (tăng ST trực tiếp) &gt; HP &gt; Thủ.${nx?` Ô Công thấp nhất hiện tại: ${nx.b} (${LP_TIER[nx.v]}).`:""}</p>`}
 /* Thanh tab con Trợ trận */
-const TROTRAN=["cp","thanthu","linhphu","trangbi"];
-(function(){const _st=showTab;showTab=function(id){if(id==="trotran")id=store.get("trotranSub","cp");_st(id);const sub=TROTRAN.includes(id),bar=document.getElementById("subnav");
- if(bar){bar.hidden=!sub;bar.querySelectorAll("button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.sub===id))}
- const tb=document.querySelector('nav [data-tab="trotran"]');if(tb&&sub){document.querySelectorAll("nav button").forEach(b=>b.setAttribute("aria-selected",b===tb));store.set("trotranSub",id)}
- if(id==="thanthu")renderThanThu();if(id==="linhphu")renderLinhPhu()}})();
+const SUBG={trotran:{label:"Trợ trận",def:"cp",tabs:[["cp","Công pháp"],["thanthu","Thần thú"],["linhphu","Linh phù"],["trangbi","Trang bị"]]},
+ sukien:{label:"Sự kiện",def:"evlist",tabs:[["evlist","Lịch sự kiện"],["codviem","Cổ Đế Viêm"]]}};
+const TROTRAN=SUBG.trotran.tabs.map(t=>t[0]);
+const groupOf=id=>Object.keys(SUBG).find(g=>SUBG[g].tabs.some(t=>t[0]===id));
+(function(){const _st=showTab;showTab=function(id){if(SUBG[id])id=store.get(id+"Sub",SUBG[id].def);_st(id);const g=groupOf(id),bar=document.getElementById("subnav");
+ if(bar){bar.hidden=!g;if(g){bar.setAttribute("aria-label",SUBG[g].label);bar.innerHTML=SUBG[g].tabs.map(([k,t])=>`<button data-sub="${k}" aria-pressed="${k===id}">${t}</button>`).join("")}}
+ if(g){const tb=document.querySelector(`nav [data-tab="${g}"]`);document.querySelectorAll("nav button").forEach(b=>b.setAttribute("aria-selected",b===tb));store.set(g+"Sub",id)}
+ if(id==="thanthu")renderThanThu();if(id==="linhphu")renderLinhPhu();if(id==="evlist")renderEvents()}})();
+/* Lịch sự kiện */
+function EVS(){if(!Array.isArray(X.ev))X.ev=[{id:1,name:"Thí Luyện Cổ Đế Viêm",kind:"Tuần",end:"",goal:"Đạt mục tiêu ST mỗi ngày; xếp hạng theo ST cao nhất kỳ",reward:"",note:"Xem chi tiết ở tab Cổ Đế Viêm",done:false}];return X.ev}
+function evDays(d){if(!d)return null;const t=new Date(d+"T23:59:59");return Math.ceil((t-Date.now())/864e5)}
+function renderEvents(){const box=document.getElementById("evBox");if(!box||!window.KREADY)return;const L=EVS().slice().sort((a,b)=>(a.done-b.done)||((a.end||"9999")>(b.end||"9999")?1:-1));
+ box.innerHTML=`<div class="evlist">${L.map(e=>{const d=evDays(e.end);const tag=e.done?'<span class="evtag ok">Đã xong</span>':d==null?"":d<0?'<span class="evtag bad">Đã hết hạn</span>':d<=2?`<span class="evtag warn">Còn ${d} ngày</span>`:`<span class="evtag">Còn ${d} ngày</span>`;
+  return `<div class="evcard ${e.done?"dim":""}"><div class="evh"><b>${esc(e.name)}</b><span class="meta">${esc(e.kind)}${e.end?" · hết hạn "+e.end.split("-").reverse().join("/"):""}</span>${tag}</div>
+  ${e.goal?`<div><span class="meta">Mục tiêu:</span> ${esc(e.goal)}</div>`:""}${e.reward?`<div><span class="meta">Thưởng:</span> ${esc(e.reward)}</div>`:""}${e.note?`<div class="meta">${esc(e.note)}</div>`:""}
+  <div class="acts" style="justify-content:flex-start;margin-top:6px"><button class="btn ghost" data-evdone="${e.id}">${e.done?"Mở lại":"Đánh dấu xong"}</button><button class="btn ghost" data-evedit="${e.id}">Sửa</button><button class="btn ghost" data-evdel="${e.id}">Xóa</button></div></div>`}).join("")||'<p class="meta">Chưa có sự kiện.</p>'}</div>
+  <div class="acts" style="justify-content:flex-start;margin-top:10px"><button class="btn" id="evAdd">Thêm sự kiện</button></div>`}
+function evForm(e){const isNew=!e;e=e||{name:"",kind:"Tuần",end:"",goal:"",reward:"",note:""};
+ modal(isNew?"Thêm sự kiện":"Sửa sự kiện",`<div class="ghform"><label style="grid-column:1/-1">Tên sự kiện<input id="evN" value="${esc(e.name)}"></label><label>Chu kỳ<select id="evK">${["Tuần","Tháng","Ngày","Khác"].map(k=>`<option ${k===e.kind?"selected":""}>${k}</option>`).join("")}</select></label><label>Kết thúc<input id="evE" type="date" value="${esc(e.end)}"></label><label style="grid-column:1/-1">Mục tiêu<input id="evG" value="${esc(e.goal)}"></label><label style="grid-column:1/-1">Phần thưởng<input id="evR" value="${esc(e.reward)}"></label><label style="grid-column:1/-1">Ghi chú<textarea id="evO" rows="3">${esc(e.note)}</textarea></label></div>`,()=>{
+  const v={name:document.getElementById("evN").value.trim(),kind:document.getElementById("evK").value,end:document.getElementById("evE").value,goal:document.getElementById("evG").value.trim(),reward:document.getElementById("evR").value.trim(),note:document.getElementById("evO").value.trim()};
+  if(!v.name)return "Cần nhập tên sự kiện.";const L=EVS();if(isNew)L.push({id:Date.now(),done:false,...v});else Object.assign(L.find(x=>x.id===e.id),v);ksave();renderEvents()},isNew?"Thêm":"Lưu")}
+document.addEventListener("click",ev=>{const t=ev.target;if(!window.KREADY)return;
+ if(t.id==="evAdd")return evForm();const g=k=>t.dataset&&t.dataset[k]?EVS().find(x=>x.id==t.dataset[k]):null;let e;
+ if(e=g("evdone")){e.done=!e.done;ksave();renderEvents()}else if(e=g("evedit"))evForm(e);else if(e=g("evdel")){if(confirm("Xóa sự kiện "+e.name+"?")){X.ev=EVS().filter(x=>x!==e);ksave();renderEvents()}}});
 document.getElementById("subnav")?.addEventListener("click",e=>{const b=e.target.closest("[data-sub]");if(b)showTab(b.dataset.sub)});
 
 /* ===== CÔNG CỤ PHÂN TÍCH TƯỚNG (chuyển từ bản GitHub) ===== */
@@ -921,4 +940,4 @@ window.renderAnalysis=()=>{list();cmp()};
 })();
 
 initTeamRadar();
-const lastTab=store.get("tab","doi"); if(["doi","tuong","phan-tich","vs","kho","cp","thanthu","linhphu","trangbi","sao","quy","codviem","camnang"].includes(lastTab)) showTab(lastTab);
+const lastTab=store.get("tab","doi"); if(["doi","tuong","phan-tich","vs","kho","cp","thanthu","linhphu","trangbi","sao","quy","evlist","codviem","camnang"].includes(lastTab)) showTab(lastTab);
