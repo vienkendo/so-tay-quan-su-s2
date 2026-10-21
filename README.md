@@ -50,6 +50,7 @@ Chỉ cần Python 3, không phụ thuộc thư viện ngoài. Thư mục `build
 
 - **Sao:** vàng 1–5 = 1–5★, đỏ 1–5 = 6–10★, cầu vồng = 11–15★, sau đó Nhập Thánh.
 - **Mặc định khi nhận:** SSR+ 5★, SSR (cam, nguyên liệu) 5★, SR (tím) 4★, R (xanh) 3★.
+- **Chỉ SSR+ là tướng thật:** SSR cam chỉ dùng làm nguyên liệu nâng sao; kỹ năng/tiềm năng của SSR, SR, R chỉ để phân tích đội địch (Đối đầu). Quy tắc, gợi ý đội, radar kho chỉ xét SSR+.
 - **Chi phí nâng sao** (bản trùng · tướng cùng phe làm nguyên liệu · cầu cam):
   5→6: 1 bản · 1×5★ · 0 — 6→7: 0 · 2×5★ · 1000 — 7→8: 0 · 1×6★ · 1000 — 8→9: 1 · 1×8★ · 2000 — 9→10: 0 · 1×6★ · 1000 — 10→11: 1 · 1×8★ · 3000 — 11→12: 0 · 1×6★ · 2000 — 12→13: 1 · 1×8★ · 5000 — 13→14: 0 · 2×6★ · 2500.
 - **Ô công pháp theo sao:** 6★: 2 · 9★: 3 · 10★: 5 · 12★: 6 · 14★: 7 · 15★: 8.

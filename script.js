@@ -942,7 +942,7 @@ window.renderAnalysis=()=>{list();cmp()};
 initTeamRadar();
 /* ===== QUY TẮC ĐỘNG: suy ra từ Kho + kỹ năng + đội hình, không gán cứng tên tướng ===== */
 const MILE=[["base","Cơ bản",0],["s9","9★",9],["s11","11★",11],["s13","13★",13],["nt","Nhập Thánh",16]];
-function ownedStars(){const m={};(K||[]).forEach(u=>{if(u.r==="SR"||u.r==="R")return;m[u.name]=Math.max(m[u.name]||0,+u.star||0)});return m}
+function ownedStars(){const m={};(K||[]).forEach(u=>{if(u.r&&u.r!=="SSR+")return;/* SSR cam, SR, R chỉ là nguyên liệu */m[u.name]=Math.max(m[u.name]||0,+u.star||0)});return m}
 function skillHits(re){const own=ownedStars(),out=[];Object.keys(own).forEach(n=>{const h=byName[n];if(h)MILE.forEach(([k,lab,st])=>{if(h[k]&&re.test(h[k]))out.push({n,lab,st,ok:own[n]>=st,txt:h[k]})});else{const d=(EDB[n]||{}).desc||"";if(re.test(d))out.push({n,lab:"Kỹ năng",st:0,ok:true,txt:d})}});return out}
 function teamCarry(t){const all=[...t.front,...t.back];return all.find(n=>/carry/i.test((t.why||{})[n]||""))||all.find(n=>((EDB[n]||{}).tags||[]).includes("carry"))}
 function laneOf(t,n){const i=t.front.indexOf(n);if(i>=0)return i;const j=t.back.indexOf(n);return j>=0?j:-1}
@@ -972,7 +972,7 @@ function renderRules(){const box=document.getElementById("quyDyn");if(!box||!win
  if(weak.length)L.push(`<li><b>Kho đang mỏng:</b> ${weak.map(([,t])=>t).join(", ")} (≤1 tướng ≥6★). Ưu tiên tướng/thần thú/công pháp bù vai trò này.</li>`);
  // 8. nguyên liệu theo phe
  const mat={};K.forEach(u=>{if(u.r==="SR"||u.r==="R"||CORE.has(u.name))return;mat[u.phe]=mat[u.phe]||{};mat[u.phe][u.name]=(mat[u.phe][u.name]||0)+1});
- L.push(`<li><b>Nguyên liệu nâng sao (không thuộc đội chính):</b> ${Object.entries(mat).map(([p,o])=>`${p}: ${Object.entries(o).sort((a,b)=>b[1]-a[1]).slice(0,3).map(([n,c])=>`${esc(n)}×${c}`).join(", ")}`).join(" · ")}.</li>`);
+ L.push(`<li><b>Nguyên liệu nâng sao</b> (SSR cam + bản SSR+ dư, không thuộc đội chính): ${Object.entries(mat).map(([p,o])=>`${p}: ${Object.entries(o).sort((a,b)=>b[1]-a[1]).slice(0,3).map(([n,c])=>`${esc(n)}×${c}`).join(", ")}`).join(" · ")}.</li>`);
  // 9. mốc sao đủ điều kiện
  const ok=(typeof upPlan==="function"?upPlan():[]).filter(p=>p.st==="ok");if(ok.length)L.push(`<li><b>Nâng sao được ngay:</b> ${ok.map(p=>`${esc(p.u.name)} ${p.u.star}→${p.u.star+1}★`).join(", ")} (xem tab Nâng sao).</li>`);
  box.innerHTML=`<ul>${L.join("")}</ul><p class="meta">Tự cập nhật khi Kho, sao hoặc đội hình thay đổi. Dựa trên mô tả kỹ năng và phân loại vai trò đã nhập.</p>`;
