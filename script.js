@@ -872,7 +872,7 @@ const TDEF=JSON.parse(JSON.stringify(DATA.teams));
 function applyTeamOv(){if(typeof X==="undefined"||!X)return;const ov=X.teamOv||{};DATA.teams.forEach((t,i)=>{const o=ov[i],d=TDEF[i];if(o&&Array.isArray(o.front)&&o.front.every(n=>byName[n])&&o.back.every(n=>byName[n])){t.front=o.front.slice();t.back=o.back.slice();t.why=Object.assign({},d.why,o.why||{});t.note=o.note||d.note;t.ov=1}else{t.front=d.front.slice();t.back=d.back.slice();t.why=d.why;t.note=d.note;t.ov=0}})}
 function tagsOf(n){return((EDB[n]||{}).tags)||[]}
 function heroVal(n,key,own){const h=byName[n],b=h&&h[key]!=null?+h[key]:2.5,st=own[n]||0;let v=b*(1+0.08*(Math.min(st,16)-5));
- if(h)[["s9",9],["s11",11],["s13",13]].forEach(([k,m])=>{if(st>=m&&/Công cao nhất/i.test(h[k]||""))v+=1.2});return v}
+ if(h)[["s9",9],["s11",11],["s13",13]].forEach(([k,m])=>{if(st>=m&&/Công cao nhất/i.test(h[k]||""))v+=1.5});return v}
 function teamEval(names,key,own){let v=0;const why=[];names.forEach(n=>v+=heroVal(n,key,own));
  const T=n=>tagsOf(n),cnt=k=>names.filter(n=>T(n).includes(k)).length;
  const carry=cnt("carry"),tank=names.filter(n=>T(n).includes("tank")||T(n).includes("shield")).length,heal=cnt("heal")+cnt("revive");
@@ -882,7 +882,8 @@ function teamEval(names,key,own){let v=0;const why=[];names.forEach(n=>v+=heroVa
  const mc=names.filter(n=>T(n).includes("carry")).sort((a,b)=>(own[b]||0)-(own[a]||0))[0];
  if(mc&&(T(mc).includes("rageDep")||/Nộ/.test((byName[mc]||{}).base||""))){v+=0.8*names.filter(n=>n!==mc&&(T(n).includes("rage+"))).length}
  v+=0.6*names.filter(n=>T(n).includes("amp")).length*(carry?1:0);
- let bonds=0;names.forEach(n=>{const p=((byName[n]||{}).tn||"").split(" – ")[0].split(" (")[0].trim();if(p&&names.includes(p))bonds++});v+=bonds*0.9;
+ let bonds=0;names.forEach(n=>{const tn=(byName[n]||{}).tn||"",p=tn.split(" – ")[0].split(" (")[0].trim();if(!p||!names.includes(p))return;
+  if(/Công/.test(tn.split("–")[1]||"")){if(n===mc||p===mc)bonds+=1;else bonds-=0.5}else bonds+=1});v+=bonds*0.5;
  const cs=chienSach(names).best;if(cs)v+=(cs[2]+cs[3])/8;
  return {v,why,carry:mc}}
 function placeTeam(names,own){const T=n=>tagsOf(n),fr=n=>(T(n).includes("tank")?3:0)+(T(n).includes("shield")?1.5:0)+(T(n).includes("amp")?1:0)+(T(n).includes("ctrl")?0.5:0)-(T(n).includes("carry")?4:0)-(T(n).includes("heal")?2:0)-(T(n).includes("back")?0:0);
@@ -890,7 +891,7 @@ function placeTeam(names,own){const T=n=>tagsOf(n),fr=n=>(T(n).includes("tank")?
  const c=back.find(n=>T(n).includes("carry"))||back[0];back=[c,...back.filter(n=>n!==c)];
  const amp=front.find(n=>T(n).includes("amp"));if(amp)front=[amp,...front.filter(n=>n!==amp)];else{const tk=front.slice().sort((a,b)=>fr(b)-fr(a))[0];front=[tk,...front.filter(n=>n!==tk)]}
  return {front,back}}
-function optimizeTeam(i){const t=DATA.teams[i],key=mk(t.mode),own=ownedStars();
+function optimizeTeam(i,ownOv){const t=DATA.teams[i],key=mk(t.mode),own=ownOv||ownedStars();
  const pool=Object.keys(own).filter(n=>byName[n]);if(pool.length<6)return null;
  const ev=ns=>teamEval(ns,key,own).v;let best=null;
  const start=[...t.front,...t.back].filter(n=>pool.includes(n));
@@ -901,7 +902,23 @@ function optimizeTeam(i){const t=DATA.teams[i],key=mk(t.mode),own=ownedStars();
   if(!best||cv>best.v)best={names:cur,v:cv}});
  const pl=placeTeam(best.names,own),cur=teamEval([...t.front,...t.back],key,own),nw=teamEval(best.names,key,own);
  return {...pl,v:best.v,cur:cur.v,why:nw.why,carry:nw.carry,key}}
-function renderTeamOpt(){const box=document.getElementById("teamOpt");if(!box||!window.KREADY)return;applyTeamOv();const t=DATA.teams[curTeam],r=optimizeTeam(curTeam),own=ownedStars();
+
+function lateGame(i){const own=ownedStars(),mx={};Object.keys(own).forEach(n=>mx[n]=16);const r=optimizeTeam(i,mx);if(!r)return null;
+ const cnt={};(K||[]).forEach(u=>{if(!u.r||u.r==="SSR+")cnt[u.name]=(cnt[u.name]||0)+1});
+ const need=[...r.front,...r.back].map(n=>{let st=own[n]||5,cp=0,orb=0,fod=[];for(let s2=st;s2<14;s2++){const R=RULE[s2];if(!R)continue;cp+=R.copy||0;orb+=R.orb||0;if(R.fc)fod.push(`${R.fc}×${R.fs}★`)}
+  const h=byName[n]||{},keys=[["s9","9★",9],["s11","11★",11],["s13","13★",13],["nt","Nhập Thánh",16]].filter(([k,,m])=>h[k]&&m>st);
+  return {n,st,cp,have:Math.max(0,(cnt[n]||1)-1),orb,fod:fod.length,keys,phe:h.phe}});
+ return {...r,need}}
+function renderLate(){const box=document.getElementById("teamLate");if(!box||!window.KREADY)return;const t=DATA.teams[curTeam],L=lateGame(curTeam);if(!L){box.innerHTML="";return}
+ const curSet=new Set([...t.front,...t.back]),cell=n=>`<div class="optc ${curSet.has(n)?"":"new"}">${token(byName[n])}<b>${esc(n)}</b><small>${ownedStars()[n]}★ → 15★+</small></div>`;
+ const tot=L.need.reduce((a,x)=>({cp:a.cp+Math.max(0,x.cp-x.have),orb:a.orb+x.orb}),{cp:0,orb:0});
+ const rows=L.need.slice().sort((a,b)=>(b.cp-b.have)-(a.cp-a.have)||b.orb-a.orb).map(x=>`<tr><td><b>${esc(x.n)}</b> <span class="meta">${x.phe||""} · ${x.st}★</span></td><td class="num">${x.cp} <span class="meta">(có ${x.have})</span></td><td class="num">${x.orb.toLocaleString("vi-VN")}</td><td class="num">${x.fod}</td><td style="white-space:normal;min-width:260px">${x.keys.map(([k,l])=>`<div><b>${l}:</b> ${esc((byName[x.n]||{})[k])}</div>`).join("")||'<span class="meta">Đã mở hết mốc có dữ liệu</span>'}</td></tr>`).join("");
+ box.innerHTML=`<h3>Đội lâu dài (late game) – ${esc(t.mode)}</h3><p class="meta">Giả sử mọi tướng SSR+ trong kho đều đạt 15★ + Nhập Thánh (mở hết đặc tính), rồi chọn 6 tướng tốt nhất. Bảng dưới là phần còn thiếu để tới đó.</p>
+ <div class="optgrid"><div class="rowlab">Hàng trước</div><div class="optrow">${L.front.map(cell).join("")}</div><div class="rowlab">Hàng sau</div><div class="optrow">${L.back.map(cell).join("")}</div></div>
+ <p>Còn cần khoảng <b>${tot.cp} bản trùng</b> và <b>${tot.orb.toLocaleString("vi-VN")} cầu cam</b> (đang có ${ORB.toLocaleString("vi-VN")}) để đưa cả đội lên 14★. <span class="meta">Chi phí 14→15★ và Nhập Thánh chưa có dữ liệu – chưa tính.</span></p>
+ <div class="sample-matrix-wrap"><table class="sample-matrix ttt"><thead><tr><th>Tướng</th><th>Bản trùng cần</th><th>Cầu cam</th><th>Lần tiêu nguyên liệu cùng phe</th><th>Mốc sẽ mở</th></tr></thead><tbody>${rows}</tbody></table></div>
+ <p class="meta">Thứ tự gợi ý: dồn bản trùng cho tướng nhiều mốc đặc tính chưa mở nhất và nằm trong cả đội hiện tại lẫn đội lâu dài.</p>`}
+function renderTeamOpt(){renderLate();const box=document.getElementById("teamOpt");if(!box||!window.KREADY)return;applyTeamOv();const t=DATA.teams[curTeam],r=optimizeTeam(curTeam),own=ownedStars();
  if(!r){box.innerHTML='<h3>Đội tối ưu từ kho</h3><p class="meta">Cần ít nhất 6 tướng SSR+ có dữ liệu.</p>';return}
  const curSet=new Set([...t.front,...t.back]),same=[...r.front,...r.back].every(n=>curSet.has(n));
  const cell=n=>`<div class="optc ${curSet.has(n)?"":"new"}">${token(byName[n])}<b>${esc(n)}</b><small>${own[n]}★${curSet.has(n)?"":" · mới"}</small></div>`;
