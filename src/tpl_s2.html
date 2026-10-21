@@ -432,6 +432,7 @@ h3 { cursor: pointer; }
 .lprow{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:6px 0;font-size:13px}
 .lprow select{max-width:62%}
 .ttt td{vertical-align:top}
+.card.notown{opacity:.55}
 .evlist{display:grid;gap:10px}.evcard{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:var(--surface);display:grid;gap:4px}.evcard.dim{opacity:.6}.evh{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px}.evtag{margin-left:auto;font:600 12px var(--body);padding:2px 8px;border-radius:999px;background:var(--surface-2);border:1px solid var(--line)}.evtag.warn{color:#b26a00;border-color:#e0b25b}.evtag.bad{color:var(--bad);border-color:var(--bad)}.evtag.ok{color:var(--good);border-color:var(--good)}
 .bktable th{white-space:nowrap}.bkrow2>td{vertical-align:middle}.bkname{display:flex;align-items:center;gap:10px;white-space:nowrap}.bkico{width:40px;height:40px;flex:none;border-radius:8px;object-fit:cover;border:2px solid var(--line);background:var(--surface-2)}.bkico.q0{border-color:#7b4bb0}.bkico.q1{border-color:#d98a1f}.bkico.q2{border-color:#c0392b}
 .ghform{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:10px 0}.ghform label{display:flex;flex-direction:column;gap:3px;font-size:12px;color:var(--muted)}.ghform input{width:100%}
@@ -918,12 +919,12 @@ function renderTeam(){
 document.getElementById("teamview").addEventListener("click",e=>{const b=e.target.closest("[data-h]"); if(b) openHero(b.dataset.h)});
 
 /* heroes */
-const F={phe:"Tất cả",nhom:"Tất cả",keep:"Tất cả"};
-const groups={phe:["Tất cả","3Q","Hán","Tần","Đường"],nhom:["Tất cả","Công","Thủ","Trợ","Thuật Sĩ"],keep:["Tất cả","Cốt lõi","Phương án","Dự bị"]};
+const F={own:"Trong kho",phe:"Tất cả",nhom:"Tất cả",keep:"Tất cả"};
+const groups={own:["Trong kho","Tất cả"],phe:["Tất cả","3Q","Hán","Tần","Đường"],nhom:["Tất cả","Công","Thủ","Trợ","Thuật Sĩ"],keep:["Tất cả","Cốt lõi","Phương án","Dự bị"]};
 const fEl=document.getElementById("filters");
 Object.entries(groups).forEach(([g,vals])=>vals.forEach(v=>{
-  const b=document.createElement("button"); b.textContent=(v==="Tất cả"?({phe:"Mọi phe",nhom:"Mọi nhóm",keep:"Mọi mức"}[g]):v);
-  b.dataset.g=g; b.dataset.v=v; b.setAttribute("aria-pressed",v==="Tất cả");
+  const b=document.createElement("button"); b.textContent=(g==="own"?(v==="Tất cả"?"Cả chưa có":"Trong kho"):v==="Tất cả"?({phe:"Mọi phe",nhom:"Mọi nhóm",keep:"Mọi mức"}[g]):v);
+  b.dataset.g=g; b.dataset.v=v; b.setAttribute("aria-pressed",v===F[g]);
   b.addEventListener("click",()=>{F[g]=v; fEl.querySelectorAll(`[data-g="${g}"]`).forEach(x=>x.setAttribute("aria-pressed",x.dataset.v===v)); renderGrid();});
   fEl.appendChild(b);
 }));
@@ -934,13 +935,16 @@ function bar(label,v){const w=v==null?0:v*20; const c=v>=5?"var(--good)":v>=3?"v
   return `<span>${label}</span><span class="track"><span class="fill" style="display:block;width:${w}%;background:${c}"></span></span><span>${v??"–"}</span>`;}
 function renderGrid(){
   const q=qEl.value.trim().toLowerCase();
-  let list=H.filter(h=>(F.phe==="Tất cả"||h.phe===F.phe)&&(F.nhom==="Tất cả"||h.nhom===F.nhom)&&(F.keep==="Tất cả"||h.keep.startsWith(F.keep))
+  const KS={};(window.KREADY?K:[]).forEach(u=>{if(u.r&&u.r!=="SSR+")return;const o=KS[u.name]=KS[u.name]||{s:0,c:0,phe:u.phe};o.s=Math.max(o.s,+u.star||0);o.c++});
+  const extra=Object.keys(KS).filter(n=>!byName[n]).map(n=>({name:n,phe:KS[n].phe,nhom:"Chưa rõ",sao:KS[n].s,ban:KS[n].c,role:(((window.EDB||{})[n])||{}).desc||"Chưa có dữ liệu kỹ năng – gửi ảnh để bổ sung",pvp:null,boss:null,pve:null,keep:"Chưa đánh giá",_x:1}));
+  const owned=n=>!!KS[n];
+  let list=[...H,...extra].filter(h=>(F.own==="Tất cả"||owned(h.name))&&(F.phe==="Tất cả"||h.phe===F.phe)&&(F.nhom==="Tất cả"||h.nhom===F.nhom)&&(F.keep==="Tất cả"||h.keep.startsWith(F.keep))
     &&(!q||[h.name,h.role,h.base,h.s9,h.s11,h.s13,h.nt].join(" ").toLowerCase().includes(q)));
   const s=sEl.value;
   list.sort((a,b)=> s==="name"?a.name.localeCompare(b.name,"vi"): s==="sao"?b.sao-a.sao: s==="tong"?total(b)-total(a): (b[s]??-1)-(a[s]??-1));
   document.getElementById("grid").innerHTML = list.length ? list.map(h=>`
-    <button class="card" data-h="${esc(h.name)}">
-      <div class="card-top">${token(h)}<div><h4>${esc(h.name)}</h4><div class="meta">${esc(h.phe)} · ${esc(h.nhom)} · ${h.sao}★${h.ban>1?" · ×"+h.ban+" bản":""} · ${slots(h.sao)}/8 ô công pháp</div></div></div>
+    <button class="card ${owned(h.name)?"":"notown"}" data-h="${esc(h.name)}">
+      <div class="card-top">${token(h)}<div><h4>${esc(h.name)}</h4><div class="meta">${esc(h.phe)} · ${esc(h.nhom)} · ${owned(h.name)?`${KS[h.name].s}★${KS[h.name].c>1?" · ×"+KS[h.name].c+" bản":""} · ${slots(KS[h.name].s)}/8 ô công pháp`:"<b>Chưa có trong kho</b>"}</div></div></div>
       <div class="r">${esc(h.role)}</div>
       <div class="bars">${bar("PVP",h.pvp)}${bar("Boss",h.boss)}${bar("PVE",h.pve)}</div>
       <span class="keep ${keepCls(h.keep)}">${esc(h.keep)}</span>
@@ -1425,7 +1429,7 @@ kcloud();
 if(!(window.claude&&window.claude.use)){const gb=document.getElementById("kGH");if(gb){gb.hidden=false;gb.onclick=ghDialog}}
 krender(); syncHeroes();
 /* ===== ĐỐI ĐẦU ===== */
-const EDB=Object.fromEntries((/*__EDB__*/[]).map(([n,p,t,d])=>[n,{name:n,phe:p,tags:t,desc:d}]));
+var EDB=Object.fromEntries((/*__EDB__*/[]).map(([n,p,t,d])=>[n,{name:n,phe:p,tags:t,desc:d}]));renderGrid();
 const TAGN={carry:"Carry",sub:"ST phụ",heal:"Hồi máu",tank:"Tank",shield:"Khiên",ctrl:"Khống chế",buff:"Buff","rage+":"Cấp Nộ","rage-":"Giảm/cướp Nộ",dispel:"Xóa buff",back:"Đánh hàng sau",aoe:"Diện rộng",exec:"Kết liễu",dot:"Chảy máu",cleanse:"Giải khống",amp:"Khuếch đại ST",immune:"Miễn khống",revive:"Hồi sinh",rageDep:"Phụ thuộc Nộ"};
 const EDIT=["carry","heal","tank","shield","ctrl","rage-","back","aoe","dispel","buff"];
 let VS; try{VS=JSON.parse(localStorage.getItem("vs2")||"null")}catch(e){} VS=VS||{slots:Array.from({length:6},()=>({n:"",tags:[]})),lv:"",my:""};
