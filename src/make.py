@@ -15,17 +15,20 @@ kho = json.load(open(B + "kho_default.json", encoding="utf-8"))
 tpl = open(B + "tpl_s2.html", encoding="utf-8").read()
 import base64
 BOOKIDX = json.load(open(B + "book_icons.json", encoding="utf-8"))   # tên công pháp -> assets/icons/books/*.jpg
+HEROIDX = json.load(open(B + "hero_art.json", encoding="utf-8")) if os.path.exists(B + "hero_art.json") else {}   # tên tướng -> assets/images/heroes/*.jpg
+HERO_INLINE = {n: "data:image/jpeg;base64," + base64.b64encode(open(B + "../" + f, "rb").read()).decode() for n, f in HEROIDX.items()}
 BOOK_INLINE = {n: "data:image/jpeg;base64," + base64.b64encode(open(B + "../" + f, "rb").read()).decode() for n, f in BOOKIDX.items()}
 
 data = dict(heroes=ns["heroes"], teams=ns["TEAMS"], ups=ns["UP"], pr=ns["PR"], books=[], alloc={}, allocWhy={})
 
-def fill(kdef, korb, footer, bookicons=None):
+def fill(kdef, korb, footer, bookicons=None, heroart=None):
     s = (tpl.replace("/*__DATA__*/null", json.dumps(data, ensure_ascii=False))
             .replace("/*__ICONS__*/{}", open(B + "icons_s2.json", encoding="utf-8").read())
             .replace("/*__BOOKICONS__*/{}", json.dumps(bookicons if bookicons is not None else BOOK_INLINE, ensure_ascii=False))
             .replace("/*__KHO__*/[]", json.dumps(kdef, ensure_ascii=False))
             .replace("/*__KORB__*/0", str(korb))
             .replace("/*__KX__*/null", json.dumps(kho.get("x") if kdef else None, ensure_ascii=False))
+            .replace("/*__HEROART__*/{}", json.dumps(heroart if heroart is not None else HERO_INLINE, ensure_ascii=False))
             .replace("/*__EDB__*/[]", json.dumps(en["DB"], ensure_ascii=False)))
     return s.replace("File chạy offline, không cần kết nối mạng.", footer)
 
@@ -40,7 +43,7 @@ w = re.sub(r"(?is)</body>\s*</html>\s*$", "", w)
 open(OUT + "so_tay_quan_su_s2_web.html", "w", encoding="utf-8").write(w); print("web", len(w))
 
 if REPO:
-    g = fill(kho["k"], kho["orb"], "Bản GitHub Pages: Kho lưu trong trình duyệt – dùng Kho → Sao lưu để chuyển máy. Bản đồng bộ đám mây chạy trên web Claude.", BOOKIDX)
+    g = fill(kho["k"], kho["orb"], "Bản GitHub Pages: Kho lưu trong trình duyệt – dùng Kho → Sao lưu để chuyển máy. Bản đồng bộ đám mây chạy trên web Claude.", BOOKIDX, HEROIDX)
     css = re.search(r"(?s)<style>\n?(.*?)</style>", g).group(1)
     js = re.search(r"(?s)<script>\n?(.*?)</script>", g).group(1)
     body = re.search(r"(?s)<body[^>]*>(.*?)<script>", g).group(1).rstrip()

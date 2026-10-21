@@ -435,6 +435,23 @@ h3 { cursor: pointer; }
 .evlist{display:grid;gap:10px}.evcard{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:var(--surface);display:grid;gap:4px}.evcard.dim{opacity:.6}.evh{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px}.evtag{margin-left:auto;font:600 12px var(--body);padding:2px 8px;border-radius:999px;background:var(--surface-2);border:1px solid var(--line)}.evtag.warn{color:#b26a00;border-color:#e0b25b}.evtag.bad{color:var(--bad);border-color:var(--bad)}.evtag.ok{color:var(--good);border-color:var(--good)}
 .bktable th{white-space:nowrap}.bkrow2>td{vertical-align:middle}.bkname{display:flex;align-items:center;gap:10px;white-space:nowrap}.bkico{width:40px;height:40px;flex:none;border-radius:8px;object-fit:cover;border:2px solid var(--line);background:var(--surface-2)}.bkico.q0{border-color:#7b4bb0}.bkico.q1{border-color:#d98a1f}.bkico.q2{border-color:#c0392b}
 .ghform{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:10px 0}.ghform label{display:flex;flex-direction:column;gap:3px;font-size:12px;color:var(--muted)}.ghform input{width:100%}
+
+/* Thẻ tướng kiểu game */
+.kview{display:flex;gap:6px;margin:6px 0 10px}.kview button{font:600 12px var(--body);border:1px solid var(--line);background:var(--surface);color:var(--muted);padding:5px 12px;border-radius:999px;cursor:pointer}.kview button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.klist.gcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:10px}
+.gcard{position:relative;aspect-ratio:1/2;border-radius:10px;overflow:hidden;cursor:pointer;border:3px solid #d9a23a;background:linear-gradient(180deg,#f6d27a,#c98a1e);box-shadow:0 4px 10px rgba(0,0,0,.18)}
+.gcard.r-SSR{border-color:#d98a1f;background:linear-gradient(180deg,#f3c27a,#b8661a)}.gcard.r-SR{border-color:#8a5cc8;background:linear-gradient(180deg,#c9b2ee,#6b45a8)}.gcard.r-R{border-color:#4a86c8;background:linear-gradient(180deg,#b5d3f2,#2f6aa8)}
+.gcard.core{outline:2px solid var(--accent);outline-offset:2px}
+.gart{position:absolute;inset:0 0 34% 0;display:grid;place-items:center;overflow:hidden}.gart img{width:100%;height:100%;object-fit:cover;object-position:50% 20%}
+.gph{font:700 20px var(--display);color:#fff8e7;text-shadow:0 1px 3px rgba(0,0,0,.5)}
+.grar{position:absolute;top:4px;left:4px;font:900 italic 13px var(--body);color:#ffe7a6;background:linear-gradient(180deg,#e2403a,#a0161b);padding:1px 6px;border-radius:4px;text-shadow:0 1px 0 #600;box-shadow:0 1px 3px rgba(0,0,0,.35)}
+.glv{position:absolute;top:4px;right:5px;font:800 15px var(--body);color:#fff;text-shadow:0 0 3px #000,0 1px 2px #000}
+.gcnt{position:absolute;top:26px;right:5px;font:700 11px var(--body);color:#fff;background:rgba(0,0,0,.55);padding:0 5px;border-radius:8px}
+.gfoot{position:absolute;left:0;right:0;bottom:0;height:36%;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding-top:6px;background:linear-gradient(180deg,rgba(40,25,8,.15),rgba(40,25,8,.85) 30%);color:#fff}
+.gname{font:700 13px var(--display);text-align:center;line-height:1.15;padding:0 3px;text-shadow:0 1px 2px #000}
+.gstars{font-size:15px;letter-spacing:-1px;line-height:1.2;margin-top:2px;text-shadow:0 1px 1px rgba(0,0,0,.6)}.gstars.g{color:#ffd54a}.gstars.r{color:#ff4a3d}.gstars.c{background:linear-gradient(90deg,#ff5f6d,#ffc371,#5ee7a0,#56ccf2,#b06ab3);-webkit-background-clip:text;background-clip:text;color:transparent}
+.gphe{position:absolute;bottom:4px;left:50%;transform:translateX(-50%);font:700 10px var(--body);padding:1px 8px;border-radius:3px;color:#fff;background:#8a6a2a;border:1px solid rgba(255,255,255,.4)}
+.gphe.p-3Q{background:#2f62b3}.gphe.p-Hán{background:#2f8a57}.gphe.p-Tần{background:#b07d12}.gphe.p-Đường{background:#7b4bb0}
 </style>
 </head>
 <body>
@@ -559,6 +576,7 @@ h3 { cursor: pointer; }
     <div class="panel" id="kHint"></div>
     <div class="filters" id="kFilter"></div>
     <details class="panel" id="khoCov" style="margin:10px 0"></details>
+    <div class="kview" role="group" aria-label="Kiểu hiển thị"><button data-kv="card">Thẻ</button><button data-kv="list">Danh sách</button></div>
     <div id="kList" class="klist"></div>
     <div class="panel" style="margin-top:16px"><h3>Lịch sử</h3><ol id="kLog" class="klog"></ol></div>
   </section>
@@ -1103,13 +1121,26 @@ const kfEl=document.getElementById("kFilter");
 ["Tất cả","3Q","Hán","Tần","Đường","SSR+","SSR (nguyên liệu)","SR (tím)","R (xanh)"].forEach(v=>{const b=document.createElement("button");b.textContent=v;b.dataset.v=v;b.setAttribute("aria-pressed",v===kf);
  b.onclick=()=>{kf=v;[...kfEl.children].forEach(x=>x.setAttribute("aria-pressed",x.dataset.v===v));krender()};kfEl.appendChild(b)});
 const stars=s=>`${s}★`;
+
+/* ===== Thẻ tướng kiểu game ===== */
+var HART=/*__HEROART__*/{};
+function heroImg(n){return HART[n]||(typeof ICONS!=="undefined"&&ICONS[n])||""}
+const PHE_SHORT={"3Q":"3Q","Hán":"Hán","Tần":"Tần","Đường":"Đường"};
+function starRow(s){s=+s||0;const tier=s<=5?"g":s<=10?"r":"c",k=s<=5?s:s<=10?s-5:Math.min(5,s-10);return `<span class="gstars ${tier}" aria-label="${s} sao">${"★".repeat(Math.max(k,0))}</span>`}
+function heroCard(n,us){const u0=us[0],lv=((X.hlv||{})[n])||LV||"",img=heroImg(n),r=u0.r||"SSR+";
+ return `<div class="gcard r-${r.replace("+","p")} ${CORE.has(n)?"core":""}" tabindex="0" data-gc="${esc(n)}">
+  <div class="gart">${img?`<img src="${img}" alt="" loading="lazy">`:`<span class="gph">${esc(short(n))}</span>`}</div>
+  <span class="grar">${esc(r)}</span>${lv?`<span class="glv">${lv}</span>`:""}${us.length>1?`<span class="gcnt">×${us.length}</span>`:""}
+  <div class="gfoot"><div class="gname">${esc(n)}</div>${starRow(u0.star)}<span class="gphe p-${esc(u0.phe)}">${esc(PHE_SHORT[u0.phe]||u0.phe)}</span></div></div>`}
 function _kr0(){
  document.getElementById("orb").value=ORB;document.getElementById("kLv").value=LV||"";const vm=document.getElementById("vsMy");if(vm)vm.value=LV||"";
  const groups={};K.forEach(u=>{(groups[u.name]=groups[u.name]||[]).push(u)});
  let names=Object.keys(groups).filter(n=>{const u=groups[n][0];return kf==="Tất cả"||u.phe===kf||(kf==="SSR+"&&u.r==="SSR+")||(kf==="SSR (nguyên liệu)"&&u.r==="SSR")||(kf==="SR (tím)"&&u.r==="SR")||(kf==="R (xanh)"&&u.r==="R")});
  names.sort((a,b)=>(CORE.has(b)-CORE.has(a))||(groups[b][0].r==="SSR+")-(groups[a][0].r==="SSR+")||Math.max(...groups[b].map(u=>u.star))-Math.max(...groups[a].map(u=>u.star))||a.localeCompare(b,"vi"));
+ const KVIEW=(()=>{try{return localStorage.getItem("kview")||"card"}catch(e){return "card"}})();document.querySelectorAll("[data-kv]").forEach(b=>b.setAttribute("aria-pressed",b.dataset.kv===KVIEW));document.getElementById("kList").className=KVIEW==="card"?"klist gcards":"klist";
  document.getElementById("kList").innerHTML=names.map(n=>{const us=groups[n].sort((a,b)=>b.star-a.star),u0=us[0],h=byName[n];
   const tok=(h||ICONS[n])?token(h||{name:n,phe:u0.phe}):`<span class="token" style="background:${PHE_COLOR[u0.phe]||"var(--muted)"};font-size:11px">${esc(short(n))}</span>`;
+  if(KVIEW==="card")return heroCard(n,us);
   return `<div class="kh"><div class="kh-top">${tok}<div><b>${esc(n)}</b> ${CORE.has(n)?'<span class="tagcore">Đội chính</span>':""}<div class="meta">${esc(u0.phe)} · <span class="rarity">${u0.r}</span> · ${us.length} bản</div></div><button class="btn ghost qadd" data-qadd="${esc(n)}" title="Thêm nhanh 1 bản (${u0.r==="SR"?4:u0.r==="R"?3:5}★)">+1 bản</button></div>
   <div class="units">${us.map(u=>`<span class="unit"><button class="setst" data-set="${u.id}" title="Sửa số sao (không trừ kho)">${stars(u.star)} ✎</button><button class="up" data-up="${u.id}" title="Nâng sao">▲ Nâng</button><button data-del="${u.id}" title="Xóa bản này">✕</button></span>`).join("")}</div></div>`}).join("")||'<p class="empty">Không có tướng.</p>';
  document.getElementById("kLog").innerHTML=KLOG.slice().reverse().map(l=>`<li>${esc(l)}</li>`).join("")||'<li class="meta">Chưa có thao tác.</li>';
@@ -1123,7 +1154,7 @@ function modal(title,html,onok,okText="Xác nhận"){
  document.getElementById("dlg-token").innerHTML="";document.getElementById("dlg-title").textContent=title;document.getElementById("dlg-meta").textContent="";
  document.getElementById("dlg-body").innerHTML=html+`<div class="err" id="mErr"></div><div class="acts"><button class="btn ghost" id="mNo">Hủy</button><button class="btn" id="mOk">${okText}</button></div>`;
  document.getElementById("mNo").onclick=()=>dlg.close();document.getElementById("mOk").onclick=()=>{let r;try{r=onok()}catch(e){r="Lỗi: "+e.message}if(r)document.getElementById("mErr").textContent=r;else dlg.close()};dlg.showModal();}
-document.getElementById("kList").addEventListener("click",e=>{
+const KACT=e=>{
  const d=e.target.closest("[data-del]"),up=e.target.closest("[data-up]");
  const qa=e.target.closest("[data-qadd]");
  if(qa){const n=qa.dataset.qadd,u0=K.find(x=>x.name===n);if(!u0)return;const s=u0.r==="SR"?4:u0.r==="R"?3:5;snap();K.push({id:nid(),name:n,phe:u0.phe,star:s,r:u0.r});KLOG.push(`${today()} · Thêm 1 × ${n} ${stars(s)}`);ksave();krender();syncHeroes();return}
@@ -1142,7 +1173,8 @@ document.getElementById("kList").addEventListener("click",e=>{
    const ids=[...document.querySelectorAll("#dlg-body .picks input:checked")].map(i=>+i.value);
    snap(); const used=K.filter(x=>ids.includes(x.id)); K=K.filter(x=>!ids.includes(x.id)); u.star++; ORB-=cost;
    KLOG.push(`${today()} · ${u.name} ${stars(u.star-1)}→${stars(u.star)} · −${cost.toLocaleString("vi-VN")} cầu${used.length?" · tiêu: "+used.map(x=>x.name+" "+stars(x.star)).join(", "):""}`);
-   ksave();krender();syncHeroes();},"Nâng sao");});
+   ksave();krender();syncHeroes();},"Nâng sao");};
+document.getElementById("kList").addEventListener("click",KACT);
 document.getElementById("kAdd").onclick=()=>{
  const known=[...new Set([...H.map(h=>h.name),...K.map(u=>u.name)])].sort((a,b)=>a.localeCompare(b,"vi"));
  modal("Thêm tướng vào kho",`<div class="form"><label for="aN">Tên</label><input id="aN" list="aL" placeholder="Gõ hoặc chọn"><datalist id="aL">${known.map(n=>`<option value="${esc(n)}">`).join("")}</datalist>
@@ -1162,6 +1194,15 @@ document.getElementById("kIO").onclick=()=>{
    try{const o=JSON.parse(document.getElementById("ioT").value);if(!Array.isArray(o.k))throw 0;snap();K=o.k;ORB=+o.orb||0;if(o.x&&typeof o.x==="object")X=Object.assign({battles:[],orbDay:0,books:[],alloc:{}},o.x);if(o.lv)LV=+o.lv;if(o.atk)ATK=o.atk;KLOG.push(`${today()} · Khôi phục từ bản sao lưu`);ksave();krender();syncHeroes();}catch(e){return "Dữ liệu không hợp lệ."}},"Khôi phục");
  document.getElementById("ioCopy").onclick=()=>{const t=document.getElementById("ioT");navigator.clipboard?.writeText(t.value).catch(()=>{});t.select();};
  document.getElementById("ioReset").onclick=()=>{snap();K=KDEF.map((u,i)=>({...u,id:i+1}));ORB=KORB;KLOG.push(`${today()} · Đặt lại kho gốc`);ksave();krender();syncHeroes();dlg.close();};};
+
+document.addEventListener("click",e=>{const v=e.target.closest("[data-kv]");if(v){try{localStorage.setItem("kview",v.dataset.kv)}catch(x){}krender();return}
+ const c=e.target.closest("[data-gc]");if(!c)return;const n=c.dataset.gc,us=K.filter(u=>u.name===n).sort((a,b)=>b.star-a.star),u0=us[0];
+ modal(n,`<div class="meta">${esc(u0.phe)} · ${esc(u0.r||"SSR+")} · ${us.length} bản${CORE.has(n)?" · Đội chính":""}</div>
+  <div class="units" style="margin-top:10px">${us.map(u=>`<span class="unit"><button class="setst" data-set="${u.id}">${u.star}★ ✎</button><button class="up" data-up="${u.id}">▲ Nâng</button><button data-del="${u.id}">✕</button></span>`).join("")}</div>
+  <div class="acts" style="justify-content:flex-start;margin-top:10px"><button class="btn ghost" data-qadd="${esc(n)}">+1 bản</button>${byName[n]?`<button class="btn ghost" data-hinfo="${esc(n)}">Xem kỹ năng</button>`:""}</div>`,()=>{},"Đóng");
+ document.querySelectorAll("#dlg-body [data-set],#dlg-body [data-up],#dlg-body [data-del],#dlg-body [data-qadd]").forEach(b=>b.addEventListener("click",ev=>{ev.stopPropagation();ev.preventDefault();dlg.close();setTimeout(()=>KACT({target:b}),0)}));
+ const hi=document.querySelector("#dlg-body [data-hinfo]");if(hi)hi.onclick=()=>{dlg.close();openHero(n)}});
+document.addEventListener("keydown",e=>{if(e.key==="Enter"&&e.target.matches&&e.target.matches("[data-gc]"))e.target.click()});
 /* ===== 8 TÍNH NĂNG BỔ SUNG ===== */
 var X=X||{battles:[],orbDay:0,books:[],alloc:{}};
 const PRIO=new Set([...DATA.teams[0].front,...DATA.teams[0].back]);
@@ -1213,7 +1254,7 @@ document.addEventListener("change",e=>{if(e.target.id==="rdH"){const t=document.
 
 /* (3) Nhập nhanh hàng loạt */
 function heroInfo(n){const u=K.find(x=>x.name===n);if(u)return{phe:u.phe,r:u.r};if(byName[n])return{phe:byName[n].phe,r:"SSR+"};
- if(EDB[n])return{phe:EDB[n].phe,r:/SR tím/.test(EDB[n].desc)?"SR":/R xanh/.test(EDB[n].desc)?"R":"SSR+"};return null}
+ if(EDB[n])return{phe:EDB[n].phe,r:/SSR cam/.test(EDB[n].desc)?"SSR":/SR tím/.test(EDB[n].desc)?"SR":/R xanh/.test(EDB[n].desc)?"R":"SSR+"};return null}
 function parseBulk(txt){const out=[],bad=[];
  txt.split(/[\n,;]+/).map(s=>s.trim()).filter(Boolean).forEach(s=>{
   let c=1,st=null; s=s.replace(/\s*[x×*]\s*(\d+)\s*$/i,(_,d)=>{c=+d;return""}).replace(/\s*(\d+)\s*(★|s|sao)\s*$/i,(_,d)=>{st=+d;return""}).replace(/\s*[x×*]\s*(\d+)\s*$/i,(_,d)=>{c=+d;return""}).trim();

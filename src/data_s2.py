@@ -131,6 +131,14 @@ _vt=dict(old["Vệ Thanh"]); _vt.update(sao=5,ban=2,books="",tn="Hoắc Khứ B�
   role="Hỗ trợ bảo vệ đồng đội yếu máu – Nộ, khiên, giải khống chế",
   stat="Cấp 120 · HP 117,860 · Công 15,890 · Thủ 3,538 · Chiến 274,405. ⚠ Công rất cao – nếu ra trận cùng Lữ Bố sẽ chiếm vị trí 'Công cao nhất'.")
 heroes.append(_vt)
+heroes.append(dict(name="Hạng Vũ",phe="Hán",nhom="Thủ",sao=5,role="Tank công thủ toàn diện – gánh đòn, giảm ST địch đánh vào mình; 11★ máu mất thành ST cho cả đội",
+  base="ĐT 100% 1 địch; TC 126% ST toàn địch, gắn [Uy Hiếp] (ST gây cho Hạng Vũ giảm 50%, 2 hiệp, không cộng dồn)",
+  s9="Tướng lân cận chịu ST khi HP Hạng Vũ >30%: thêm 10% Khiên, giúp đồng đội ngăn ST này",
+  s11="Khi còn sống, cứ mất 1% HP thì toàn đội +1% Buff ST, tối đa +100%",
+  s13="Chịu ST từ địch đang [Uy Hiếp]: 60% Choáng kẻ đó đến hết hiệp và −1 Nộ (mỗi tướng tối đa 3 lần/trận)",
+  nt="Bị tấn công: 21% gắn [Uy Hiếp] lên kẻ công (2 hiệp); HP <30%: hồi về 100% HP và +30% Giảm ST 3 hiệp (2 lần/trận)",
+  tn="Ngu Cơ – Thủ +15%",pvp=4,boss=4,pve=4,keep="Phương án",gear="HP > Thủ > Miễn ST; không lấy dòng Công",books="",ban=1,
+  stat="Cấp 160 · HP 32 vạn · Công 42.700 · Thủ 10.425 · Lực chiến 736.054 (5★, 21/10). Tiềm năng: bậc 1–5 Thủ +120, HP +10%, Thủ +120 & HP +3500, Thủ +10%, Kháng Bạo +10%; 6★ Nộ +2 · 7★ Miễn ST +8% · 8★ HP +10% · 10★ Thủ +6% · 12★ Thủ +4% · 14★ Thủ +6% · 15★ HP +10%."))
 
 UP=[
  dict(name="Lý Long Cơ",cur=8,next=9,unlock="Đánh thường +1 tầng [Trường Hận], tối đa 6 tầng · chỉ số 130%→150% · cấp 185→205",copy="1/1",fodder="Tướng Đường 8★",fodderHave="0/1",cost=2000,note="Nguyên liệu: nâng 1 Lý Tú Ninh lên 8★. KHÔNG chọn Lý Thế Dân, Lý Bạch, Võ Tắc Thiên."),
