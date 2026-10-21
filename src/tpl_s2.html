@@ -9,7 +9,7 @@
 :root{
   --bg:#eef0f3; --surface:#ffffff; --surface-2:#f6f7f9; --ink:#1c2230; --muted:#5d6678; --line:#d9dde4;
   --accent:#a8322a; --accent-ink:#ffffff;
-  --q3:#2f62b3; --han:#2f8a57; --tan:#b07d12; --duong:#7b4bb0;
+  --q3:#2f62b3; --han:#2f8a57; --tan:#b07d12; --duong:#7b4bb0; --code:#c0392b;
   --front:#fbe9e4; --back:#e6eef9;
   --good:#3c8d4f; --warn:#c08a16; --bad:#b2433a;
   --display:"Palatino Linotype","Book Antiqua",Palatino,Georgia,"Times New Roman",serif;
@@ -840,7 +840,7 @@ var BICON=/*__BOOKICONS__*/{};function BIMG(n){return BICON[n]||(typeof ICONS!==
 
 const DATA = /*__DATA__*/null;
 const H = DATA.heroes, byName = Object.fromEntries(H.map(h=>[h.name,h]));
-const PHE_COLOR = {"3Q":"var(--q3)","Hán":"var(--han)","Tần":"var(--tan)","Đường":"var(--duong)"};
+const PHE_COLOR = {"3Q":"var(--q3)","Hán":"var(--han)","Tần":"var(--tan)","Đường":"var(--duong)","Cổ Đế":"#c0392b"};
 const esc = s => String(s ?? "").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const short = n => { const p=n.split(" "); return p[p.length-1]; };
 const ICONS = /*__ICONS__*/{};
