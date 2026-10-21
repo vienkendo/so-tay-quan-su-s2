@@ -55,7 +55,6 @@ Trên web Claude, cùng cấu trúc được lưu ở `data/users/me/kho`.
 
 ## 4. Còn thiếu dữ liệu (cần ảnh từ người chơi)
 
-- Hiệu ứng công pháp mới: Quỷ Cốc Tử, Lỗ Trí Thâm (Cam), Lý Thế Dân (Đỏ).
 - Kỹ năng các tướng SR: Tuân Úc, Mị Nguyệt, Liêm Pha, Võ Tòng, Thái Bình Công Chúa, Khương Duy…
 - Linh phù: số phù cùng bậc để ghép, giá trị ô Tăng/Giảm ST, điều kiện mở kỹ năng linh thú.
 - Thần thú: hiệu quả ở các mốc sao thấp (hiện chỉ có mốc 15★), cách nâng sao/bậc.
