@@ -222,7 +222,7 @@ const b64e=s=>{const b=new TextEncoder().encode(s);let o="";for(let i=0;i<b.leng
 const b64d=s=>new TextDecoder().decode(Uint8Array.from(atob(s.replace(/\s/g,"")),c=>c.charCodeAt(0)));
 function ghUrl(c){return `https://api.github.com/repos/${encodeURIComponent(c.owner)}/${encodeURIComponent(c.repo)}/contents/${c.path.split("/").map(encodeURIComponent).join("/")}`}
 function ghHead(c,extra){return Object.assign({"Authorization":"Bearer "+c.token,"Accept":"application/vnd.github+json","X-GitHub-Api-Version":"2022-11-28"},extra||{})}
-async function ghGet(c,useEtag){const h=ghHead(c,useEtag&&GH.etag?{"If-None-Match":GH.etag}:{});const r=await fetch(ghUrl(c)+"?ref="+encodeURIComponent(c.branch||"main"),{headers:h,cache:"no-store"});
+async function ghGet(c,useEtag){const h=ghHead(c,useEtag&&GH.etag?{"If-None-Match":GH.etag}:{});const r=await fetch(ghUrl(c)+"?ref="+encodeURIComponent(c.branch||"main")+(useEtag?"":"&_="+Date.now()),{headers:h,cache:"no-store"});
  if(r.status===304)return {same:true};if(r.status===404)return {missing:true};if(!r.ok)throw new Error(r.status===401?"Token không hợp lệ (dán thiếu, đã xóa hoặc đã bấm Regenerate) – mở Đồng bộ GitHub dán lại":r.status===403?"Token không đủ quyền / bị giới hạn":r.status===404?"Không thấy repo – kiểm tra tên repo và quyền Contents của token":"GitHub lỗi "+r.status);
  GH.etag=r.headers.get("ETag");const j=await r.json();GH.sha=j.sha;return {data:JSON.parse(b64d(j.content))}}
 async function ghPut(c,obj,retry){const body={message:`Kho ${new Date().toLocaleString("vi-VN")}`,content:b64e(JSON.stringify(obj)),branch:c.branch||"main"};if(GH.sha)body.sha=GH.sha;
@@ -237,21 +237,33 @@ async function ghInit(){const c=GH.cfg();if(!c||!c.token){kstat("","Lưu trên t
  try{const g=await ghGet(c,false),dirty=GH.meta("dirty")==="1",synced=+GH.meta("ts")||0;
   if(g.missing){CLOUD=ghAdapter(c);kpush()}
   else{const rts=+g.data.ts||0;
-   if(dirty&&rts<=synced){CLOUD=ghAdapter(c);kpush()}
+   if(rts<synced||(dirty&&rts<=synced)){CLOUD=ghAdapter(c);kpush()}
    else{if(dirty&&rts>synced){snap();setTimeout(()=>alert("Máy khác vừa cập nhật Kho trên GitHub nên trang đã lấy bản đó. Thay đổi chưa đồng bộ trên máy này có thể lấy lại bằng nút Hoàn tác."),50)}
+    if(!dirty&&rts>synced&&(X.battles||[]).length>((g.data.x||{}).battles||[]).length){snap()}
     kapply(g.data);GH.meta("ts",rts);GH.meta("dirty",0)}}
   CLOUD=ghAdapter(c);kstat("on","Đồng bộ qua GitHub");
   clearInterval(GH.timer);GH.timer=setInterval(()=>{if(document.visibilityState==="visible")ghPull(c)},60000);
   document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible")ghPull(c)});
  }catch(e){CLOUD=null;kstat("","GitHub: "+e.message+" – vẫn lưu trên máy này")}}
+
+async function ghHistory(){const c=GH.cfg();if(!c||!c.token){alert("Chưa kết nối GitHub.");return}
+ const base=`https://api.github.com/repos/${encodeURIComponent(c.owner)}/${encodeURIComponent(c.repo)}`;
+ modal("Lịch sử bản lưu trên GitHub",'<p class="meta" id="ghHL">Đang tải…</p>',()=>{},"Đóng");
+ try{const r=await fetch(`${base}/commits?path=${encodeURIComponent(c.path)}&sha=${encodeURIComponent(c.branch||"main")}&per_page=40&_=${Date.now()}`,{headers:ghHead(c),cache:"no-store"});if(!r.ok)throw new Error("GitHub lỗi "+r.status);const L=await r.json();
+  document.getElementById("ghHL").outerHTML=`<p class="meta">Mỗi lần lưu là 1 bản. Bấm "Xem" để biết bản đó có bao nhiêu tướng/trận, rồi "Khôi phục" nếu đúng bản cần lấy lại.</p><ol class="klog">${L.map(x=>`<li>${new Date(x.commit.author.date).toLocaleString("vi-VN")} <button class="btn ghost" data-ghv="${x.sha}">Xem</button> <span class="meta" id="gv_${x.sha}"></span></li>`).join("")}</ol>`;
+  document.querySelectorAll("#dlg-body [data-ghv]").forEach(btn=>btn.onclick=async()=>{const sh=btn.dataset.ghv,o=document.getElementById("gv_"+sh);o.textContent="…";
+   try{const q=await fetch(`${ghUrl(c)}?ref=${sh}`,{headers:ghHead(c),cache:"no-store"});const j=await q.json(),d=JSON.parse(b64d(j.content));
+    o.innerHTML=`${(d.k||[]).length} bản tướng · ${((d.x||{}).battles||[]).length} trận · cầu ${(+d.orb||0).toLocaleString("vi-VN")} <button class="btn" data-ghr="${sh}">Khôi phục</button>`;
+    o.querySelector("[data-ghr]").onclick=()=>{if(!confirm("Thay toàn bộ Kho hiện tại bằng bản này? (Hoàn tác được)"))return;snap();d.ts=Date.now();kapply(d);KLOG.push(`${today()} · Khôi phục bản lưu GitHub ${sh.slice(0,7)}`);ksave();dlg.close()}}catch(e){o.textContent="Không đọc được bản này"}})}
+ catch(e){const el=document.getElementById("ghHL");if(el)el.textContent=e.message}}
 function ghDialog(){const c=GH.cfg()||{owner:"vienkendo",repo:"so-tay-data",path:"kho.json",branch:"main",token:""};
  modal("Đồng bộ Kho qua GitHub",`<p class="meta">Kho được lưu thành file <b>kho.json</b> trong một repo <b>riêng tư</b>. Mỗi máy nhập token một lần; token chỉ lưu trong trình duyệt của máy đó.</p>
  <ol class="meta" style="padding-left:18px"><li>Tạo repo riêng tư (Private), ví dụ <b>so-tay-data</b>.</li><li>GitHub → Settings → Developer settings → <b>Fine-grained tokens</b> → Generate: Repository access = <i>Only select repositories</i> → chọn repo đó; Permissions → <b>Contents: Read and write</b>.</li><li>Dán token vào ô dưới.</li></ol>
  <div class="ghform"><label>Chủ repo<input id="ghO" value="${esc(c.owner)}"></label><label>Repo<input id="ghR" value="${esc(c.repo)}"></label><label>Nhánh<input id="ghB" value="${esc(c.branch||"main")}"></label><label>File<input id="ghP" value="${esc(c.path)}"></label><label style="grid-column:1/-1">Token<input id="ghT" type="password" autocomplete="off" placeholder="github_pat_…" value="${esc(c.token)}"></label></div>
- <div class="acts" style="justify-content:flex-start"><button class="btn ghost" id="ghShow" type="button">Hiện token</button><button class="btn ghost" id="ghCopy" type="button">Sao chép token</button>${GH.cfg()?'<button class="btn ghost" id="ghOff">Ngắt đồng bộ trên máy này</button>':""}</div><p class="meta" id="ghMsg"></p>`,()=>{
+ <div class="acts" style="justify-content:flex-start"><button class="btn ghost" id="ghHist" type="button">Lịch sử bản lưu</button><button class="btn ghost" id="ghShow" type="button">Hiện token</button><button class="btn ghost" id="ghCopy" type="button">Sao chép token</button>${GH.cfg()?'<button class="btn ghost" id="ghOff">Ngắt đồng bộ trên máy này</button>':""}</div><p class="meta" id="ghMsg"></p>`,()=>{
   const n={owner:document.getElementById("ghO").value.trim(),repo:document.getElementById("ghR").value.trim(),branch:document.getElementById("ghB").value.trim()||"main",path:document.getElementById("ghP").value.trim()||"kho.json",token:document.getElementById("ghT").value.replace(/[\s\u200B-\u200D\uFEFF]/g,"")};
   if(!n.owner||!n.repo||!n.token)return "Cần nhập chủ repo, tên repo và token.";GH.save(n);GH.sha=null;GH.etag=null;ghInit()},"Lưu & kết nối");
- const tk=document.getElementById("ghT");document.getElementById("ghShow").onclick=e=>{tk.type=tk.type==="password"?"text":"password";e.target.textContent=tk.type==="password"?"Hiện token":"Ẩn token"};
+ document.getElementById("ghHist").onclick=()=>{dlg.close();setTimeout(ghHistory,50)};const tk=document.getElementById("ghT");document.getElementById("ghShow").onclick=e=>{tk.type=tk.type==="password"?"text":"password";e.target.textContent=tk.type==="password"?"Hiện token":"Ẩn token"};
  document.getElementById("ghCopy").onclick=()=>{const v=tk.value.replace(/[\s\u200B-\u200D\uFEFF]/g,"");const m=document.getElementById("ghMsg");if(!v){m.textContent="Máy này chưa lưu token.";return}(navigator.clipboard?navigator.clipboard.writeText(v):Promise.reject()).then(()=>m.textContent="Đã sao chép – dán vào máy khác, đừng gửi qua chat.").catch(()=>{tk.type="text";tk.select();m.textContent="Bôi đen sẵn – bấm Sao chép của trình duyệt."})};
  const off=document.getElementById("ghOff");if(off)off.onclick=()=>{GH.save(null);CLOUD=null;clearInterval(GH.timer);kstat("","Đã ngắt – chỉ lưu trên máy này");dlg.close()}}
 
