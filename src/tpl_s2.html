@@ -432,6 +432,7 @@ h3 { cursor: pointer; }
 .lprow{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:6px 0;font-size:13px}
 .lprow select{max-width:62%}
 .ttt td{vertical-align:top}
+.optrow{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:4px 0 8px}.optc{display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 4px;border:1px solid var(--line);border-radius:10px;background:var(--surface);text-align:center;font-size:13px}.optc.new{border-color:var(--good);box-shadow:inset 0 0 0 1px var(--good)}.optc small{color:var(--muted)}
 .card.notown{opacity:.55}
 .evlist{display:grid;gap:10px}.evcard{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:var(--surface);display:grid;gap:4px}.evcard.dim{opacity:.6}.evh{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px}.evtag{margin-left:auto;font:600 12px var(--body);padding:2px 8px;border-radius:999px;background:var(--surface-2);border:1px solid var(--line)}.evtag.warn{color:#b26a00;border-color:#e0b25b}.evtag.bad{color:var(--bad);border-color:var(--bad)}.evtag.ok{color:var(--good);border-color:var(--good)}
 .bktable th{white-space:nowrap}.bkrow2>td{vertical-align:middle}.bkname{display:flex;align-items:center;gap:10px;white-space:nowrap}.bkico{width:40px;height:40px;flex:none;border-radius:8px;object-fit:cover;border:2px solid var(--line);background:var(--surface-2)}.bkico.q0{border-color:#7b4bb0}.bkico.q1{border-color:#d98a1f}.bkico.q2{border-color:#c0392b}
@@ -483,6 +484,7 @@ h3 { cursor: pointer; }
     <div class="modes" id="modes"></div>
     <div class="khobar" style="margin:8px 0"><button class="btn ghost" id="exTeam">Tải ảnh đội hình</button><span class="meta" id="exMsg"></span></div>
     <div id="teamview"></div>
+    <div class="panel" id="teamOpt" style="margin-top:18px"></div>
     <div class="panel" id="teamAlt" style="margin-top:18px"></div>
     <div class="panel" id="teamRadar" style="margin-top:18px"></div>
   </section>
@@ -1681,7 +1683,7 @@ function radarSVG(series,max){const cx=180,cy=150,r=92,N=RADAR_AX.length,ang=i=>
  return `<svg viewBox="0 0 360 300" role="img" aria-label="Biểu đồ radar vai trò">${g}${sh}${lb}</svg>`}
 function teamTotals(names){const t={};RADAR_AX.forEach(([k])=>t[k]=0);names.filter(Boolean).forEach(n=>{const s=radarScore(n);RADAR_AX.forEach(([k])=>t[k]+=s[k])});RADAR_AX.forEach(([k])=>t[k]=+t[k].toFixed(1));return t}
 function teamGaps(t){const w=[];if(t.dmg<4)w.push("thiếu sát thương");if(t.tru<5)w.push("hàng trước mỏng");if(t.heal<3)w.push("ít hồi máu");if(t.ctrl<3)w.push("không có khống chế/giảm Nộ");if(t.no<3)w.push("ít nguồn Nộ");return w}
-function renderTeamRadar(){renderTeamAlt();const box=document.getElementById("teamRadar");if(!box)return;
+function renderTeamRadar(){if(!window.__opt){window.__opt=1;setTimeout(()=>{window.__opt=0;applyTeamOv();renderTeam();renderTeamOpt()},0)}renderTeamAlt();const box=document.getElementById("teamRadar");if(!box)return;
  const T=DATA.teams,a=+(document.getElementById("trA")||{}).value||curTeam,bv=(document.getElementById("trB")||{}).value,b=bv===""||bv==null?-1:+bv;
  const ta=T[a]||T[curTeam],va=teamTotals([...ta.front,...ta.back]),series=[{v:va,c:"var(--accent)"}];let vb=null;
  if(b>=0&&T[b]&&b!==a){vb=teamTotals([...T[b].front,...T[b].back]);series.push({v:vb,c:"#2f62b3"})}
@@ -1702,6 +1704,55 @@ function renderTeamAlt(){const box=document.getElementById("teamAlt");if(!box||!
   if(!c.length)return "";const me=sc(n);
   return `<tr><td><b>Ô ${i+1}</b> ${esc(n)} <span class="meta">${own[n]||"–"}★ · ${rs.map(r=>TAGN[r]||r).join(", ")}</span></td><td>${c.map(x=>{const d=sc(x)-me;return `<span class="chip ${d>0.3?"on":""}" title="Điểm chế độ ${(byName[x]||{})[key]??"?"}">${esc(x)} ${own[x]}★${d>0.3?" ▲":""}</span>`}).join(" ")}</td></tr>`}).join("");
  box.innerHTML=`<h3>Phương án thay từ kho</h3><p class="meta">Tướng SSR+ trong kho cùng vai trò với từng ô, xếp theo điểm ${esc(t.mode)} + số sao hiện tại. ▲ = đang vượt tướng trong đội. Đổi tướng sẽ mất Tình Nghĩa/Chiến Sách của ô đó – kiểm tra trước khi thay.</p><div class="sample-matrix-wrap"><table class="sample-matrix ttt"><tbody>${rows||'<tr><td class="meta">Không có tướng cùng vai trò trong kho.</td></tr>'}</tbody></table></div>`}
+
+/* ===== Tự dựng đội tối ưu từ Kho ===== */
+const TDEF=JSON.parse(JSON.stringify(DATA.teams));
+function applyTeamOv(){if(typeof X==="undefined"||!X)return;const ov=X.teamOv||{};DATA.teams.forEach((t,i)=>{const o=ov[i],d=TDEF[i];if(o&&Array.isArray(o.front)&&o.front.every(n=>byName[n])&&o.back.every(n=>byName[n])){t.front=o.front.slice();t.back=o.back.slice();t.why=Object.assign({},d.why,o.why||{});t.note=o.note||d.note;t.ov=1}else{t.front=d.front.slice();t.back=d.back.slice();t.why=d.why;t.note=d.note;t.ov=0}})}
+function tagsOf(n){return((EDB[n]||{}).tags)||[]}
+function heroVal(n,key,own){const h=byName[n],b=h&&h[key]!=null?+h[key]:2.5,st=own[n]||0;let v=b*(1+0.08*(Math.min(st,16)-5));
+ if(h)[["s9",9],["s11",11],["s13",13]].forEach(([k,m])=>{if(st>=m&&/Công cao nhất/i.test(h[k]||""))v+=1.2});return v}
+function teamEval(names,key,own){let v=0;const why=[];names.forEach(n=>v+=heroVal(n,key,own));
+ const T=n=>tagsOf(n),cnt=k=>names.filter(n=>T(n).includes(k)).length;
+ const carry=cnt("carry"),tank=names.filter(n=>T(n).includes("tank")||T(n).includes("shield")).length,heal=cnt("heal")+cnt("revive");
+ if(carry===0){v-=6;why.push("thiếu carry")}else if(carry>1)v-=2.5*(carry-1);
+ if(tank===0){v-=4;why.push("thiếu trụ")}
+ if(heal===0&&key!=="pve"){v-=3;why.push("thiếu hồi máu")}
+ const mc=names.filter(n=>T(n).includes("carry")).sort((a,b)=>(own[b]||0)-(own[a]||0))[0];
+ if(mc&&(T(mc).includes("rageDep")||/Nộ/.test((byName[mc]||{}).base||""))){v+=0.8*names.filter(n=>n!==mc&&(T(n).includes("rage+"))).length}
+ v+=0.6*names.filter(n=>T(n).includes("amp")).length*(carry?1:0);
+ let bonds=0;names.forEach(n=>{const p=((byName[n]||{}).tn||"").split(" – ")[0].split(" (")[0].trim();if(p&&names.includes(p))bonds++});v+=bonds*0.9;
+ const cs=chienSach(names).best;if(cs)v+=(cs[2]+cs[3])/8;
+ return {v,why,carry:mc}}
+function placeTeam(names,own){const T=n=>tagsOf(n),fr=n=>(T(n).includes("tank")?3:0)+(T(n).includes("shield")?1.5:0)+(T(n).includes("amp")?1:0)+(T(n).includes("ctrl")?0.5:0)-(T(n).includes("carry")?4:0)-(T(n).includes("heal")?2:0)-(T(n).includes("back")?0:0);
+ const s=names.slice().sort((a,b)=>fr(b)-fr(a));let front=s.slice(0,3),back=s.slice(3);
+ const c=back.find(n=>T(n).includes("carry"))||back[0];back=[c,...back.filter(n=>n!==c)];
+ const amp=front.find(n=>T(n).includes("amp"));if(amp)front=[amp,...front.filter(n=>n!==amp)];else{const tk=front.slice().sort((a,b)=>fr(b)-fr(a))[0];front=[tk,...front.filter(n=>n!==tk)]}
+ return {front,back}}
+function optimizeTeam(i){const t=DATA.teams[i],key=mk(t.mode),own=ownedStars();
+ const pool=Object.keys(own).filter(n=>byName[n]);if(pool.length<6)return null;
+ const ev=ns=>teamEval(ns,key,own).v;let best=null;
+ const start=[...t.front,...t.back].filter(n=>pool.includes(n));
+ const seeds=[start,pool.slice().sort((a,b)=>heroVal(b,key,own)-heroVal(a,key,own)).slice(0,6)];
+ for(let r=0;r<6;r++)seeds.push(pool.slice().sort(()=>Math.random()-.5).slice(0,6));
+ seeds.forEach(sd=>{let cur=sd.slice();while(cur.length<6){const n=pool.find(x=>!cur.includes(x));cur.push(n)}let cv=ev(cur),imp=true;
+  while(imp){imp=false;for(let a=0;a<6;a++)for(const n of pool){if(cur.includes(n))continue;const nx=cur.slice();nx[a]=n;const nv=ev(nx);if(nv>cv+1e-9){cur=nx;cv=nv;imp=true}}}
+  if(!best||cv>best.v)best={names:cur,v:cv}});
+ const pl=placeTeam(best.names,own),cur=teamEval([...t.front,...t.back],key,own),nw=teamEval(best.names,key,own);
+ return {...pl,v:best.v,cur:cur.v,why:nw.why,carry:nw.carry,key}}
+function renderTeamOpt(){const box=document.getElementById("teamOpt");if(!box||!window.KREADY)return;applyTeamOv();const t=DATA.teams[curTeam],r=optimizeTeam(curTeam),own=ownedStars();
+ if(!r){box.innerHTML='<h3>Đội tối ưu từ kho</h3><p class="meta">Cần ít nhất 6 tướng SSR+ có dữ liệu.</p>';return}
+ const curSet=new Set([...t.front,...t.back]),same=[...r.front,...r.back].every(n=>curSet.has(n));
+ const cell=n=>`<div class="optc ${curSet.has(n)?"":"new"}">${token(byName[n])}<b>${esc(n)}</b><small>${own[n]}★${curSet.has(n)?"":" · mới"}</small></div>`;
+ const out=[...t.front,...t.back].filter(n=>!r.front.includes(n)&&!r.back.includes(n));
+ box.innerHTML=`<h3>Đội tối ưu từ kho – ${esc(t.mode)} ${t.ov?'<span class="chip on">đang dùng đội tự dựng</span>':""}</h3>
+ <p class="meta">Tự chọn 6 tướng SSR+ trong kho: điểm ${esc(t.mode)} × hệ số sao, cần 1 carry + trụ + hồi máu, cộng Tình Nghĩa, Chiến Sách, nguồn Nộ cho carry, khuếch đại cùng làn. Xếp hàng trước: tank/khiên/khuếch đại; hàng sau: carry, hồi máu.</p>
+ <div class="optgrid"><div class="rowlab">Hàng trước</div><div class="optrow">${r.front.map(cell).join("")}</div><div class="rowlab">Hàng sau</div><div class="optrow">${r.back.map(cell).join("")}</div></div>
+ <p>Điểm đánh giá: <b>${r.v.toFixed(1)}</b> · đội hiện tại <b>${r.cur.toFixed(1)}</b>${same?" – đội hiện tại đã tối ưu theo kho ✓":` · thay ra: ${out.map(esc).join(", ")}`}</p>
+ ${r.why.length?`<div class="warn">⚠ ${r.why.join(", ")}</div>`:""}
+ <div class="acts" style="justify-content:flex-start">${same?"":`<button class="btn" id="optApply">Dùng đội này</button>`}${t.ov?`<button class="btn ghost" id="optReset">Về đội mẫu</button>`:""}<button class="btn ghost" id="optRe">Tính lại</button></div>`;
+ const ap=document.getElementById("optApply");if(ap)ap.onclick=()=>{X.teamOv=X.teamOv||{};const why={};[...r.front,...r.back].forEach(n=>{if(!(TDEF[curTeam].why||{})[n])why[n]=((EDB[n]||{}).desc||"").replace(/^SSR\+ · /,"").slice(0,90)});X.teamOv[curTeam]={front:r.front,back:r.back,why,note:`Đội tự dựng từ kho (${new Date().toLocaleDateString("vi-VN")}). Thay ra: ${out.join(", ")}.`};ksave();applyTeamOv();renderTeam();renderTeamRadar();renderTeamOpt()};
+ const rs=document.getElementById("optReset");if(rs)rs.onclick=()=>{if(X.teamOv)delete X.teamOv[curTeam];ksave();applyTeamOv();renderTeam();renderTeamRadar();renderTeamOpt()};
+ document.getElementById("optRe").onclick=renderTeamOpt}
 function initTeamRadar(){const box=document.getElementById("teamRadar");if(!box)return;const opts=DATA.teams.map((t,i)=>`<option value="${i}">${esc(t.name)}</option>`).join("");
  box.innerHTML=`<h3>Hồ sơ vai trò của đội</h3><div class="tools"><label>Đội <select id="trA">${opts}</select></label><label>So với <select id="trB"><option value="">— không —</option>${opts}</select></label></div><div id="teamRadarOut"></div>`;
  const A=document.getElementById("trA");A.value=String(curTeam);A.onchange=renderTeamRadar;document.getElementById("trB").onchange=renderTeamRadar;renderTeamRadar();
