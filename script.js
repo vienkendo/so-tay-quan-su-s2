@@ -767,7 +767,7 @@ function vsRun(){
  const tagOf=n=>(EDB[n]||{tags:[]}).tags;
  const sc={},why={},EXV={};
  Object.entries(own).forEach(([n,st])=>{const tg=tagOf(n),h=byName[n];let s=(h&&h.pvp!=null?h.pvp:2.5)+Math.min(st-5,6)*0.8;const w=[];let cb=0;const add=(v,m)=>{cb+=v;w.push(m)};
-  if(backHeal.length&&(tg.includes("back")||tg.includes("aoe")))add(1.5,"đánh tới healer hàng sau")
+  if(backHeal.length&&(tg.includes("back")||tg.includes("aoe")))add(1,"đánh tới healer hàng sau")
   if(carries.length&&tg.includes("exec"))add(0.8,"kết liễu từng mục tiêu")
   if((shields.length||buffs.length)&&tg.includes("dispel"))add(2,"xóa khiên/buff địch")
   if(carries.length&&(tg.includes("shield")||tg.includes("tank")))add(1,"chịu đòn từ carry địch")
@@ -775,7 +775,7 @@ function vsRun(){
   if(drain.length&&(tg.includes("rage+")||tg.includes("immune")))add(0.8,"bù Nộ / không phụ thuộc Nộ")
   if(ctrl.length&&(tg.includes("cleanse")||tg.includes("immune")))add(1,"chống khống chế")
   if(en.some(e=>e.tags.includes("rageDep")||e.tags.includes("carry"))&&tg.includes("rage-"))add(0.8,"cướp Nộ carry địch")
-  const ma=modeAdj(tg,en),la=learnAdj(tg);if(ma[1])w.push(ma[1]);if(la[1])w.push(la[1]);sc[n]=s+Math.min(cb,2)+ma[0]+la[0];EXV[n]=Math.min(cb,2)+ma[0]+la[0];why[n]=w;});
+  const ma=modeAdj(tg,en),la=learnAdj(tg);if(ma[1])w.push(ma[1]);if(la[1])w.push(la[1]);sc[n]=s+Math.min(cb,1.5)+ma[0]+la[0];EXV[n]=Math.min(cb,1.5)+ma[0]+la[0];why[n]=w;});
  const CC=MODES[VS.mode||"pvp"].cond?(VS.cond||{}):{};const capN=CC.vsPheMax===undefined||CC.vsPheMax===""?99:+CC.vsPheMax,capP=CC.vsPhe||"3Q";
  const pheOf=n=>(K.find(u=>u.name===n)||byName[n]||EDB[n]||{}).phe;
  const okPhe=n=>pheOf(n)!==capP||pick.filter(x=>pheOf(x)===capP).length<capN;
@@ -911,7 +911,7 @@ function renderTeamAlt(){const box=document.getElementById("teamAlt");if(!box||!
 const TDEF=JSON.parse(JSON.stringify(DATA.teams));
 function applyTeamOv(){if(typeof X==="undefined"||!X)return;const ov=X.teamOv||{};DATA.teams.forEach((t,i)=>{const o=ov[i],d=TDEF[i];if(o&&Array.isArray(o.front)&&o.front.every(n=>byName[n])&&o.back.every(n=>byName[n])){t.front=o.front.slice();t.back=o.back.slice();t.why=Object.assign({},d.why,o.why||{});t.note=o.note||d.note;t.ov=1}else{t.front=d.front.slice();t.back=d.back.slice();t.why=d.why;t.note=d.note;t.ov=0}})}
 function tagsOf(n){return((EDB[n]||{}).tags)||[]}
-function heroVal(n,key,own){const h=byName[n],b=h&&h[key]!=null?+h[key]:2.5,st=own[n]||0;let v=b*(1+0.08*(Math.min(st,16)-5));
+function heroVal(n,key,own){const h=byName[n],b=h&&h[key]!=null?+h[key]:2.5,st=own[n]||0;let v=b+0.6*(Math.min(st,16)-5)+(st>=6?0.5:0);/* điểm tiềm năng + sức mạnh thực theo sao (mỗi sao ≈ +0.45; 6★ mở ô công pháp, ×1.2 chỉ số) */
  if(h)[["s9",9],["s11",11],["s13",13]].forEach(([k,m])=>{if(st>=m&&/Công cao nhất/i.test(h[k]||""))v+=1.5});return v}
 function teamEval(names,key,own){let v=0;const why=[];names.forEach(n=>v+=heroVal(n,key,own));
  const T=n=>tagsOf(n),cnt=k=>names.filter(n=>T(n).includes(k)).length;
@@ -954,7 +954,7 @@ function bestTeams(i,ownOv,prof,noPrune,opt){prof=prof||"bal";opt=opt||{};const 
  function evalSet(S){let v=0,fl=0,nc=0,nt=0,nh=0,nr=0,na=0,nb=0,nx=0,ndm=0,ntf=0,mc=-1;const phe={};
   for(const k of S){const x=H[k];v+=x.val;fl|=x.f;if(x.f&F_CARRY){nc++;if(mc<0||x.st>H[mc].st)mc=k}if(x.f&F_TANK)nt++;if(x.f&F_HEAL)nh++;if(x.f&F_AMP)na++;if(x.f&F_BLEED)nb++;if(x.f&F_CTRL)nx++;
    if(x.f&(F_AOE|F_AMP|F_RAGE))ndm++;if(x.f&(F_TANK|F_HEAL|F_CTRL))ntf++;phe[x.phe]=(phe[x.phe]||0)+1}
-  const why=[];if(!nc){v-=6;why.push("thiếu carry")}else if(nc>1)v-=2.5*(nc-1);if(!nt){v-=4;why.push("thiếu trụ")}if(!nh&&key!=="pve"){v-=3;why.push("thiếu hồi máu")}
+  const why=[];if(!nc){v-=6;why.push("thiếu carry")}else if(nc>1)v-=2.5*(nc-1);if(!nt){v-=4;why.push("thiếu trụ")}if(!nh&&key!=="pve"){v-=3;why.push("thiếu hồi máu")}if(nh>2)v-=1.5*(nh-2);if(!nx&&key==="pvp")v-=0.5;
   if(mc>=0&&(H[mc].f&F_DEP))for(const k of S)if(k!==mc&&(H[k].f&F_RAGE))nr++;v+=0.8*nr;if(nc)v+=0.6*na;if(nb>=2)v+=0.5*(nb-1);if(nx)v+=key==="pvp"?0.8:0.4;
   let bd=0;for(const k of S){const x=H[k];if(x.pi<0||!S.includes(x.pi))continue;if(x.pc){bd+=(k===mc||x.pi===mc)?1:-0.5}else bd+=1}v+=bd*0.5;
   const c=Object.values(phe).sort((a,b)=>b-a).concat([0,0,0]);let cs=0;CSACH.forEach(r=>{if(r[4](c))cs=Math.max(cs,(r[2]+r[3])/8)});v+=cs;
