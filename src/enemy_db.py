@@ -28,7 +28,7 @@ DB=[
 ("Võ Tắc Thiên","Đường",["aoe","dispel","rage+"],"SSR+ · TC 90% toàn địch, 45% xóa 1 buff; 9★ 60% toàn đội +1 Nộ · 11★ địch nhận buff 35% bị xóa · 13★ đồng đội nhận Nộ 60% +1 Nộ · Nhập Thánh xóa buff gây ST & −1 Nộ"),
 ("Bạch Khởi","Tần",["tank","dot"],"SSR+ · Tank phản Huyết Tích: TC 110% hàng trước, 20% Huyết Tích; 9★ bị đánh 40% gắn Huyết Tích · 11★ toàn đội +8% Miễn ST · Nhập Thánh tử trận hồi máu cả đội"),
 ("Tần Thủy Hoàng","Tần",["carry","aoe","dot"],"Carry toàn địch [Huyết Tích]"),
-("Dương Ngọc Hoàn","Đường",["rage-","ctrl"],"Giảm Nộ địch – khắc chế Lữ Bố"),
+("Dương Ngọc Hoàn","Đường",["rage-","sub","ctrl"],"SSR+ · Cắt Nộ: TC 170% hàng dọc, 35% −1 Nộ; 9★ đánh thường 25% −1 Nộ · 11★ địch hồi Nộ → đánh thêm · 13★ giảm Nộ thành công → đánh thêm/tự hồi Nộ · Nhập Thánh choáng mục tiêu miễn giảm Nộ. Khắc chế Lữ Bố/carry Nộ."),
 ("Hồng Phất Nữ","Đường",["heal"],"Trị liệu (theo huy hiệu)"),
 ("Thương Ưởng","Tần",["ctrl"],"Câm lặng khống chế (theo huy hiệu)"),
 ("Tôn Thượng Hương","3Q",["aoe","sub"],"SR tím · Tuyệt chiêu 162% ST lên 3 địch ngẫu nhiên; 5★ +2 Nộ cơ bản"),
