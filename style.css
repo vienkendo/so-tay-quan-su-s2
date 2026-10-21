@@ -449,3 +449,13 @@ h3 { cursor: pointer; }
 .gstars{font-size:17px;line-height:1;letter-spacing:-1.5px;-webkit-text-stroke:.7px #5a3a08;text-shadow:0 1px 2px rgba(0,0,0,.55)}.gstars.g{color:#ffd23f}.gstars.r{color:#ff3b2f;-webkit-text-stroke-color:#5a0a05}.gstars.c{color:#f2b6ff;-webkit-text-stroke-color:#3a2a6a;text-shadow:0 0 3px #8fe9ff,0 1px 2px rgba(0,0,0,.55)}
 .gphe{position:absolute;z-index:5;bottom:0;left:50%;transform:translateX(-50%);min-width:28px;padding:2px 6px 6px;font-size:9px;font:700 10px/1 var(--display);color:#3a2405;text-align:center;background:linear-gradient(180deg,#f5d77e,#c9921f);clip-path:polygon(0 0,100% 0,100% 70%,50% 100%,0 70%);filter:drop-shadow(0 0 1px #6b4410)}
 .gphe.p-3Q{background:linear-gradient(180deg,#8fb6ef,#2f62b3);color:#fff}.gphe.p-Hán{background:linear-gradient(180deg,#8fd6a8,#2f8a57);color:#fff}.gphe.p-Tần{background:linear-gradient(180deg,#f5d77e,#c9921f);color:#3a2405}.gphe.p-Đường{background:linear-gradient(180deg,#c9a8ee,#7b4bb0);color:#fff}
+
+/* Kế hoạch */
+.plangrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px;margin-bottom:14px}@media(max-width:820px){.plangrid{grid-template-columns:minmax(0,1fr)}}
+.pmode{padding:8px 0;border-bottom:1px solid var(--line)}.pmh{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;margin-bottom:6px}
+.pteam{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin:4px 0}
+.pchip{display:flex;align-items:center;gap:6px;padding:4px 6px;border-radius:8px;border:1px solid var(--line);font-size:12px;line-height:1.15;min-width:0}.pchip.f{background:var(--front)}.pchip.b{background:var(--back)}.pchip .token{width:28px;height:28px;flex:none}.pchip span{min-width:0;overflow:hidden;text-overflow:ellipsis}.pchip small{display:block;color:var(--muted)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .pchip.f,:root:not([data-theme="light"]) .pchip.b{background:var(--surface-2)}}
+.pgrp{margin:10px 0}.pgrp h4{margin:0 0 2px;font:700 15px var(--display)}.pgrp.keep h4{color:var(--good)}.pgrp.res h4{color:var(--warn)}.pgrp.mat h4{color:var(--bad)}
+.plist{list-style:none;margin:6px 0 0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,220px),1fr));gap:6px}.plist li{display:flex;gap:8px;align-items:center;padding:5px 7px;border:1px solid var(--line);border-radius:8px;font-size:13px}.plist .token{width:30px;height:30px;flex:none}.plist li.k{border-left:3px solid var(--good)}.plist li.r{border-left:3px solid var(--warn)}.plist li.m{border-left:3px solid var(--bad)}
+.gbadge{position:absolute;z-index:4;top:24px;left:5px;font:700 9px var(--body);padding:1px 5px;border-radius:4px;color:#fff}.gbadge.k{background:#2f8a57}.gbadge.r{background:#b07d12}.gbadge.m{background:#8a2a22}

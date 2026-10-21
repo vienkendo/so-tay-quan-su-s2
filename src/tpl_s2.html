@@ -456,6 +456,16 @@ h3 { cursor: pointer; }
 .gstars{font-size:17px;line-height:1;letter-spacing:-1.5px;-webkit-text-stroke:.7px #5a3a08;text-shadow:0 1px 2px rgba(0,0,0,.55)}.gstars.g{color:#ffd23f}.gstars.r{color:#ff3b2f;-webkit-text-stroke-color:#5a0a05}.gstars.c{color:#f2b6ff;-webkit-text-stroke-color:#3a2a6a;text-shadow:0 0 3px #8fe9ff,0 1px 2px rgba(0,0,0,.55)}
 .gphe{position:absolute;z-index:5;bottom:0;left:50%;transform:translateX(-50%);min-width:28px;padding:2px 6px 6px;font-size:9px;font:700 10px/1 var(--display);color:#3a2405;text-align:center;background:linear-gradient(180deg,#f5d77e,#c9921f);clip-path:polygon(0 0,100% 0,100% 70%,50% 100%,0 70%);filter:drop-shadow(0 0 1px #6b4410)}
 .gphe.p-3Q{background:linear-gradient(180deg,#8fb6ef,#2f62b3);color:#fff}.gphe.p-Hán{background:linear-gradient(180deg,#8fd6a8,#2f8a57);color:#fff}.gphe.p-Tần{background:linear-gradient(180deg,#f5d77e,#c9921f);color:#3a2405}.gphe.p-Đường{background:linear-gradient(180deg,#c9a8ee,#7b4bb0);color:#fff}
+
+/* Kế hoạch */
+.plangrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px;margin-bottom:14px}@media(max-width:820px){.plangrid{grid-template-columns:minmax(0,1fr)}}
+.pmode{padding:8px 0;border-bottom:1px solid var(--line)}.pmh{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;margin-bottom:6px}
+.pteam{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin:4px 0}
+.pchip{display:flex;align-items:center;gap:6px;padding:4px 6px;border-radius:8px;border:1px solid var(--line);font-size:12px;line-height:1.15;min-width:0}.pchip.f{background:var(--front)}.pchip.b{background:var(--back)}.pchip .token{width:28px;height:28px;flex:none}.pchip span{min-width:0;overflow:hidden;text-overflow:ellipsis}.pchip small{display:block;color:var(--muted)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .pchip.f,:root:not([data-theme="light"]) .pchip.b{background:var(--surface-2)}}
+.pgrp{margin:10px 0}.pgrp h4{margin:0 0 2px;font:700 15px var(--display)}.pgrp.keep h4{color:var(--good)}.pgrp.res h4{color:var(--warn)}.pgrp.mat h4{color:var(--bad)}
+.plist{list-style:none;margin:6px 0 0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,220px),1fr));gap:6px}.plist li{display:flex;gap:8px;align-items:center;padding:5px 7px;border:1px solid var(--line);border-radius:8px;font-size:13px}.plist .token{width:30px;height:30px;flex:none}.plist li.k{border-left:3px solid var(--good)}.plist li.r{border-left:3px solid var(--warn)}.plist li.m{border-left:3px solid var(--bad)}
+.gbadge{position:absolute;z-index:4;top:24px;left:5px;font:700 9px var(--body);padding:1px 5px;border-radius:4px;color:#fff}.gbadge.k{background:#2f8a57}.gbadge.r{background:#b07d12}.gbadge.m{background:#8a2a22}
 </style>
 </head>
 <body>
@@ -463,7 +473,8 @@ h3 { cursor: pointer; }
   <div class="bar">
     <div class="brand"><div class="seal"><img src="data:image/jpeg;base64,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" alt="Biểu tượng Tam Quốc Tứ Thời Ca"></div><h1>Sổ Tay Quân Sư <small style="font:600 12px var(--body);color:var(--muted)">Server mới</small></h1></div><span class="sync" id="kSync2" style="margin-left:10px;font-size:11px">Đang tải…</span>
     <nav role="tablist" aria-label="Mục">
-      <button role="tab" id="t-doi" aria-selected="true" data-tab="doi">Đội hình</button>
+      <button role="tab" id="t-plan" aria-selected="true" data-tab="plan">Kế hoạch</button>
+      <button role="tab" id="t-doi" aria-selected="false" data-tab="doi">Đội hình</button>
       <button role="tab" id="t-tuong" aria-selected="false" data-tab="tuong">Tướng</button>
       <button role="tab" id="t-vs" aria-selected="false" data-tab="vs">Đối đầu</button>
       <button role="tab" id="t-kho" aria-selected="false" data-tab="kho">Kho</button>
@@ -477,7 +488,13 @@ h3 { cursor: pointer; }
 </header>
 <main>
   <div class="subnav" id="subnav" hidden role="group"></div>
-  <section id="doi">
+  <section id="plan">
+    <h2>Kế hoạch của bạn</h2>
+    <p class="lead">Tóm tắt 3 câu hỏi chính, tự tính từ Kho: <b>đánh đội nào</b>, <b>tướng SSR+ nào giữ</b>, <b>tướng nào cho làm nguyên liệu</b>. Chi tiết xem ở các tab khác.</p>
+    <div id="planBox"><p class="meta">Đang tính…</p></div>
+  </section>
+
+  <section id="doi" hidden>
     <h2>Đội hình tối ưu</h2>
     <p class="lead">Xếp theo tiềm năng tối đa (đủ sao và Nhập Thánh). Bấm vào tướng để xem chi tiết kỹ năng.</p>
     <div class="modes" id="modes"></div>
@@ -1011,7 +1028,7 @@ renderTeam(); renderGrid(); renderUp();
 const KDEF=/*__KHO__*/[];var KORB=/*__KORB__*/0;var KDEFX=/*__KX__*/null;
 const RULE={5:{copy:1,fs:5,fc:1,orb:0},6:{copy:0,fs:5,fc:2,orb:1000},7:{copy:0,fs:6,fc:1,orb:1000},8:{copy:1,fs:8,fc:1,orb:2000},
  9:{copy:0,fs:6,fc:1,orb:1000},10:{copy:1,fs:8,fc:1,orb:3000},11:{copy:0,fs:6,fc:1,orb:2000},12:{copy:1,fs:8,fc:1,orb:5000},13:{copy:0,fs:6,fc:2,orb:2500}};
-const CORE=new Set(DATA.teams.flatMap(t=>[...t.front,...t.back]));
+var CORE=new Set(DATA.teams.flatMap(t=>[...t.front,...t.back]));
 let K, KLOG, KUNDO, ORB, kf="Tất cả";
 function kload(){try{const s=JSON.parse(localStorage.getItem("kho2")||"null");if(s){K=s.k;KLOG=s.log||[];KUNDO=s.undo||[];ORB=s.orb;M5=!!s.m5;LV=+s.lv||0;ATK=s.atk||{};if(s.x)X=Object.assign({battles:[],orbDay:0,books:[],alloc:{}},s.x);if(kmig())ksave();return}}catch(e){}
  K=KDEF.map((u,i)=>({...u,id:i+1}));KLOG=[];KUNDO=[];ORB=KDEF.length?KORB:0;if(KDEF.length&&KDEFX)X=Object.assign({battles:[],orbDay:0,books:[],alloc:{}},JSON.parse(JSON.stringify(KDEFX)));}
@@ -1084,7 +1101,7 @@ function upPlan(){
   if(!R||R.fs==null){out.push({u,st:"unk"});continue}
   const miss=[], pick=[];
   if(R.copy){const c=us.slice(1).sort((a,b)=>a.star-b.star).find(x=>!used.has(x.id)); if(c) pick.push(c); else miss.push(`1 bản trùng ${n}`)}
-  const pool=K.filter(x=>x.phe===u.phe&&x.name!==n&&x.star===R.fs&&x.r!=="SR"&&x.r!=="R"&&!CORE.has(x.name)&&!used.has(x.id)&&!pick.includes(x))
+  const pool=K.filter(x=>x.phe===u.phe&&x.name!==n&&x.star===R.fs&&x.r!=="SR"&&x.r!=="R"&&!CORE.has(x.name)&&!(window.KEEPSET&&KEEPSET.has(x.name))&&!used.has(x.id)&&!pick.includes(x))
    .sort((a,b)=>(a.r==="SSR"?0:1)-(b.r==="SSR"?0:1));
   const f=pool.slice(0,R.fc); pick.push(...f); if(f.length<R.fc) miss.push(`${R.fc-f.length} tướng ${u.phe} ${R.fs}★ (không tính tướng đội chính)`);
   if(R.orb!=null&&ORB<R.orb) miss.push(`${(R.orb-ORB).toLocaleString("vi-VN")} cầu cam${dTxt(R.orb-ORB)}`);
@@ -1106,7 +1123,7 @@ document.addEventListener("click",e=>{const b=e.target.closest("[data-uh]");if(!
  const t=document.createElement("span");t.dataset.up=b.dataset.uh;document.getElementById("kList").appendChild(t);t.click();t.remove();
  ids.forEach(id=>{const c=document.querySelector(`#dlg-body .picks input[value="${id}"]`);if(c)c.checked=true});});
 
-function krender(){_kr0();setTimeout(()=>{renderKhoCoverage();if(typeof renderTeamRadar==="function")renderTeamRadar();const sec=document.querySelector("main section:not([hidden])");if(sec&&sec.id==="thanthu")renderThanThu();if(sec&&sec.id==="linhphu")renderLinhPhu();if(sec&&sec.id==="evlist")renderEvents();if(sec&&sec.id==="quy")renderRules();if(window.cdvLoad)cdvLoad()},0);renderUpHint();renderRoad();renderBooks();renderBattles();const od=document.getElementById("kOd");if(od)od.value=X.orbDay||""}
+function krender(){_kr0();setTimeout(()=>{renderKhoCoverage();if(typeof renderTeamRadar==="function")renderTeamRadar();const sec=document.querySelector("main section:not([hidden])");if(sec&&sec.id==="thanthu")renderThanThu();if(sec&&sec.id==="linhphu")renderLinhPhu();if(sec&&sec.id==="evlist")renderEvents();clearTimeout(PLANT);PLANT=setTimeout(()=>{renderPlan();const s2=document.querySelector("main section:not([hidden])");if(s2&&s2.id==="kho")_kr0()},50);if(sec&&sec.id==="quy")renderRules();if(window.cdvLoad)cdvLoad()},0);renderUpHint();renderRoad();renderBooks();renderBattles();const od=document.getElementById("kOd");if(od)od.value=X.orbDay||""}
 function snap(){KUNDO.push(JSON.stringify({k:K,orb:ORB,log:KLOG}))}
 const nid=()=>K.reduce((m,u)=>Math.max(m,u.id),0)+1;
 const today=()=>new Date().toLocaleString("vi-VN",{day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit"});
@@ -1125,7 +1142,7 @@ function starRow(s){s=+s||0;const tier=s<=5?"g":s<=10?"r":"c",k=s<=5?s:s<=10?s-5
 function heroCard(n,us){const u0=us[0],lv=((X.hlv||{})[n])||LV||"",img=heroImg(n),full=!!HART[n],r=u0.r||"SSR+";
  return `<div class="gcard r-${r.replace("+","p")} ${CORE.has(n)?"core":""}" tabindex="0" data-gc="${esc(n)}">
   <div class="gart ${full?"full":"small"}">${img?`<img src="${img}" alt="" loading="lazy">`:`<span class="gph">${esc(short(n))}</span>`}</div>
-  <span class="grar">${esc(r)}</span>${lv?`<span class="glv">${lv}</span>`:""}${us.length>1?`<span class="gcnt">×${us.length}</span>`:""}
+  <span class="grar">${esc(r)}</span>${r==="SSR+"&&window.PLAN?(PLAN.keep[n]?'<span class="gbadge k">Giữ</span>':PLAN.res[n]?'<span class="gbadge r">Dự bị</span>':PLAN.mat[n]?'<span class="gbadge m">Nguyên liệu</span>':""):r!=="SSR+"?'<span class="gbadge m">Nguyên liệu</span>':""}${lv?`<span class="glv">${lv}</span>`:""}${us.length>1?`<span class="gcnt">×${us.length}</span>`:""}
   <div class="gfoot"><div class="gname">${esc(n)}</div>${starRow(u0.star)}</div><span class="gphe p-${esc(u0.phe)}">${esc(PHE_SHORT[u0.phe]||u0.phe)}</span></div>`}
 function _kr0(){
  document.getElementById("orb").value=ORB;document.getElementById("kLv").value=LV||"";const vm=document.getElementById("vsMy");if(vm)vm.value=LV||"";
@@ -1720,7 +1737,7 @@ function optimizeTeam(i,ownOv){const t=DATA.teams[i],key=mk(t.mode),own=ownOv||o
  const ev=ns=>teamEval(ns,key,own).v;let best=null;
  const start=[...t.front,...t.back].filter(n=>pool.includes(n));
  const seeds=[start,pool.slice().sort((a,b)=>heroVal(b,key,own)-heroVal(a,key,own)).slice(0,6)];
- for(let r=0;r<6;r++)seeds.push(pool.slice().sort(()=>Math.random()-.5).slice(0,6));
+ let sd0=12345+i;const rnd=()=>{sd0=(sd0*1103515245+12345)%2147483648;return sd0/2147483648};for(let r=0;r<12;r++){const a2=pool.slice();for(let k=a2.length-1;k>0;k--){const j=Math.floor(rnd()*(k+1));[a2[k],a2[j]]=[a2[j],a2[k]]}seeds.push(a2.slice(0,6))}
  seeds.forEach(sd=>{let cur=sd.slice();while(cur.length<6){const n=pool.find(x=>!cur.includes(x));cur.push(n)}let cv=ev(cur),imp=true;
   while(imp){imp=false;for(let a=0;a<6;a++)for(const n of pool){if(cur.includes(n))continue;const nx=cur.slice();nx[a]=n;const nv=ev(nx);if(nv>cv+1e-9){cur=nx;cv=nv;imp=true}}}
   if(!best||cv>best.v)best={names:cur,v:cv}});
@@ -1756,6 +1773,34 @@ function renderTeamOpt(){renderLate();const box=document.getElementById("teamOpt
  const ap=document.getElementById("optApply");if(ap)ap.onclick=()=>{X.teamOv=X.teamOv||{};const why={};[...r.front,...r.back].forEach(n=>{if(!(TDEF[curTeam].why||{})[n])why[n]=((EDB[n]||{}).desc||"").replace(/^SSR\+ · /,"").slice(0,90)});X.teamOv[curTeam]={front:r.front,back:r.back,why,note:`Đội tự dựng từ kho (${new Date().toLocaleDateString("vi-VN")}). Thay ra: ${out.join(", ")}.`};ksave();applyTeamOv();renderTeam();renderTeamRadar();renderTeamOpt()};
  const rs=document.getElementById("optReset");if(rs)rs.onclick=()=>{if(X.teamOv)delete X.teamOv[curTeam];ksave();applyTeamOv();renderTeam();renderTeamRadar();renderTeamOpt()};
  document.getElementById("optRe").onclick=renderTeamOpt}
+
+/* ===== KẾ HOẠCH: đội nên đánh, giữ / dự bị / nguyên liệu ===== */
+var PLAN=null,PLANT=null;
+function computePlan(){const own=ownedStars(),modes=DATA.teams.map((t,i)=>{const now=optimizeTeam(i),late=lateGame(i);return {i,name:t.name,mode:t.mode,now,late}});
+ const keep={},why=(n,r)=>{(keep[n]=keep[n]||[]).push(r)};
+ modes.forEach(m=>{if(m.now)[...m.now.front,...m.now.back].forEach(n=>why(n,`đội ${m.mode} hiện tại`));if(m.late)[...m.late.front,...m.late.back].forEach(n=>why(n,`đội ${m.mode} lâu dài`))});
+ const T=n=>tagsOf(n),score=n=>{const h=byName[n]||{};return Math.max(h.pvp||0,h.boss||0,h.pve||0)};
+ const rare=["ctrl","rage+","heal","tank","dispel","amp"];
+ const res={},mat={};Object.keys(own).forEach(n=>{if(keep[n])return;const r=T(n).filter(k=>rare.includes(k));
+  if(score(n)>=4&&r.length)res[n]=`vai trò hiếm: ${r.map(k=>TAGN[k]||k).join(", ")}`;else mat[n]=score(n)?`điểm cao nhất ${score(n)}/5, không vào đội nào`:"chưa có dữ liệu đánh giá"});
+ const cnt={};(K||[]).forEach(u=>{(cnt[u.name]=cnt[u.name]||{n:0,r:u.r,phe:u.phe}).n++});
+ return {modes,keep,res,mat,cnt,own}}
+function renderPlan(){const box=document.getElementById("planBox");if(!box||!window.KREADY)return;const P=PLAN=computePlan();window.KEEPSET=new Set(Object.keys(P.keep));
+ const team=(r,cur)=>r?`<div class="pteam">${[...r.front,...r.back].map((n,k)=>`<span class="pchip ${k<3?"f":"b"}">${token(byName[n])}<span>${esc(n)}<small>${P.own[n]}★</small></span></span>`).join("")}</div>`:'<p class="meta">Chưa đủ tướng.</p>';
+ const card1=`<div class="panel"><h3>1. Đánh đội nào</h3>${P.modes.map(m=>`<div class="pmode"><div class="pmh"><b>${esc(m.name)}</b>${!m.now?"":(m.now.v-m.now.cur)<0.05?'<span class="chip on">đội đang dùng đã tối ưu</span>':(m.now.v-m.now.cur)<1.5?`<span class="chip">chênh ít (+${(m.now.v-m.now.cur).toFixed(1)}) – giữ đội đang dùng cũng được</span>`:`<span class="chip warn">nên đổi: +${(m.now.v-m.now.cur).toFixed(1)} điểm</span>`}</div>${team(m.now)}
+  <details><summary class="meta">Đội lâu dài khi max sao</summary>${team(m.late)}</details></div>`).join("")}<p class="meta">Bấm tab <b>Đội hình</b> để xem chi tiết, áp dụng đội đề xuất hoặc giữ đội mẫu.</p></div>`;
+ const row=(n,r,cls)=>{const c=P.cnt[n]||{n:0};return `<li class="${cls}">${token(byName[n]||{name:n,phe:c.phe})}<span><b>${esc(n)}</b> <small>${P.own[n]}★ · ${c.n} bản · ${esc(c.phe||"")}</small><br><small class="meta">${esc(Array.isArray(r)?[...new Set(r)].join(", "):r)}</small></span></li>`};
+ const K1=Object.keys(P.keep).sort((a,b)=>P.own[b]-P.own[a]),K2=Object.keys(P.res).sort((a,b)=>P.own[b]-P.own[a]),K3=Object.keys(P.mat).sort((a,b)=>P.own[a]-P.own[b]);
+ const card2=`<div class="panel"><h3>2. Tướng SSR+ giữ hay cho</h3>
+  <div class="pgrp keep"><h4>Giữ & đầu tư (${K1.length})</h4><p class="meta">Có trong đội hiện tại hoặc đội lâu dài. Giữ <b>mọi bản trùng</b> – bản trùng là thứ hiếm nhất để lên 9★/11★/13★.</p><ul class="plist">${K1.map(n=>row(n,P.keep[n],"k")).join("")}</ul></div>
+  <div class="pgrp res"><h4>Dự bị (${K2.length})</h4><p class="meta">Không vào đội nhưng có vai trò kho đang thiếu. Giữ 1 bản để đổi theo đối thủ; bản trùng dư có thể làm nguyên liệu.</p><ul class="plist">${K2.map(n=>row(n,P.res[n],"r")).join("")||'<li class="meta">Không có</li>'}</ul></div>
+  <div class="pgrp mat"><h4>Dứt khoát làm nguyên liệu (${K3.length})</h4><p class="meta">Không vào đội nào, kể cả khi max sao. Dùng hết làm nguyên liệu nâng sao cùng phe cho nhóm Giữ.</p><ul class="plist">${K3.map(n=>row(n,P.mat[n],"m")).join("")||'<li class="meta">Không có</li>'}</ul></div>
+  <p class="meta">SSR cam, SR, R luôn là nguyên liệu. Phân loại tự đổi khi bạn nâng sao, thêm tướng hoặc kho thay đổi.</p></div>`;
+ const ups=upPlan().filter(p=>p.st==="ok").slice(0,4);
+ const card3=`<div class="panel"><h3>3. Làm ngay</h3><ul>${ups.length?ups.map(p=>`<li>Nâng <b>${esc(p.u.name)}</b> ${p.u.star}→${p.u.star+1}★ (tab Kho → Gợi ý nâng sao)</li>`).join(""):"<li>Chưa đủ điều kiện nâng sao tướng đội chính – tích bản trùng, cầu cam.</li>"}
+  <li>Bản trùng ưu tiên: ${K1.filter(n=>P.modes.some(m=>m.late&&[...m.late.front,...m.late.back].includes(n))).sort((a,b)=>P.own[b]-P.own[a]).slice(0,4).map(esc).join(" › ")}.</li></ul></div>`;
+ box.innerHTML=`<div class="plangrid">${card1}${card2}</div>${card3}`;
+ if(typeof krender==="function"&&!window.__pk){window.__pk=1;document.querySelectorAll("#kList .gcard").length&&_kr0();window.__pk=0}}
 function initTeamRadar(){const box=document.getElementById("teamRadar");if(!box)return;const opts=DATA.teams.map((t,i)=>`<option value="${i}">${esc(t.name)}</option>`).join("");
  box.innerHTML=`<h3>Hồ sơ vai trò của đội</h3><div class="tools"><label>Đội <select id="trA">${opts}</select></label><label>So với <select id="trB"><option value="">— không —</option>${opts}</select></label></div><div id="teamRadarOut"></div>`;
  const A=document.getElementById("trA");A.value=String(curTeam);A.onchange=renderTeamRadar;document.getElementById("trB").onchange=renderTeamRadar;renderTeamRadar();
@@ -1819,7 +1864,7 @@ const groupOf=id=>Object.keys(SUBG).find(g=>SUBG[g].tabs.some(t=>t[0]===id));
 (function(){const _st=showTab;showTab=function(id){if(SUBG[id])id=store.get(id+"Sub",SUBG[id].def);_st(id);const g=groupOf(id),bar=document.getElementById("subnav");
  if(bar){bar.hidden=!g;if(g){bar.setAttribute("aria-label",SUBG[g].label);bar.innerHTML=SUBG[g].tabs.map(([k,t])=>`<button data-sub="${k}" aria-pressed="${k===id}">${t}</button>`).join("")}}
  if(g){const tb=document.querySelector(`nav [data-tab="${g}"]`);document.querySelectorAll("nav button").forEach(b=>b.setAttribute("aria-selected",b===tb));store.set(g+"Sub",id)}
- if(id==="thanthu")renderThanThu();if(id==="linhphu")renderLinhPhu();if(id==="evlist")renderEvents();if(id==="quy")renderRules()}})();
+ if(id==="thanthu")renderThanThu();if(id==="linhphu")renderLinhPhu();if(id==="evlist")renderEvents();if(id==="quy")renderRules();if(id==="kho"&&window.PLAN)_kr0();if(id==="plan"&&window.KREADY)renderPlan()}})();
 /* Lịch sự kiện */
 function EVS(){if(!Array.isArray(X.ev))X.ev=[{id:1,name:"Thí Luyện Cổ Đế Viêm",kind:"Tuần",end:"",goal:"Đạt mục tiêu ST mỗi ngày; xếp hạng theo ST cao nhất kỳ",reward:"",note:"Xem chi tiết ở tab Cổ Đế Viêm",done:false}];return X.ev}
 function evDays(d){if(!d)return null;const t=new Date(d+"T23:59:59");return Math.ceil((t-Date.now())/864e5)}
@@ -1907,7 +1952,7 @@ function renderRules(){const box=document.getElementById("quyDyn");if(!box||!win
  // cần kiểm tra
  const miss=Object.keys(own).filter(n=>!byName[n]&&!((EDB[n]||{}).desc)),nb=(X.books||[]).filter(b=>!BOOKFX[b.name]).map(b=>b.name);
  const q=document.getElementById("quyChk");if(q)q.innerHTML=`<ul>${miss.length?`<li>Chưa có kỹ năng: ${miss.map(esc).join(", ")} – gửi ảnh để đưa vào phân tích.</li>`:""}${nb.length?`<li>Công pháp chưa có hiệu ứng: ${nb.map(esc).join(", ")}.</li>`:""}<li>Boss có miễn khống chế không; khiêu khích có chặn đòn diện rộng không.</li><li>Linh phù: số phù để ghép, giá trị Tăng/Giảm ST. Thần thú: hiệu quả ở sao thấp.</li></ul>`}
-let lastTab=store.get("tab","doi");if(lastTab==="phan-tich")lastTab="tuong"; if(["doi","tuong","vs","kho","cp","thanthu","linhphu","trangbi","sao","quy","evlist","codviem","camnang"].includes(lastTab)) showTab(lastTab);
+let lastTab=store.get("tab","plan");if(lastTab==="phan-tich")lastTab="tuong"; if(["plan","doi","tuong","vs","kho","cp","thanthu","linhphu","trangbi","sao","quy","evlist","codviem","camnang"].includes(lastTab)) showTab(lastTab);
 </script>
 </body>
 </html>
