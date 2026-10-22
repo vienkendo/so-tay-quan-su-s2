@@ -310,7 +310,7 @@ const kfEl=document.getElementById("kFilter");
 const stars=s=>`${s}★`;
 
 /* ===== Thẻ tướng kiểu game ===== */
-var HART={"Hạng Vũ": "assets/images/heroes/hang-vu.jpg", "Lữ Bố": "assets/images/heroes/lu-bo.jpg", "Mạc Tà": "assets/images/heroes/mac-ta.jpg", "Huyền Trang": "assets/images/heroes/huyen-trang.jpg", "Gia Cát Lượng": "assets/images/heroes/gia-cat-luong.jpg", "Võ Tắc Thiên": "assets/images/heroes/vo-tac-thien.jpg", "Bạch Khởi": "assets/images/heroes/bach-khoi.jpg", "Dương Ngọc Hoàn": "assets/images/heroes/duong-ngoc-hoan.jpg", "Hoắc Khứ Bệnh": "assets/images/heroes/hoac-khu-benh.jpg"};
+var HART={"Hạng Vũ": "assets/images/heroes/hang-vu.jpg", "Lữ Bố": "assets/images/heroes/lu-bo.jpg", "Mạc Tà": "assets/images/heroes/mac-ta.jpg", "Huyền Trang": "assets/images/heroes/huyen-trang.jpg", "Gia Cát Lượng": "assets/images/heroes/gia-cat-luong.jpg", "Võ Tắc Thiên": "assets/images/heroes/vo-tac-thien.jpg", "Bạch Khởi": "assets/images/heroes/bach-khoi.jpg", "Dương Ngọc Hoàn": "assets/images/heroes/duong-ngoc-hoan.jpg", "Hoắc Khứ Bệnh": "assets/images/heroes/hoac-khu-benh.jpg", "Biển Thước": "assets/images/heroes/bien-thuoc.jpg"};
 function heroImg(n){return HART[n]||(typeof ICONS!=="undefined"&&ICONS[n])||""}
 const PHE_SHORT={"3Q":"3Q","Hán":"Hán","Tần":"Tần","Đường":"Đường"};
 function starRow(s){s=+s||0;const tier=s<=5?"g":s<=10?"r":"c",k=s<=5?s:s<=10?s-5:Math.min(5,s-10);return `<span class="gstars ${tier}" aria-label="${s} sao">${"★".repeat(Math.max(k,0))}</span>`}
