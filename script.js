@@ -193,16 +193,24 @@ const RULE={5:{copy:1,fs:5,fc:1,orb:0},6:{copy:0,fs:5,fc:2,orb:1000},7:{copy:0,f
  9:{copy:0,fs:6,fc:1,orb:1000},10:{copy:1,fs:8,fc:1,orb:3000},11:{copy:0,fs:6,fc:1,orb:2000},12:{copy:1,fs:8,fc:1,orb:5000},13:{copy:0,fs:6,fc:2,orb:2500}};
 var CORE=new Set(DATA.teams.flatMap(t=>[...t.front,...t.back]));
 let K, KLOG, KUNDO, ORB, kf="Tất cả";
-function kload(){try{const s=JSON.parse(localStorage.getItem("kho2")||"null");if(s){K=s.k;KLOG=s.log||[];KUNDO=s.undo||[];ORB=s.orb;M5=!!s.m5;LV=+s.lv||0;ATK=s.atk||{};if(s.x)X=Object.assign({battles:[],orbDay:0,books:[],alloc:{}},s.x);if(kmig())ksave();return}}catch(e){}
- K=KDEF.map((u,i)=>({...u,id:i+1}));KLOG=[];KUNDO=[];ORB=KDEF.length?KORB:0;if(KDEF.length&&KDEFX)X=Object.assign({battles:[],orbDay:0,books:[],alloc:{}},JSON.parse(JSON.stringify(KDEFX)));}
+function kload(){try{const s=JSON.parse(localStorage.getItem("kho2")||"null");if(s){K=s.k;KLOG=s.log||[];KUNDO=s.undo||[];ORB=s.orb;M5=!!s.m5;LV=+s.lv||0;ATK=s.atk||{};if(s.x)X=Object.assign({battles:[],orbDay:0,books:[],alloc:{}},s.x);const m1=kmig(),m2=kpatch();if(m1||m2)ksave();return}}catch(e){}
+ K=KDEF.map((u,i)=>({...u,id:i+1}));KLOG=[];KUNDO=[];ORB=KDEF.length?KORB:0;if(KDEF.length&&KDEFX)X=Object.assign({battles:[],orbDay:0,books:[],alloc:{}},JSON.parse(JSON.stringify(KDEFX)));kpatch();KUNDO=[];}
 let CLOUD=null,LASTTS=0,PUSHT=null,M5=false;var LV=0,ATK={};
+/* Cập nhật Kho từ ảnh "Túi" trong game (giá trị tuyệt đối, chạy 1 lần/bản cập nhật; chạy lại cũng không sai) */
+const KPATCH=[{id:"2026-10-23-tui",lv:160,hlv:{"Lữ Bố":170,"Điêu Thuyền":170,"Quỷ Cốc Tử":170,"Lý Long Cơ":170,"Lý Thế Dân":163,"Võ Tắc Thiên":160},clearHlv:true,
+ top:{"Lữ Bố":[15],"Điêu Thuyền":[12],"Quỷ Cốc Tử":[12],"Lý Long Cơ":[12],"Ban Chiêu":[10],"Lý Thế Dân":[8],"Vương Chiêu Quân":[8],"Mạc Tà":[8],"Biển Thước":[8],"Thái Văn Cơ":[8],"Chân Cơ":[8],"Ngu Cơ":[7],"Chung Vô Diệm":[7],"Triệu Vân":[6],"Tây Thi":[6],"Lữ Hậu":[6]}}];
+function kpatch(){X.patches=X.patches||[];let done=false;KPATCH.forEach(p=>{if(X.patches.includes(p.id))return;snap();const ch=[];let mx=Math.max(0,...K.map(u=>+u.id||0));
+ Object.entries(p.top||{}).forEach(([n,sts])=>{const us=K.filter(u=>u.name===n).sort((a,b)=>b.star-a.star);sts.forEach((st,i)=>{let u=us[i];if(!u){const h=(typeof H!=="undefined"&&H.find(x=>x.name===n))||{};const e=(typeof EDB!=="undefined"&&EDB||[]).find(x=>x[0]===n)||[];u={name:n,phe:h.phe||e[1]||"",star:5,r:"SSR+",id:++mx};K.push(u);ch.push(`+${n}`)}if(u.star!==st){ch.push(`${n} ${u.star}→${st}★`);u.star=st}})});
+ if(p.lv)LV=p.lv;if(p.hlv){X.hlv=p.clearHlv?{}:(X.hlv||{});Object.assign(X.hlv,p.hlv)}
+ X.patches.push(p.id);KLOG.push(`${today()} · Cập nhật theo ảnh Túi (${p.id}): ${ch.join(", ")||"sao không đổi"}; cấp chung ${p.lv||LV}`);done=true});return done}
+function klocal(){try{localStorage.setItem("kho2",JSON.stringify({k:K,log:KLOG,undo:KUNDO.slice(-30),orb:ORB,m5:M5?1:0,lv:LV,atk:ATK,x:X}))}catch(e){}}
 function kmig(){if(M5)return false;let c=0;K.forEach(u=>{if(u.r==="SSR"&&u.star<5){u.star=5;c++}});M5=true;if(c)KLOG.push(`${today()} · Chuẩn hóa ${c} tướng SSR cam lên 5★`);return true}
 function ksave(){try{if(GH.cfg())GH.meta("dirty",1);localStorage.setItem("kho2",JSON.stringify({k:K,log:KLOG,undo:KUNDO.slice(-30),orb:ORB,m5:M5?1:0,lv:LV,atk:ATK,x:X}));localStorage.setItem("cash",String(ORB))}catch(e){}
  if(CLOUD){clearTimeout(PUSHT);PUSHT=setTimeout(kpush,600)}}
 function kpush(){if(!CLOUD)return;LASTTS=Date.now();CLOUD.set({k:K,orb:ORB,log:KLOG.slice(-80),ts:LASTTS,m5:1,lv:LV,atk:ATK,x:X}).then(()=>kstat("on","Đã đồng bộ")).catch(()=>kstat("","Chưa đồng bộ được – vẫn lưu trên máy này"))}
 function kstat(c,txt){["kSync","kSync2"].forEach(id=>{const el=document.getElementById(id);if(el){el.className="sync "+c+(id==="kSync2"&&c!=="on"?" off":"");el.textContent=(c==="on"?"☁ ":"⚠ ")+txt}})}
-function kapply(d){if(!d||!Array.isArray(d.k))return;d=JSON.parse(JSON.stringify(d));K=d.k;ORB=+d.orb||0;KLOG=Array.isArray(d.log)?d.log:[];LASTTS=+d.ts||0;M5=!!d.m5;LV=+d.lv||LV||0;ATK=d.atk&&typeof d.atk==="object"?d.atk:ATK;if(d.x&&typeof d.x==="object")X=Object.assign({battles:[],orbDay:0,books:[],alloc:{}},d.x);const mg=kmig();if(mg)setTimeout(()=>{ksave()},0);
- try{localStorage.setItem("kho2",JSON.stringify({k:K,log:KLOG,undo:KUNDO.slice(-30),orb:ORB}))}catch(e){} krender();syncHeroes();}
+function kapply(d){if(!d||!Array.isArray(d.k))return;d=JSON.parse(JSON.stringify(d));K=d.k;ORB=+d.orb||0;KLOG=Array.isArray(d.log)?d.log:[];LASTTS=+d.ts||0;M5=!!d.m5;LV=+d.lv||LV||0;ATK=d.atk&&typeof d.atk==="object"?d.atk:ATK;if(d.x&&typeof d.x==="object")X=Object.assign({battles:[],orbDay:0,books:[],alloc:{}},d.x);const mg=kmig(),mp=kpatch();if(mg||mp)setTimeout(()=>{ksave()},0);
+ klocal(); krender();syncHeroes();}
 async function kcloud(){try{if(!window.claude||!window.claude.use){ghInit();return}const db=await window.claude.use("db"),user=await window.claude.use("user");if(!db||!user){ghInit();return}
  const uid=await user.id();if(!uid){ghInit();return}const ref=db.doc("data/users/"+uid+"/kho");kstat("","Đang đồng bộ…");
  const s=await ref.get();

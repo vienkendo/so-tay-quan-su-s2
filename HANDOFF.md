@@ -40,6 +40,15 @@ Trước đó repo (khởi tạo từ một bản HTML cũ ngày 19/10) và bả
 - **Tự kéo bản mới:** mỗi 60 giây khi tab đang mở và khi quay lại tab (có dùng ETag).
 - **Kiểm thử:** giả lập API bằng Playwright với 2 máy (kết nối, sửa, máy kia nhận) và token sai.
 
+## 3a. Cập nhật Kho từ ảnh (KPATCH)
+
+- Claude không đọc được Kho thật (nằm trong trình duyệt và repo riêng `so-tay-data`). Để sửa Kho theo ảnh người chơi gửi, thêm một mục vào `KPATCH` trong `tpl_s2.html`:
+  - `top`: sao của các bản cao nhất theo tên;
+  - `lv`: cấp chung;
+  - `hlv`: cấp riêng từng tướng.
+- Mỗi mục chạy một lần khi mở trang (`X.patches` lưu id đã chạy), có ghi nhật ký và Hoàn tác. Các giá trị là tuyệt đối nên chạy lại cũng không sai.
+- Mục `2026-10-23-tui`: ảnh Túi ngày 23/10, Lữ Bố 15★, Lý Long Cơ 12★, cấp chung 160.
+
 ## 3b. Lưu trữ
 
 | Khóa | Nội dung |
