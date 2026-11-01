@@ -156,6 +156,7 @@ h3.sub{font:600 19px var(--display);margin:26px 0 4px}
 .unit button{border:0;background:transparent;color:var(--muted);cursor:pointer;font:600 12px var(--body);padding:2px 5px;border-radius:4px}
 .unit button.up{color:var(--accent)}
 .unit button:hover{background:var(--line)}
+.chcard.q-Đỏ{border-left:4px solid #c0392b}.chcard.q-Tím{border-left:4px solid #8e44ad}.chcard.q-Cam{border-left:4px solid #e67e22}
 .unit input.dsel{width:16px;height:16px;margin:0 2px 0 0;accent-color:var(--accent)}
 .unit.sel{border-color:#c0392b;background:rgba(192,57,43,.12)}
 .dmgrp{border-top:1px solid var(--line);padding:8px 0}.dmgrp:first-child{border-top:0}

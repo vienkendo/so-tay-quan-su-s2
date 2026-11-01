@@ -6,7 +6,7 @@
 <title>Sổ Tay Quân Sư S2</title>
 <meta name="theme-color" content="#17130f">
 <link rel="icon" href="assets/images/site-icon-fantasy.jpg">
-<link rel="stylesheet" href="style.css?v=49d50742">
+<link rel="stylesheet" href="style.css?v=e68c71f6">
 </head>
 <body>
 
@@ -169,6 +169,21 @@
     <div class="panel" id="lpTotal"></div>
     <div id="lpGrid" class="lpgrid" style="margin-top:14px"></div>
     <div class="panel" style="margin-top:14px"><h3>Còn thiếu dữ liệu</h3><ul><li>Số linh phù cùng bậc cần để <b>ghép</b> lên bậc kế (2 hay 3).</li><li>Giá trị ô <b>Tăng ST / Giảm ST</b> theo từng phẩm.</li><li>Điều kiện mở kỹ năng của từng linh thú (Huyền Anh, Tuế Dư, Bạch Tàng, Kim Tố, Chu Minh, Trường Doanh, Thanh Dương, Thương Linh).</li></ul><p class="meta">Gửi ảnh các mục này để web tính ghép và gợi ý chính xác.</p></div>
+  </section>
+
+  <section id="chienhon" hidden>
+    <h2>Chiến hồn</h2>
+    <p class="lead">8 ô Chiến hồn cộng HP/Công/Thủ cho <b>toàn bộ tướng</b>. Nhóm <b>Mộc</b> (Công) mở thêm Tăng ST PVP, nhóm <b>Kim</b> (Thủ) mở thêm Miễn ST PVP ở các mốc nuôi dưỡng. Sửa cấp “+” khi bạn cường hóa trong game.</p>
+    <div class="panel" id="chRes"></div>
+    <div class="panel" style="margin-top:14px" id="chPlan"></div>
+    <div id="chGrid" class="lpgrid" style="margin-top:14px"></div>
+    <div class="panel" style="margin-top:14px"><h3>Cơ chế (theo mô tả trong game)</h3><ul>
+      <li><b>Nuôi dưỡng</b>: tiêu [Kết Tinh Diệu Tinh] để tăng thuộc tính cơ bản; đạt cấp nhất định mở thêm thuộc tính theo giai đoạn. Đổi Chiến hồn khác <b>giữ cấp nuôi dưỡng của ô</b>.</li>
+      <li><b>Cộng hưởng</b>: khi cả 8 Chiến hồn đang trang bị đạt cấp yêu cầu → nhận buff thuộc tính nuôi dưỡng.</li>
+      <li><b>Nâng sao</b>: nuốt Chiến hồn cùng loại để lấy Điểm Nâng Sao (phẩm càng cao càng nhiều điểm). Đổi Chiến hồn <b>không giữ sao</b>; nuốt Chiến hồn có sao thì quy đổi điểm có hao hụt.</li>
+      <li><b>Tẩy dòng</b> (Chiến hồn Đỏ trở lên): tiêu [Tinh Tủy Ngọc]/[Tinh Tủy Lưu Ly]. Loại Công và Thủ có bộ dòng khác nhau; mỗi dòng là duy nhất; tẩy cao cấp chắc chắn ra dòng Cam+; khóa dòng tốn thêm; mỗi lần tẩy cộng EXP tẩy (đầy EXP tăng chỉ số cơ bản cho toàn bộ tướng); Cổ Đế và cấp Thức Tỉnh Cổ Đế tăng xác suất dòng tốt. Đổi Chiến hồn <b>không giữ dòng</b>.</li>
+      <li>Phẩm càng cao thì chỉ số gốc càng cao và nhiều dòng ngẫu nhiên hơn; phẩm <b>Đa Sắc</b> có hiệu ứng bộ.</li></ul>
+      <p class="meta">Chưa có dữ liệu: ngưỡng các cấp Cộng hưởng khác ngoài cấp 7 (+40), giá trị buff Cộng hưởng, các mốc mở thêm đã qua (ảnh chỉ cho mốc kế tiếp), ý nghĩa ô T/P/B/C (đang 0/4), hiệu ứng bộ Đa Sắc.</p></div>
   </section>
 
   <section id="trangbi" hidden>
@@ -378,6 +393,6 @@
   <div class="dh"><div id="dlg-token"></div><div><h3 id="dlg-title"></h3><div class="meta" id="dlg-meta"></div></div><button class="x" id="dlg-x" aria-label="Đóng">×</button></div>
   <div class="db" id="dlg-body"></div>
 </dialog>
-<script src="script.js?v=49d50742"></script>
+<script src="script.js?v=e68c71f6"></script>
 </body>
 </html>

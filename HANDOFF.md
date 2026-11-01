@@ -58,6 +58,8 @@ Trước đó repo (khởi tạo từ một bản HTML cũ ngày 19/10) và bả
 | `x.battles`, `x.orbDay`, `x.hlv` | Nhật ký trận, cầu cam mỗi ngày, cấp từng tướng |
 | `x.tt` | Thần thú: `{own, manh, camPick, food}` |
 | `x.lp` | Linh phù: `{<thú>: [HP, Công, Thủ, Tăng/Giảm ST]}`, chỉ số phẩm −1..9 |
+| `x.ch` | Chiến hồn: `{lv:{<tên>:cấp+}, mat}`; số liệu gốc `CH_DEF` (ảnh 01/11) |
+| `x.patches` | id các KPATCH đã chạy |
 | `x.cdv` | Ghi chú Cổ Đế Viêm |
 | `x.bdlv` | Cấp Bảo Điển (Lv130 ngày 21/10) |
 | `localStorage.vs2` | Đội địch đang nhập ở Đối đầu |

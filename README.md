@@ -14,7 +14,7 @@ Sổ tay xây đội, quản lý kho tướng và tài nguyên cho server mới 
 | Phân tích | Lọc theo phe, nhóm, từ khóa kỹ năng; so sánh 2 tướng |
 | Đối đầu | 9 phụ bản (PVP 20 hiệp, Tháp, PVE ngày, Trấn thủ, Nam chinh, Rèn luyện Bang 5 hiệp…), cấp/sao từng ô địch, lực chiến, thứ tự ra đòn, đánh theo làn, gợi ý khắc chế từ kho, nhật ký trận |
 | Kho | Thẻ từng bản tướng, nâng sao theo bảng chi phí thật, thêm nhanh/nhập nhanh, hoàn tác, sao lưu; độ phủ vai trò |
-| Trợ trận | **Công pháp** (kho sách, phân sách, chi phí bản trùng) · **Thần thú** · **Linh phù** · **Trang bị** (chờ dữ liệu) |
+| Trợ trận | **Công pháp** (kho sách, phân sách, chi phí bản trùng) · **Thần thú** · **Linh phù** · **Chiến hồn** (8 ô, Cộng hưởng, mốc PVP, thứ tự cường hóa) · **Trang bị** (chờ dữ liệu) |
 | Nâng sao | Kế hoạch nâng sao lấy trực tiếp từ Kho |
 | Quy tắc | Nguyên tắc xây đội |
 | Cổ Đế Viêm | Số liệu trận boss sự kiện + ghi chú |
