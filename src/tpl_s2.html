@@ -197,7 +197,8 @@ h3.sub{font:600 19px var(--display);margin:26px 0 4px}
 .hv-tag{position:relative;display:grid;place-items:center;width:156px;min-height:44px;margin-top:4px;padding:8px 18px;font:700 12px var(--body);text-align:center;color:#fff;text-shadow:0 1px 3px #000;isolation:isolate}.hv-tag .uii{position:absolute;inset:0;width:100%;height:100%;z-index:-1}.hv-tag span{position:relative}.hv-tag[data-phe]:not([data-phe="3Q"]){width:154px;min-height:36px;padding:4px 18px}
 .hv-tn{display:grid;grid-template-columns:auto 1fr;align-items:center;gap:4px 10px;padding:10px;background:#251c2c;text-shadow:0 1px 3px #000}.hv-tn .t{grid-column:1/-1}.hv-tn .t{font:700 13px var(--body);margin-bottom:4px}.hv-tn .p{display:flex;gap:4px}.hv-tn .p .token{width:52px;height:52px;border-radius:6px}.hv-tn .b{color:#7dff7d;font:700 11px var(--body);margin-top:4px}
 .hv-pan{position:relative;background:#f4efe6;color:#2b2218;padding:4px 12px 12px}
-.hv-lc{display:inline-block;background:linear-gradient(90deg,#3a1408,#7a2e10);color:#ffd36b;font:800 22px var(--body);font-style:italic;padding:2px 14px;border-radius:6px;margin-top:4px;position:relative;z-index:3;box-shadow:0 2px 8px rgba(0,0,0,.4)}
+.hv-lc{display:grid;place-items:center;width:min(300px,100%);aspect-ratio:1200/270;padding:0;color:#fff0a5;font:800 italic 18px var(--body);white-space:nowrap;text-shadow:0 2px 3px #4b1602;margin-top:4px;position:relative;z-index:3;isolation:isolate}.hv-lc>.uii{position:absolute;inset:0;width:100%;height:100%;z-index:-1}.hv-lc span{position:absolute;inset:0 7% 0 34%;display:grid;place-items:center}
+.quality-badge{display:inline-block;width:58px;aspect-ratio:512/288;vertical-align:middle;line-height:0}.quality-badge .uii{width:100%;height:100%;object-fit:contain}.grar .quality-badge{width:48px}.rarity .quality-badge{width:38px}
 .hv-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);align-items:center;gap:8px;margin-top:8px}
 .hv-st{display:grid;gap:3px}.hv-st div{display:flex;justify-content:space-between;background:linear-gradient(90deg,#2d2a2a,#5b5650);color:#fff;border-radius:4px;padding:3px 8px;font:700 13px var(--body)}.hv-st span:first-child{color:#e9dcc0}
 .hv-sb{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;align-items:start}.hv-sb button{min-width:0;min-height:44px;padding:4px 2px;background:none;border:0;cursor:pointer;color:#5a3a1a;font:700 11px var(--body);display:grid;justify-items:center;gap:3px}.hv-sb i{display:grid;place-items:center;width:46px;height:46px;border-radius:50%;background:radial-gradient(#e0458a,#6d1240);border:2px solid #f0b9d8;font-style:normal;color:#fff;font-size:20px}.hv-sb button[aria-pressed=true] i{box-shadow:0 0 0 3px #f5c542}
@@ -1047,11 +1048,11 @@ function heroView(n){const h=byName[n]||{name:n},st=heroStarNow(n),hs=((typeof X
  const v=x=>x?(x>=100000?(Math.round(x/1000)/10).toString().replace(/\.0$/,"")+"vạn":String(x)):"—";/* như game: ≥10 vạn ghi "194vạn", "29.8vạn"; nhỏ hơn ghi số thường */
  return `<div class="hv${HFULL[n]?" hv-full":""}"><div class="hv-art"><div class="hv-heading">
   <div class="hv-top">${ui(PHEKEY[h.phe],`<span class="hv-dia" style="background:${PHE_COLOR[h.phe]||"#555"}"><span>${esc(PHE_SHORT[h.phe]||h.phe||"")}</span></span>`,"dia")}${ui(NHOMKEY[h.nhom],`<span class="hv-dia" style="background:#a8321e"><span>${esc((h.nhom||"").slice(0,1))}</span></span>`,"dia")}
-   <div class="hv-name">${flames}<div><b class="r">SSR+</b><b>${esc(n)}</b></div></div></div>
+   <div class="hv-name">${flames}<div>${rarityBadge("SSR+")}<b>${esc(n)}</b></div></div></div>
   <div class="hv-tag" data-phe="${esc(h.phe||'')}">${ui("khung-"+PHEKEY[h.phe],"","")}<span>${esc(tag)}</span></div>
   </div>${art?`<img class="hv-portrait${HFULL[n]||HART[n]?"":" hv-icon"}" src="${esc(art)}" alt="${esc(n)} – ảnh nhân vật" decoding="async">`:""}
   ${pn?`<div class="hv-tn"><div class="t">Tình Nghĩa</div><div class="p">${token(h)}${ph?token(ph):`<span class="token">${esc(short(pn))}</span>`}</div><div class="b">${esc(pn)}${tb?" · đồng thời ra trận, "+esc(tb):""}</div></div>`:""}
- </div><div class="hv-pan"><div class="hv-summary"><div class="hv-lc">Chiến ${hs.lc?esc(fmtLC(hs.lc).replace(" vạn ","vạn")):"—"}</div>
+ </div><div class="hv-pan"><div class="hv-summary"><div class="hv-lc" aria-label="Chiến lực">${ui("frame-chien", "", "")}<span>${hs.lc?esc(fmtLC(hs.lc).replace(" vạn ","vạn")):"—"}</span></div>
   <div class="hv-row"><div class="hv-st"><div><span>${ui("st-cap","","st")}Cấp</span><span>${lv||"—"}/${hs.lvmax||"—"}</span></div><div><span>${ui("st-hp","","st")}HP</span><span>${v(hs.hp)}</span></div><div><span>${ui("st-cong","","st")}Công</span><span>${v(hs.atk)}</span></div><div><span>${ui("st-thu","","st")}Thủ</span><span>${v(hs.def)}</span></div></div>
    <div class="hv-sb"><button data-hvs="dt" aria-pressed="false">${ui("sk-danh-thuong","<i>⚔</i>","sk")}Đánh Thường</button><button data-hvs="tc" aria-pressed="false">${ui("sk-tuyet-chieu","<i>✦</i>","sk")}Tuyệt Chiêu</button><button data-hvs="tn" aria-pressed="false">${ui("sk-tiem-nang","<i>☯</i>","sk")}Tiềm Năng</button></div></div>
   <div class="hv-bot"><button data-hvb="cp">${ui("btn-cong-phap","","bt")}Công Pháp</button><button data-hvb="tk">${ui("btn-tuyet-ky","","bt")}Tuyệt Kỹ</button><button data-hvb="tt">${ui("btn-thuoc-tinh","","bt")}Thuộc Tính</button></div></div><div class="hv-sk" id="hvSk" hidden></div></div></div>`}
@@ -1278,6 +1279,7 @@ var HART=/*__HEROART__*/{};
 /* Biểu tượng giao diện do người chơi cung cấp (src/ui_icons.json → assets/icons/ui/). Không có ảnh thì dùng bản vẽ HTML dự phòng. */
 var UIICON=/*__UIICONS__*/{};
 function ui(key,fallback,cls){return UIICON[key]?`<img class="uii ${cls||""}" src="${UIICON[key]}" alt="">`:fallback}
+function rarityBadge(r){const key={"SSR+":"rarity-ssr-plus","SSR":"rarity-ssr","SR":"rarity-sr"}[r];return key?`<span class="quality-badge" role="img" aria-label="${esc(r)}">${ui(key,esc(r),"")}</span>`:esc(r||"")}
 const PHEKEY={"3Q":"phe-3q","Hán":"phe-han","Tần":"phe-tan","Đường":"phe-duong","Cổ Đế":"phe-co-de"},NHOMKEY={"Công":"nhom-tan-cong","Thủ":"nhom-do-don","Trợ":"nhom-bo-tro","Thuật Sĩ":"nhom-thuat-si"};
 function heroImg(n){return HART[n]||(typeof ICONS!=="undefined"&&ICONS[n])||""}
 const PHE_SHORT={"3Q":"3Q","Hán":"Hán","Tần":"Tần","Đường":"Đường"};
@@ -1285,7 +1287,7 @@ function starRow(s){s=+s||0;if(s>15)return `<span class="gstars nt" aria-label="
 function heroCard(n,us){const u0=us[0],lv=((X.hlv||{})[n])||LV||"",img=heroImg(n),full=!!HART[n],r=u0.r||"SSR+";
  return `<div class="gcard r-${r.replace("+","p")} ${CORE.has(n)?"core":""}" tabindex="0" data-gc="${esc(n)}">
   <div class="gart ${full?"full":"small"}">${img?`<img src="${img}" alt="" loading="lazy">`:`<span class="gph">${esc(short(n))}</span>`}</div>
-  <span class="grar">${esc(r)}</span>${r==="SSR+"&&window.PLAN?(PLAN.keep[n]?'<span class="gbadge k">Giữ</span>':PLAN.res[n]?'<span class="gbadge r">Dự bị</span>':PLAN.mat[n]?'<span class="gbadge m">Nguyên liệu</span>':""):r!=="SSR+"?'<span class="gbadge m">Nguyên liệu</span>':""}${lv?`<span class="glv">${lv}</span>`:""}${us.length>1?`<span class="gcnt">×${us.length}</span>`:""}
+  <span class="grar">${rarityBadge(r)}</span>${r==="SSR+"&&window.PLAN?(PLAN.keep[n]?'<span class="gbadge k">Giữ</span>':PLAN.res[n]?'<span class="gbadge r">Dự bị</span>':PLAN.mat[n]?'<span class="gbadge m">Nguyên liệu</span>':""):r!=="SSR+"?'<span class="gbadge m">Nguyên liệu</span>':""}${lv?`<span class="glv">${lv}</span>`:""}${us.length>1?`<span class="gcnt">×${us.length}</span>`:""}
   <div class="gfoot"><div class="gname">${esc(n)}</div>${starRow(u0.star)}</div><span class="gphe p-${esc(u0.phe)}">${esc(PHE_SHORT[u0.phe]||u0.phe)}</span></div>`}
 function _kr0(){
  document.getElementById("orb").value=ORB;document.getElementById("kLv").value=LV||"";const vm=document.getElementById("vsMy");if(vm)vm.value=LV||"";
@@ -1296,7 +1298,7 @@ function _kr0(){
  document.getElementById("kList").innerHTML=names.map(n=>{const us=groups[n].sort((a,b)=>b.star-a.star),u0=us[0],h=byName[n];
   const tok=(h||ICONS[n])?token(h||{name:n,phe:u0.phe}):`<span class="token" style="background:${PHE_COLOR[u0.phe]||"var(--muted)"};font-size:11px">${esc(short(n))}</span>`;
   if(KVIEW==="card")return heroCard(n,us);
-  return `<div class="kh"><div class="kh-top">${tok}<div><b>${esc(n)}</b> ${CORE.has(n)?'<span class="tagcore">Đội chính</span>':""}<div class="meta">${esc(u0.phe)} · <span class="rarity">${u0.r}</span> · ${us.length} bản</div></div><button class="btn ghost qadd" data-qadd="${esc(n)}" title="Thêm nhanh 1 bản (${u0.r==="SR"?4:u0.r==="R"?3:5}★)">+1 bản</button></div>
+  return `<div class="kh"><div class="kh-top">${tok}<div><b>${esc(n)}</b> ${CORE.has(n)?'<span class="tagcore">Đội chính</span>':""}<div class="meta">${esc(u0.phe)} · <span class="rarity">${rarityBadge(u0.r)}</span> · ${us.length} bản</div></div><button class="btn ghost qadd" data-qadd="${esc(n)}" title="Thêm nhanh 1 bản (${u0.r==="SR"?4:u0.r==="R"?3:5}★)">+1 bản</button></div>
   <div class="units">${us.map(u=>`<span class="unit"><button class="setst" data-set="${u.id}" title="Sửa số sao (không trừ kho)">${stars(u.star)} ✎</button><button class="up" data-up="${u.id}" title="Nâng sao">▲ Nâng</button><button data-del="${u.id}" title="Xóa bản này">✕</button></span>`).join("")}</div></div>`}).join("")||'<p class="empty">Không có tướng.</p>';
  document.getElementById("kLog").innerHTML=KLOG.slice().reverse().map(l=>`<li>${esc(l)}</li>`).join("")||'<li class="meta">Chưa có thao tác.</li>';
  document.getElementById("kUndo").disabled=!KUNDO.length;

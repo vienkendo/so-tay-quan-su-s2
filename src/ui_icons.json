@@ -18,5 +18,9 @@
   "khung-phe-duong": "assets/icons/ui/khung-phe-duong.png",
   "khung-phe-tan": "assets/icons/ui/khung-phe-tan.png",
   "khung-phe-co-de": "assets/icons/ui/khung-phe-co-de.png",
-  "khung-phe-3q": "assets/icons/ui/khung-phe-3q.png"
+  "khung-phe-3q": "assets/icons/ui/khung-phe-3q.png",
+  "rarity-ssr-plus": "assets/icons/ui/rarity-ssr-plus.png",
+  "rarity-ssr": "assets/icons/ui/rarity-ssr.png",
+  "rarity-sr": "assets/icons/ui/rarity-sr.png",
+  "frame-chien": "assets/icons/ui/frame-chien.png"
 }
