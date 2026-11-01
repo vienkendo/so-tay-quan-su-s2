@@ -122,18 +122,19 @@ const dlg=document.getElementById("dlg");
 document.getElementById("dlg-x").addEventListener("click",()=>dlg.close());
 dlg.addEventListener("click",e=>{ if(e.target===dlg) dlg.close(); });
 /* ===== Giao diện chi tiết tướng kiểu trong game ===== */
-const HFULL={"Lữ Bố":"assets/images/heroes/full/lu-bo.jpg"};/* ảnh toàn thân cắt từ ảnh người chơi; tướng khác dùng ảnh thẻ */
+const HFULL={"Lữ Bố":"assets/images/heroes/full/lu-bo.png"};/* ảnh toàn thân do người chơi cung cấp; tướng khác dùng ảnh thẻ */
 function heroStarNow(n){const us=(typeof K!=="undefined"&&K||[]).filter(u=>u.name===n);return us.length?Math.max(...us.map(u=>u.star)):((byName[n]||{}).sao||0)}
 function heroView(n){const h=byName[n]||{name:n},st=heroStarNow(n),hs=((typeof X!=="undefined"&&X&&X.hs)||{})[n]||{},lv=((X&&X.hlv)||{})[n]||LV||"",f=heroFlags(n,st);
  const tag=(f&F_CARRY)?"Cốt Lõi ST Cao":(f&F_TANK)?"Trụ Hàng Trước":(f&F_HEAL)?"Hồi Máu":(f&F_FEED)?"Hỗ Trợ Carry":(f&F_SHIELD)?"Khiên Đội":(f&F_AMP)?"Khuếch Đại":(f&F_CTRL)?"Khống Chế":"Hỗ Trợ";
- const bg=[HFULL[n],HART[n],(typeof ICONS!=="undefined"&&ICONS[n])].filter(Boolean).map(u=>`url('${String(u).replace(/'/g,"%27")}')`).join(",");
+ const art=HFULL[n]||HART[n]||(typeof ICONS!=="undefined"&&ICONS[n])||"";
  const tn=h.tn||"",pn=tn.split(" – ")[0].split(" (")[0].trim(),tb=(tn.split("–")[1]||"").trim(),ph=byName[pn];
  const flames=st>15?(UIICON["nt-flame"]?`<div>${ui("nt-flame","","fl").repeat(Math.min(5,st-15))}</div>`:`<div style="font-size:18px;filter:hue-rotate(195deg) saturate(1.6)">${"🔥".repeat(Math.min(5,st-15))}</div>`):starRow(st);
  const v=x=>x?(x>=100000?(Math.round(x/1000)/10).toString().replace(/\.0$/,"")+"vạn":String(x)):"—";/* như game: ≥10 vạn ghi "194vạn", "29.8vạn"; nhỏ hơn ghi số thường */
- return `<div class="hv"><div class="hv-art" style="background-image:${bg||"none"};${HFULL[n]?"":HART[n]?"background-size:contain;background-position:center":"background-size:220px;background-position:center 60%"}">
+ return `<div class="hv"><div class="hv-art"><div class="hv-heading">
   <div class="hv-top">${ui(PHEKEY[h.phe],`<span class="hv-dia" style="background:${PHE_COLOR[h.phe]||"#555"}"><span>${esc(PHE_SHORT[h.phe]||h.phe||"")}</span></span>`,"dia")}${ui(NHOMKEY[h.nhom],`<span class="hv-dia" style="background:#a8321e"><span>${esc((h.nhom||"").slice(0,1))}</span></span>`,"dia")}
    <div class="hv-name">${flames}<div><b class="r">SSR+</b><b>${esc(n)}</b></div></div></div>
   <div class="hv-tag">${esc(tag)}</div>
+  </div>${art?`<img class="hv-portrait${HFULL[n]||HART[n]?"":" hv-icon"}" src="${esc(art)}" alt="${esc(n)} – ảnh nhân vật" decoding="async">`:""}
   ${pn?`<div class="hv-tn"><div class="t">Tình Nghĩa</div><div class="p">${token(h)}${ph?token(ph):`<span class="token">${esc(short(pn))}</span>`}</div><div class="b">${esc(pn)}${tb?" · đồng thời ra trận, "+esc(tb):""}</div></div>`:""}
  </div><div class="hv-pan"><div class="hv-lc">Chiến ${hs.lc?esc(fmtLC(hs.lc).replace(" vạn ","vạn")):"—"}</div>
   <div class="hv-row"><div class="hv-st"><div><span>${ui("st-cap","","st")}Cấp</span><span>${lv||"—"}/${hs.lvmax||"—"}</span></div><div><span>${ui("st-hp","","st")}HP</span><span>${v(hs.hp)}</span></div><div><span>${ui("st-cong","","st")}Công</span><span>${v(hs.atk)}</span></div><div><span>${ui("st-thu","","st")}Thủ</span><span>${v(hs.def)}</span></div></div>
