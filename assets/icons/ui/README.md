@@ -16,9 +16,9 @@ Web dùng các biểu tượng này trong giao diện chi tiết tướng. File 
 | `phe-tan.png` | 128×128 | Hình thoi phe Tần, nền vàng cam |
 | `phe-duong.png` | 128×128 | Hình thoi phe Đường, nền tím |
 | `phe-co-de.png` | 128×128 | Hình thoi phe Cổ Đế, nền xanh ngọc |
-| `nhom-cong.png` | 128×128 | Hình thoi nhóm Công (biểu tượng kiếm), nền đỏ |
-| `nhom-thu.png` | 128×128 | Hình thoi nhóm Thủ (khiên) |
-| `nhom-tro.png` | 128×128 | Hình thoi nhóm Trợ (chữ thập hồi máu) |
+| `nhom-tan-cong.png` | 128×128 | Hình thoi nhóm Công (biểu tượng kiếm), nền đỏ |
+| `nhom-do-don.png` | 128×128 | Hình thoi nhóm Thủ (khiên) |
+| `nhom-bo-tro.png` | 128×128 | Hình thoi nhóm Trợ (chữ thập hồi máu) |
 | `nhom-thuat-si.png` | 128×128 | Hình thoi nhóm Thuật Sĩ (cuộn sách/bùa) |
 | `nt-flame.png` | 64×64 | Ngọn lửa xanh lam–tím (mốc Nhập Thánh) |
 | `st-cap.png` | 64×64 | Biểu tượng chỉ số Cấp (chữ "Lv") |
