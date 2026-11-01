@@ -653,6 +653,13 @@ h3 { cursor: pointer; }
       <p class="meta">Chưa có dữ liệu: ngưỡng các cấp Cộng hưởng khác ngoài cấp 7 (+40), giá trị buff Cộng hưởng, các mốc mở thêm đã qua (ảnh chỉ cho mốc kế tiếp), ý nghĩa ô T/P/B/C (đang 0/4), hiệu ứng bộ Đa Sắc.</p></div>
   </section>
 
+  <section id="tuyetky" hidden>
+    <h2>Tuyệt kỹ (Nhập Thánh)</h2>
+    <p class="lead">Từ <b>Nhập Thánh 2 lửa</b>, mỗi mốc lửa mở 1 hàng Tuyệt kỹ, chọn 1 trong 4 (đổi được). Bảng dưới liệt kê tướng đã Nhập Thánh, Tuyệt kỹ đang chọn và gợi ý theo vai trò của tướng (bảng <code>SYN</code>). Hàng chưa mở vẫn hiện để lên kế hoạch trước.</p>
+    <div id="tkList"></div>
+    <div class="panel" style="margin-top:14px"><h3>Còn thiếu dữ liệu</h3><ul><li>Tuyệt kỹ hàng <b>Nhập Thánh 4, 5 và Thánh Tôn</b> (đang khóa).</li><li>4 lựa chọn mỗi hàng có <b>giống nhau cho mọi tướng</b> không (hiện mới có ảnh của Lữ Bố).</li><li>Nộ của Lữ Bố có giới hạn tối đa không (ảnh hưởng giá trị “Càng Đánh Càng Mạnh”).</li></ul></div>
+  </section>
+
   <section id="trangbi" hidden>
     <h2>Trang bị</h2>
     <p class="lead">Chưa có dữ liệu trang bị. Gửi ảnh màn hình trang bị (danh sách món, chỉ số từng phẩm, cách cường hóa/ghép) để bổ sung tab này.</p>
@@ -1065,11 +1072,12 @@ const KPATCH=[{id:"2026-10-23-tui",lv:160,hlv:{"Lữ Bố":170,"Điêu Thuyền"
  {id:"2026-11-01-cp",top:{"Lữ Bố":[17]},hlv:{"Lữ Bố":210},bdlv:298,books:[["Thuần Vu Quỳnh", "Tím", 5], ["Tuân Úc", "Tím", 5], ["Bách Lý Hề", "Tím", 5], ["Liêm Pha", "Tím", 5], ["Thái Bình Công Chúa", "Tím", 5], ["Trương Công Cẩn", "Tím", 5], ["Khương Duy", "Tím", 5], ["Trương Mạn Thành", "Tím", 5], ["Lý Long Cơ", "Cam", 3], ["Tây Thi", "Cam", 2], ["Lỗ Ban", "Cam", 2], ["Bạch Khởi", "Cam", 2], ["Vệ Tử Phu", "Cam", 1], ["Ban Chiêu", "Cam", 1], ["Lý Tú Ninh", "Cam", 1], ["Triệu Vân", "Cam", 1], ["Điển Vi", "Cam", 1], ["Quỷ Cốc Tử", "Cam", 1], ["Vệ Thanh", "Cam", 1], ["Thượng Quan Uyển Nhi", "Cam", 1], ["Chung Vô Diệm", "Cam", 1], ["Thái Văn Cơ", "Cam", 0], ["Hàn Tín", "Cam", 0], ["Hồng Phất Nữ", "Cam", 0], ["Chân Cơ", "Cam", 0], ["Lỗ Trí Thâm", "Cam", 0], ["Ngu Cơ", "Cam", 0], ["Tôn Sách", "Cam", 0]]},
  {id:"2026-11-01-tui",lv:189,clearHlv:true,hlv:{"Lữ Bố":210,"Điêu Thuyền":190,"Quỷ Cốc Tử":191,"Vương Chiêu Quân":189,"Lý Long Cơ":190,"Võ Tắc Thiên":195},
  top:{"Lữ Bố":[17],"Điêu Thuyền":[15],"Quỷ Cốc Tử":[15],"Vương Chiêu Quân":[13],"Lý Long Cơ":[13],"Võ Tắc Thiên":[10],"Mạc Tà":[8],"Lý Thế Dân":[8],"Ban Chiêu":[8],"Tư Mã Ý":[7],"Tôn Sách":[7],"Ngu Cơ":[7]},books:[["Tần Thủy Hoàng","Đỏ",0],["Lữ Bố","Đỏ",0],["Điêu Thuyền","Đỏ",0],["Hạng Vũ","Đỏ",0],["Lý Bạch","Đỏ",0],["Lý Thế Dân","Đỏ",0]]},
+ {id:"2026-11-01-tuyetky",tk:{"Lữ Bố":{"2":"Đấu Chí Sục Sôi"}}},
  {id:"2026-11-01-tran-lieu-nhu-ye",battles:[{"t": 1793499300000, "win": false, "mode": "PVP – Đấu trường", "lv": 190, "my": 189, "lcMe": 0, "lcEn": 0, "en": [{"n": "Tư Mã Ý", "i": 0, "st": "", "lv": 200, "tags": []}, {"n": "Vương Chiêu Quân", "i": 1, "st": "", "lv": 205, "tags": []}, {"n": "Biển Thước", "i": 2, "st": "", "lv": 180, "tags": []}, {"n": "Quan Vũ", "i": 3, "st": "", "lv": 181, "tags": []}, {"n": "Tướng Hán (chưa rõ tên)", "i": 4, "st": "", "lv": 180, "tags": []}, {"n": "Lữ Bố", "i": 5, "st": "", "lv": 191, "tags": []}], "note": "Liễu Như Yê. Thua ngay hiệp 1/20. Thần thú địch → Tư Mã Ý ô 1 ra đòn trước mọi tướng mình; ~11 lần tuyệt chiêu/truy kích trong vòng 1, ST mỗi đòn tăng 22k → 232k. Mình chỉ có Lộc Thục (hồi 87 vạn) và Lý Long Cơ (1 đòn + đòn tử trận) kịp ra tay; 5/6 tướng chưa tới lượt. Vương Chiêu Quân địch cho Công/Bạo/Khiên/Vô Địch + đòn thêm cho Tư Mã Ý.", "r": 1, "car": null, "stMe": 1630000, "stEn": 19995000, "per": {"me": [1630000, 0, 0, 0, 0, 0], "en": [18100000, 725000, 0, 0, 0, 1170000]}, "team": {"i": 0, "name": "PVP", "front": ["Lý Long Cơ", "Lý Thế Dân", "Quỷ Cốc Tử"], "back": ["Lữ Bố", "Điêu Thuyền", "Võ Tắc Thiên"]}}]}];
 function kpatch(){X.patches=X.patches||[];let done=false;if(Array.isArray(X.books)){const seen=new Set();let mxb=Math.max(Date.now(),...X.books.map(b=>+b.id||0));X.books.forEach(b=>{if(seen.has(b.id)){b.id=++mxb;done=true}seen.add(b.id)})}KPATCH.forEach(p=>{if(X.patches.includes(p.id))return;snap();const ch=[];let mx=Math.max(0,...K.map(u=>+u.id||0));
  Object.entries(p.top||{}).forEach(([n,sts])=>{const us=K.filter(u=>u.name===n).sort((a,b)=>b.star-a.star);sts.forEach((st,i)=>{let u=us[i];if(!u){const h=(typeof H!=="undefined"&&H.find(x=>x.name===n))||{};const e=(typeof EDB!=="undefined"&&EDB&&EDB[n])||{};u={name:n,phe:h.phe||e.phe||"",star:5,r:"SSR+",id:++mx};K.push(u);ch.push(`+${n}`)}if(u.star!==st){ch.push(`${n} ${stars(u.star)}→${stars(st)}`);u.star=st}})});
  if(p.lv)LV=p.lv;if(p.hlv){X.hlv=p.clearHlv?{}:(X.hlv||{});Object.assign(X.hlv,p.hlv)}
- if(p.bdlv)X.bdlv=p.bdlv;
+ if(p.bdlv)X.bdlv=p.bdlv;if(p.tk){X.tk=X.tk||{};Object.entries(p.tk).forEach(([n,o])=>{X.tk[n]=Object.assign({},o,X.tk[n]||{})});ch.push("Tuyệt kỹ: "+Object.keys(p.tk).join(", "))}
  if(p.battles){X.battles=X.battles||[];p.battles.forEach(b=>{if(!X.battles.some(x=>x.t===b.t)){const c=JSON.parse(JSON.stringify(b));if(c.team&&c.team.i===0&&DATA.teams[0])c.team.name=DATA.teams[0].name;X.battles.push(c);ch.push("+trận "+new Date(c.t).toLocaleDateString("vi-VN")+(c.win?" thắng":" thua"))}});X.battles.sort((a,b)=>a.t-b.t)}
  if(p.books){X.books=X.books||[];let bid=Math.max(Date.now(),...X.books.map(b=>+b.id||0));p.books.forEach(([n,q,st])=>{let b=X.books.find(x=>x.name===n&&x.q===q);if(!b){b={id:++bid,name:n,q,star:st,max:st+1};X.books.push(b);ch.push(`+sách ${n} ${q} ${st}★`)}else if(b.star!==st){ch.push(`sách ${n} ${b.star}→${st}★`);b.star=st;b.max=st+1}})}
  X.patches.push(p.id);KLOG.push(`${today()} · Cập nhật theo ảnh (${p.id}): ${ch.join(", ")||"không đổi"}${p.lv?"; cấp chung "+p.lv:""}`);done=true});return done}
@@ -1176,7 +1184,7 @@ document.addEventListener("click",e=>{const b=e.target.closest("[data-uh]");if(!
  const t=document.createElement("span");t.dataset.up=b.dataset.uh;document.getElementById("kList").appendChild(t);t.click();t.remove();
  ids.forEach(id=>{const c=document.querySelector(`#dlg-body .picks input[value="${id}"]`);if(c)c.checked=true});});
 
-function krender(){_kr0();setTimeout(()=>{renderKhoCoverage();if(typeof renderTeamRadar==="function")renderTeamRadar();const sec=document.querySelector("main section:not([hidden])");if(sec&&sec.id==="thanthu")renderThanThu();if(sec&&sec.id==="linhphu")renderLinhPhu();if(sec&&sec.id==="chienhon")renderChienHon();if(sec&&sec.id==="evlist")renderEvents();clearTimeout(PLANT);PLANT=setTimeout(()=>{renderPlan();const s2=document.querySelector("main section:not([hidden])");if(s2&&s2.id==="kho")_kr0()},50);if(sec&&sec.id==="quy")renderRules();if(window.cdvLoad)cdvLoad()},0);renderUpHint();renderRoad();renderBooks();renderBattles();const od=document.getElementById("kOd");if(od)od.value=X.orbDay||""}
+function krender(){_kr0();setTimeout(()=>{renderKhoCoverage();if(typeof renderTeamRadar==="function")renderTeamRadar();const sec=document.querySelector("main section:not([hidden])");if(sec&&sec.id==="thanthu")renderThanThu();if(sec&&sec.id==="linhphu")renderLinhPhu();if(sec&&sec.id==="chienhon")renderChienHon();if(sec&&sec.id==="tuyetky")renderTuyetKy();if(sec&&sec.id==="evlist")renderEvents();clearTimeout(PLANT);PLANT=setTimeout(()=>{renderPlan();const s2=document.querySelector("main section:not([hidden])");if(s2&&s2.id==="kho")_kr0()},50);if(sec&&sec.id==="quy")renderRules();if(window.cdvLoad)cdvLoad()},0);renderUpHint();renderRoad();renderBooks();renderBattles();const od=document.getElementById("kOd");if(od)od.value=X.orbDay||""}
 function snap(){KUNDO.push(JSON.stringify({k:K,orb:ORB,log:KLOG}))}
 const nid=()=>K.reduce((m,u)=>Math.max(m,u.id),0)+1;
 const today=()=>new Date().toLocaleString("vi-VN",{day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit"});
@@ -2043,6 +2051,33 @@ function renderLinhPhu(){const g=document.getElementById("lpGrid");if(!g||!windo
  ${empty.length?`<div class="warn" style="margin-top:8px">Ô trống nên lấp ngay (đeo phù Lam cũng có lợi): ${empty.map(esc).join(", ")}.</div>`:""}
  <p class="meta" style="margin-top:6px">Ưu tiên ghép: <b>Công</b> (tăng ST trực tiếp) &gt; HP &gt; Thủ.${nx?` Ô Công thấp nhất hiện tại: ${nx.b} (${LP_TIER[nx.v]}).`:""}</p>`}
 /* Thanh tab con Trợ trận */
+/* Tuyệt kỹ Nhập Thánh – dữ liệu ảnh Lữ Bố 01/11/2026. Hàng = số lửa (sao nội bộ 15+lửa). */
+const TK={2:[["Đấu Chí Sục Sôi","Tấn công","Khai chiến: tổng Công +15%"],["Ngưng Thần Tịnh Tâm","Sinh tồn","Khai chiến: HP +20%"],["Ý Chí Sắt Đá","Buff","Khai chiến: Thủ +20%"],["Tâm Thần Hợp Nhất","Buff","Khai chiến: Công +7%, HP +10%, Thủ +10%"]],
+ 3:[["Mềm Nắn Rắn Buông","Buff","Khi có mặt: mỗi debuff trên địch, địch +2% ST phải chịu (tối đa 10%)"],["Càng Đánh Càng Mạnh","Buff","Hạ địch: +1 Nộ; mỗi lần nhận ST: 30% +1 Nộ"],["Mưa Xuân Ươm Chồi","Trị liệu","Hồi máu dư chuyển thành khiên, tối đa 50% HP tối đa"],["Ý Chí Kiên Định","Trị liệu","Hạ địch: hồi 15% HP tối đa"]],
+ 4:null,5:null,"tt":null};
+const TKROW=[[2,"Nhập Thánh 2"],[3,"Nhập Thánh 3"],[4,"Nhập Thánh 4"],[5,"Nhập Thánh 5"],["tt","Thánh Tôn"]];
+function tkSuggest(n,row){const st=Math.max(16,...K.filter(u=>u.name===n).map(u=>u.star)),f=heroFlags(n,st),h=byName[n]||{},txt=(h.base||"")+(h.nt||"");
+ if(row===2){if(f&F_CARRY)return ["Đấu Chí Sục Sôi","carry: +15% Công ≈ +15% sát thương, giữ vị trí Công cao nhất để nhận buff"];
+  if(f&F_FEED&&/Công/.test(txt+(h.s9||"")))return ["Đấu Chí Sục Sôi","Công của tướng này được cộng sang carry / hồi máu theo Công"];
+  if(f&(F_TANK|F_SHIELD))return ["Ngưng Thần Tịnh Tâm","tank/khiên theo HP tối đa: +20% HP vừa trụ vừa to khiên"];
+  if(f&F_HEAL)return ["Đấu Chí Sục Sôi","hồi máu tính theo Công"];return ["Tâm Thần Hợp Nhất","hỗ trợ: cân bằng Công/HP/Thủ"]}
+ if(row===3){if((f&F_CARRY)&&(f&F_DEP))return ["Càng Đánh Càng Mạnh","carry mạnh theo Nộ: mỗi Nộ +ST; bị đánh trước (bên phòng thủ đi trước) cũng tích Nộ"];
+  if(f&F_CARRY)return ["Càng Đánh Càng Mạnh","Nộ sớm → tuyệt chiêu sớm; hạ địch +1 Nộ"];
+  if(f&(F_AMP|F_BLEED))return ["Mềm Nắn Rắn Buông","tướng gắn debuff: cả đội đánh địch đau hơn tới 10%"];
+  if(f&(F_TANK|F_SHIELD))return ["Mưa Xuân Ươm Chồi","tank được hồi nhiều → phần dư thành khiên"];
+  if(f&F_HEAL)return ["Mưa Xuân Ươm Chồi","giữ máu, hồi dư thành khiên"];return ["Mềm Nắn Rắn Buông","đội có debuff thì có lợi cho mọi người"]}
+ return null}
+function renderTuyetKy(){const box=document.getElementById("tkList");if(!box||!window.KREADY)return;X.tk=X.tk||{};
+ const nt={};K.forEach(u=>{if(u.star>15&&(!u.r||u.r==="SSR+"))nt[u.name]=Math.max(nt[u.name]||0,u.star-15)});
+ const names=Object.keys(nt).sort((a,b)=>nt[b]-nt[a]);
+ if(!names.length){box.innerHTML='<p class="meta">Chưa có tướng nào Nhập Thánh (sao > 15 trong Kho).</p>';return}
+ box.innerHTML=names.map(n=>{const L=nt[n],cur=X.tk[n]||{};
+  return `<div class="panel" style="margin-top:12px"><h3>${esc(n)} <span class="meta">Nhập Thánh ${L} lửa</span></h3>${TKROW.map(([r,lab])=>{const opts=TK[r],open=typeof r==="number"&&L>=r,sg=opts?tkSuggest(n,r):null;
+   if(!opts)return `<div class="lprow"><span>${lab}</span><span class="meta">${open?"đã mở – ":""}chưa có dữ liệu</span></div>`;
+   return `<div style="margin:8px 0"><div class="rowlab">${lab}${open?"":" · <span class='meta'>chưa mở</span>"}</div>
+    <select data-tk="${esc(n)}|${r}" ${open?"":"disabled"} style="max-width:100%"><option value="">— chưa chọn —</option>${opts.map(o=>`<option value="${esc(o[0])}" ${cur[r]===o[0]?"selected":""}>${esc(o[0])} (${esc(o[1])}): ${esc(o[2])}</option>`).join("")}</select>
+    ${sg?`<div class="meta">Gợi ý: <b>${esc(sg[0])}</b> – ${esc(sg[1])}${cur[r]&&cur[r]!==sg[0]?' · <span style="color:#e67e22">đang chọn khác gợi ý</span>':""}</div>`:""}</div>`}).join("")}</div>`}).join("");
+ box.querySelectorAll("[data-tk]").forEach(sel=>sel.onchange=()=>{const [n,r]=sel.dataset.tk.split("|");X.tk[n]=X.tk[n]||{};if(sel.value)X.tk[n][r]=sel.value;else delete X.tk[n][r];KLOG.push(`${today()} · Tuyệt kỹ ${n} – Nhập Thánh ${r}: ${sel.value||"bỏ chọn"}`);ksave();renderTuyetKy()})}
 /* Chiến hồn – số liệu ảnh 01/11/2026 (cấp +, chỉ số tại cấp đó, mốc kế tiếp, giá cường hóa) */
 const CH_DEF=[
  {n:"Giác Mộc Giao",g:"Mộc",q:"Đỏ",lv:78,hp:141620,atk:18882,df:1430,d:[129,18,5],nx:[100,"Tăng ST PVP +2%"],cost:90},
@@ -2080,14 +2115,14 @@ function renderChienHon(){const g=document.getElementById("chGrid");if(!g||!wind
   <p class="meta">Mức tăng mỗi cấp gần như như nhau giữa các Chiến hồn (≈ +128 HP, +16–18 Công, +4–5 Thủ) nên ưu tiên theo <b>mốc mở thêm</b> và <b>Cộng hưởng</b>, không theo phẩm. Giá mỗi lần cường hóa lấy từ ảnh (50 ở dưới +40, 60 ở +40–69, 90 từ +70) – mốc giá chính xác giữa các khoảng chưa xác nhận. Tăng ST PVP (Mộc) có lợi cho Lữ Bố gánh sát thương; Miễn ST PVP (Kim) giúp sống qua đòn dồn như Tư Mã Ý.</p>`;
  g.querySelectorAll("[data-ch]").forEach(i=>i.onchange=()=>{const v=Math.max(0,Math.round(+i.value)||0);C.lv[i.dataset.ch]=v;ksave();renderChienHon()});
  const m=document.getElementById("chMat");if(m)m.onchange=()=>{C.mat=Math.max(0,+m.value||0);ksave()}}
-const SUBG={trotran:{label:"Trợ trận",def:"cp",tabs:[["cp","Công pháp"],["thanthu","Thần thú"],["linhphu","Linh phù"],["chienhon","Chiến hồn"],["trangbi","Trang bị"]]},
+const SUBG={trotran:{label:"Trợ trận",def:"cp",tabs:[["cp","Công pháp"],["thanthu","Thần thú"],["linhphu","Linh phù"],["chienhon","Chiến hồn"],["tuyetky","Tuyệt kỹ"],["trangbi","Trang bị"]]},
  sukien:{label:"Sự kiện",def:"evlist",tabs:[["evlist","Lịch sự kiện"],["codviem","Cổ Đế Viêm"]]}};
 const TROTRAN=SUBG.trotran.tabs.map(t=>t[0]);
 const groupOf=id=>Object.keys(SUBG).find(g=>SUBG[g].tabs.some(t=>t[0]===id));
 (function(){const _st=showTab;showTab=function(id){if(SUBG[id])id=store.get(id+"Sub",SUBG[id].def);_st(id);const g=groupOf(id),bar=document.getElementById("subnav");
  if(bar){bar.hidden=!g;if(g){bar.setAttribute("aria-label",SUBG[g].label);bar.innerHTML=SUBG[g].tabs.map(([k,t])=>`<button data-sub="${k}" aria-pressed="${k===id}">${t}</button>`).join("")}}
  if(g){const tb=document.querySelector(`nav [data-tab="${g}"]`);document.querySelectorAll("nav button").forEach(b=>b.setAttribute("aria-selected",b===tb));store.set(g+"Sub",id)}
- if(id==="thanthu")renderThanThu();if(id==="linhphu")renderLinhPhu();if(id==="chienhon")renderChienHon();if(id==="evlist")renderEvents();if(id==="quy")renderRules();if(id==="kho"&&window.PLAN)_kr0();if(id==="cp"&&window.PLAN)renderBooks();if(id==="plan"&&window.KREADY)renderPlan()}})();
+ if(id==="thanthu")renderThanThu();if(id==="linhphu")renderLinhPhu();if(id==="chienhon")renderChienHon();if(id==="tuyetky")renderTuyetKy();if(id==="evlist")renderEvents();if(id==="quy")renderRules();if(id==="kho"&&window.PLAN)_kr0();if(id==="cp"&&window.PLAN)renderBooks();if(id==="plan"&&window.KREADY)renderPlan()}})();
 /* Lịch sự kiện */
 function EVS(){if(!Array.isArray(X.ev))X.ev=[{id:1,name:"Thí Luyện Cổ Đế Viêm",kind:"Tuần",end:"",goal:"Đạt mục tiêu ST mỗi ngày; xếp hạng theo ST cao nhất kỳ",reward:"",note:"Xem chi tiết ở tab Cổ Đế Viêm",done:false}];return X.ev}
 function evDays(d){if(!d)return null;const t=new Date(d+"T23:59:59");return Math.ceil((t-Date.now())/864e5)}
@@ -2175,7 +2210,7 @@ function renderRules(){const box=document.getElementById("quyDyn");if(!box||!win
  // cần kiểm tra
  const miss=Object.keys(own).filter(n=>!byName[n]&&!((EDB[n]||{}).desc)),nb=(X.books||[]).filter(b=>!BOOKFX[b.name]).map(b=>b.name);
  const q=document.getElementById("quyChk");if(q)q.innerHTML=`<ul>${miss.length?`<li>Chưa có kỹ năng: ${miss.map(esc).join(", ")} – gửi ảnh để đưa vào phân tích.</li>`:""}${nb.length?`<li>Công pháp chưa có hiệu ứng: ${nb.map(esc).join(", ")}.</li>`:""}<li>Boss có miễn khống chế không; khiêu khích có chặn đòn diện rộng không.</li><li>Linh phù: số phù để ghép, giá trị Tăng/Giảm ST. Thần thú: hiệu quả ở sao thấp.</li></ul>`}
-let lastTab=store.get("tab","plan");if(lastTab==="phan-tich")lastTab="tuong"; if(["plan","doi","tuong","vs","kho","cp","thanthu","linhphu","chienhon","trangbi","sao","quy","evlist","codviem","camnang"].includes(lastTab)) showTab(lastTab);
+let lastTab=store.get("tab","plan");if(lastTab==="phan-tich")lastTab="tuong"; if(["plan","doi","tuong","vs","kho","cp","thanthu","linhphu","chienhon","tuyetky","trangbi","sao","quy","evlist","codviem","camnang"].includes(lastTab)) showTab(lastTab);
 </script>
 </body>
 </html>
