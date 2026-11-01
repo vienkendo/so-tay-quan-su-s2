@@ -716,7 +716,7 @@ h3 { cursor: pointer; }
           <li><b>6★ là mốc bắt buộc:</b> giới hạn cấp 100 → 145, chỉ số ×1.2, Nộ cơ bản +2, mở 2 ô công pháp.</li>
           <li><b>Ô công pháp theo sao:</b> 6★: 2 · 9★: 3 · 10★: 5 · 12★: 6 · 14★: 7 · 15★: 8. Mốc đặc tính: 9★, 11★, 13★, Nhập Thánh.</li>
           <li><b>Ô đội hình:</b> 1–3 hàng trước, 4–6 hàng sau; 1-4, 2-5, 3-6 cùng làn. Đòn đơn thể đánh ô trước cùng làn trước.</li>
-          <li><b>Thứ tự ra đòn:</b> PVP: <b>thần thú có kỹ năng ra chiêu của địch đánh đầu tiên</b>, rồi xen kẽ địch 1 → ta 1 → địch 2…; tướng địch ở <b>ô 1</b> luôn ra đòn trước mọi tướng của bạn; PVE đội ta ra trước. PVP tối đa 20 hiệp, phụ bản 15, Rèn luyện Bang 5.</li>
+          <li><b>Thứ tự ra đòn:</b> PVP: <b>bên phòng thủ (bị khiêu chiến) đi trước</b> – thần thú có kỹ năng ra chiêu của bên đó đánh đầu tiên, rồi xen kẽ ô1 phòng thủ → ô1 khiêu chiến → ô2…; khi bạn đi đánh, tướng địch ô 1 ra đòn trước mọi tướng của bạn; khi bạn bị đánh, ô 1 của <b>đội phòng thủ</b> của bạn được ra đòn trước; PVE đội ta ra trước. PVP tối đa 20 hiệp, phụ bản 15, Rèn luyện Bang 5.</li>
           <li><b>Nâng sao tiêu hao tướng cùng phe</b> ở số sao yêu cầu – không dùng tướng đội chính làm nguyên liệu.</li>
           <li><b>Linh phù, thần thú</b> cộng cho toàn bộ tướng – không làm đổi thứ tự Công giữa các tướng.</li>
         </ul></div>
@@ -1769,7 +1769,7 @@ function vsRun(){
    <div class="enemy">↑ Phía địch</div><div class="rowlab">Hàng trước</div><div class="row front">${slots.slice(0,3).map((n,i)=>cell(n,i)).join("")}</div>
    <div class="rowlab">Hàng sau</div><div class="row back">${slots.slice(3).map((n,i)=>cell(n,i+3)).join("")}</div>
    <div class="bonds">${csChip(pick)}</div><div class="bonds">${bonds.map(b=>`<span class="chip on">Tình Nghĩa: ${esc(b)}</span>`).join("")}</div></div></div>
-  <div class="panel" style="margin-top:16px"><h3>Thứ tự ra đòn hiệp 1</h3><p class="meta" style="margin:0 0 8px">Đòn đơn thể nhắm địch cùng làn dọc (ô trước, chết mới tới ô sau). ${(VS.mode||"pvp")==="pvp"?"PVP: thần thú (có kỹ năng ra chiêu) của địch → địch ô1 → mình ô1 → địch ô2 → mình ô2 …":"PVE: mình ô1 → địch ô1 → mình ô2 → địch ô2 …"} Ô trống bị bỏ qua.</p>
+  <div class="panel" style="margin-top:16px"><h3>Thứ tự ra đòn hiệp 1</h3><p class="meta" style="margin:0 0 8px">Đòn đơn thể nhắm địch cùng làn dọc (ô trước, chết mới tới ô sau). ${(VS.mode||"pvp")==="pvp"?"PVP (bạn khiêu chiến – bên phòng thủ đi trước): thần thú (có kỹ năng ra chiêu) của địch → địch ô1 → mình ô1 → địch ô2 → mình ô2 … Khi bạn phòng thủ thì ngược lại: đội phòng thủ của bạn đi trước.":"PVE: mình ô1 → địch ô1 → mình ô2 → địch ô2 …"} Ô trống bị bỏ qua.</p>
    <div class="tl">${(VS.mode||"pvp")==="pvp"?'<span class="tli e">0. Thần thú địch</span>':""}${TL.map((x,k)=>`<span class="tli ${x.side}">${k+1}. ${x.side==="e"?"Địch":"Mình"} Ô${x.i+1} <b>${esc(x.n)}</b>${x.tags.includes("ctrl")?" ⛓":""}${x.n===carry&&x.side==="m"?" ★":""}</span>`).join("")}</div>
    <p class="meta" style="margin:8px 0 0">${laneTxt.map(esc).join(" · ")}</p>${tlWarn.length?`<ul style="margin-top:8px">${tlWarn.map(w=>`<li>${esc(w)}</li>`).join("")}</ul>`:'<p class="meta" style="margin-top:8px">Không thấy rủi ro thứ tự ra đòn rõ ràng.</p>'}</div>
   <div class="panel" style="margin-top:16px"><h3>Lý do chọn</h3><ul>${pick.map(n=>`<li><b>${esc(n)}</b> (${own[n]}★): ${esc((EDB[n]||{}).desc||"")}${why[n]&&why[n].length?" – "+esc(why[n].join(", ")):""}</li>`).join("")}</ul>

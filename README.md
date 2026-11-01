@@ -56,7 +56,7 @@ Chỉ cần Python 3, không phụ thuộc thư viện ngoài. Thư mục `build
 - **Ô công pháp theo sao:** 6★: 2 · 9★: 3 · 10★: 5 · 12★: 6 · 14★: 7 · 15★: 8.
 - **Công pháp:** số người đeo = sao sách + 1. Bản trùng để lên sao: Tím 2→4→8→16→32; Cam/Đỏ 1→2→4→8→16 (mỗi sao gấp đôi).
 - **Mảnh:** 50 mảnh = 1 tướng / 1 thần thú; 100 Mảnh Vạn Năng = chọn 1 tướng bất kỳ; ghép mảnh phe 5★ ra tướng ngẫu nhiên.
-- **Trận:** PVP tối đa 20 hiệp, các phụ bản khác 15, Rèn luyện Bang 5 hiệp; hết hiệp chưa hạ hết địch là thua. PVP: thần thú có kỹ năng ra chiêu của địch đánh đầu tiên, rồi ra đòn xen kẽ (địch 1 → ta 1 → địch 2…), PVE đội ta ra trước. Đòn đơn thể đánh cùng làn dọc (1–4, 2–5, 3–6), ô trước trước.
+- **Trận:** PVP tối đa 20 hiệp, các phụ bản khác 15, Rèn luyện Bang 5 hiệp; hết hiệp chưa hạ hết địch là thua. PVP: **bên phòng thủ đi trước** – thần thú có kỹ năng ra chiêu của bên phòng thủ đánh đầu tiên, rồi ra đòn xen kẽ (địch 1 → ta 1 → địch 2…), PVE đội ta ra trước. Đòn đơn thể đánh cùng làn dọc (1–4, 2–5, 3–6), ô trước trước.
 - **Lực chiến:** 1 vạn = 10.000 (ví dụ "290vạn6676" = 2.906.676).
 - **Linh phù:** cộng cho toàn bộ tướng; Công Lam 1.000 → Tím 2.000 → Cam 4.000 → Đỏ 8.000 → Vàng 1★ 10.000 (+5%)…
 
