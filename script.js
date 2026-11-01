@@ -365,7 +365,9 @@ var UIICON={"phe-3q": "assets/icons/ui/phe-3q.png", "phe-han": "assets/icons/ui/
 function ui(key,fallback,cls){return UIICON[key]?`<img class="uii ${cls||""}" src="${UIICON[key]}" alt="">`:fallback}
 function rarityBadge(r){const key={"SSR+":"rarity-ssr-plus","SSR":"rarity-ssr","SR":"rarity-sr"}[r];return key?`<span class="quality-badge" role="img" aria-label="${esc(r)}">${ui(key,esc(r),"")}</span>`:esc(r||"")}
 const PHEKEY={"3Q":"phe-3q","Hán":"phe-han","Tần":"phe-tan","Đường":"phe-duong","Cổ Đế":"phe-co-de"},NHOMKEY={"Công":"nhom-tan-cong","Thủ":"nhom-do-don","Trợ":"nhom-bo-tro","Thuật Sĩ":"nhom-thuat-si"};
-function heroImg(n){return HFULL[n]||HART[n]||(typeof ICONS!=="undefined"&&ICONS[n])||""}
+/* Ảnh riêng cho thẻ Kho được thu nhỏ chất lượng cao từ ảnh toàn thân. */
+const HCARD=new Set(["Ban Chiêu","Điêu Thuyền","Lữ Bố","Lý Long Cơ","Lý Thế Dân","Mạc Tà","Quan Vũ","Quỷ Cốc Tử","Tư Mã Ý","Võ Tắc Thiên","Vương Chiêu Quân"]);
+function heroImg(n){return (HCARD.has(n)&&HFULL[n]?HFULL[n].replace("/full/","/cards/").replace(/\.jpg$/i,".webp"):HFULL[n])||HART[n]||(typeof ICONS!=="undefined"&&ICONS[n])||""}
 const PHE_SHORT={"3Q":"3Q","Hán":"Hán","Tần":"Tần","Đường":"Đường"};
 function starRow(s){s=+s||0;if(s>15)return `<span class="gstars nt" aria-label="Nhập Thánh ${s-15}">${"🔥".repeat(Math.min(5,s-15))}</span>`;const tier=s<=5?"g":s<=10?"r":"c",k=s<=5?s:s<=10?s-5:Math.min(5,s-10);return `<span class="gstars ${tier}" aria-label="${s} sao">${"★".repeat(Math.max(k,0))}</span>`}
 function heroCard(n,us){const u0=us[0],lv=((X.hlv||{})[n])||LV||"",img=heroImg(n),full=!!(HFULL[n]||HART[n]),r=u0.r||"SSR+";
