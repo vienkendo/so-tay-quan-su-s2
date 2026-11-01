@@ -82,7 +82,7 @@ index.html, script.js, style.css   SINH TỰ ĐỘNG – không sửa tay
   - Sách Chung Vô Diệm chỉ tướng nữ đeo được (`FEMALE`, `BOOKFEM`).
 - **Lực chiến:** 1 vạn = 10.000 (`parseLC` đọc được "69.3vạn", "290vạn6676", "8.48ức").
 - **Trận:**
-  - PVP ra đòn xen kẽ.
+  - PVP: thần thú (có kỹ năng ra chiêu) của địch đánh đầu tiên, rồi xen kẽ địch ô1 → ta ô1 → địch ô2… (người chơi xác nhận 01/11).
   - Đòn đơn thể đánh cùng làn dọc 1–4, 2–5, 3–6, ô trước trước.
   - Số hiệp tùy chế độ (thấy cả 5, 20, 30).
 - **Đội người chơi:** xoay quanh **Lữ Bố** (carry đánh thường, mạnh theo Nộ, phải giữ **Công cao nhất đội**). Các buff "tướng Công cao nhất" của Vương Chiêu Quân, Quỷ Cốc Tử, Điêu Thuyền cần rơi vào Lữ Bố.

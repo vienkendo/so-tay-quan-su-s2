@@ -874,6 +874,7 @@ function vsRun(){
   if(cc.length)tlWarn.push(`${carry} ra đòn thứ ${tpos(myC)}, SAU ${cc.map(x=>x.n+" (thứ "+tpos(x)+")").join(", ")} – có thể bị khống chế trước khi kịp đánh.`);
   if(dp.length)tlWarn.push(`${dp.map(x=>x.n).join(", ")} xóa buff/khiên trước khi ${carry} ra tay – buff đầu trận của đội mình dễ mất.`);
   if(bu.length>=3)tlWarn.push(`${bu.length} tướng sát thương diện rộng/carry của địch ra đòn trước ${carry} – hàng sau mỏng máu dễ bị dọn trước.`);}
+ if(EF&&ENs[0]&&(ENs[0].tags.includes("carry")||ENs[0].tags.includes("aoe")))tlWarn.unshift(`${ENs[0].n} đứng ô 1 của địch: ra đòn ngay sau thần thú địch, TRƯỚC mọi tướng của bạn – chỉ phòng thủ bị động (đặc tính không cần lượt, Chiến hồn/linh phù Miễn ST, thần thú) mới kịp tác dụng.`);
  const mySh=TL.find(x=>x.side==="m"&&(x.tags.includes("shield")));const enBurst=TL.find(x=>x.side==="e"&&(x.tags.includes("carry")||x.tags.includes("aoe")));
  if(mySh&&enBurst&&tpos(mySh)>tpos(enBurst))tlWarn.push(`Khiên của ${mySh.n} (thứ ${tpos(mySh)}) bật SAU đòn của ${enBurst.n} (thứ ${tpos(enBurst)}) – cân nhắc đưa ${mySh.n} lên ô thấp hơn.`);
  const enCtrlFirst=TL.find(x=>x.side==="e"&&x.tags.includes("ctrl"));
@@ -902,8 +903,8 @@ function vsRun(){
    <div class="enemy">↑ Phía địch</div><div class="rowlab">Hàng trước</div><div class="row front">${slots.slice(0,3).map((n,i)=>cell(n,i)).join("")}</div>
    <div class="rowlab">Hàng sau</div><div class="row back">${slots.slice(3).map((n,i)=>cell(n,i+3)).join("")}</div>
    <div class="bonds">${csChip(pick)}</div><div class="bonds">${bonds.map(b=>`<span class="chip on">Tình Nghĩa: ${esc(b)}</span>`).join("")}</div></div></div>
-  <div class="panel" style="margin-top:16px"><h3>Thứ tự ra đòn hiệp 1</h3><p class="meta" style="margin:0 0 8px">Đòn đơn thể nhắm địch cùng làn dọc (ô trước, chết mới tới ô sau). ${(VS.mode||"pvp")==="pvp"?"PVP: địch ô1 → mình ô1 → địch ô2 → mình ô2 …":"PVE: mình ô1 → địch ô1 → mình ô2 → địch ô2 …"} Ô trống bị bỏ qua.</p>
-   <div class="tl">${TL.map((x,k)=>`<span class="tli ${x.side}">${k+1}. ${x.side==="e"?"Địch":"Mình"} Ô${x.i+1} <b>${esc(x.n)}</b>${x.tags.includes("ctrl")?" ⛓":""}${x.n===carry&&x.side==="m"?" ★":""}</span>`).join("")}</div>
+  <div class="panel" style="margin-top:16px"><h3>Thứ tự ra đòn hiệp 1</h3><p class="meta" style="margin:0 0 8px">Đòn đơn thể nhắm địch cùng làn dọc (ô trước, chết mới tới ô sau). ${(VS.mode||"pvp")==="pvp"?"PVP: thần thú (có kỹ năng ra chiêu) của địch → địch ô1 → mình ô1 → địch ô2 → mình ô2 …":"PVE: mình ô1 → địch ô1 → mình ô2 → địch ô2 …"} Ô trống bị bỏ qua.</p>
+   <div class="tl">${(VS.mode||"pvp")==="pvp"?'<span class="tli e">0. Thần thú địch</span>':""}${TL.map((x,k)=>`<span class="tli ${x.side}">${k+1}. ${x.side==="e"?"Địch":"Mình"} Ô${x.i+1} <b>${esc(x.n)}</b>${x.tags.includes("ctrl")?" ⛓":""}${x.n===carry&&x.side==="m"?" ★":""}</span>`).join("")}</div>
    <p class="meta" style="margin:8px 0 0">${laneTxt.map(esc).join(" · ")}</p>${tlWarn.length?`<ul style="margin-top:8px">${tlWarn.map(w=>`<li>${esc(w)}</li>`).join("")}</ul>`:'<p class="meta" style="margin-top:8px">Không thấy rủi ro thứ tự ra đòn rõ ràng.</p>'}</div>
   <div class="panel" style="margin-top:16px"><h3>Lý do chọn</h3><ul>${pick.map(n=>`<li><b>${esc(n)}</b> (${own[n]}★): ${esc((EDB[n]||{}).desc||"")}${why[n]&&why[n].length?" – "+esc(why[n].join(", ")):""}</li>`).join("")}</ul>
   ${warns.length?`<h3 style="margin-top:12px">Lưu ý</h3><ul>${warns.map(w=>`<li>${esc(w)}</li>`).join("")}</ul>`:""}</div>`;
