@@ -13,5 +13,10 @@
   "st-hp": "assets/icons/ui/st-hp.png",
   "st-cong": "assets/icons/ui/st-cong.png",
   "st-thu": "assets/icons/ui/st-thu.png",
-  "sk-danh-thuong": "assets/icons/ui/sk-danh-thuong.png"
+  "sk-danh-thuong": "assets/icons/ui/sk-danh-thuong.png",
+  "khung-phe-han": "assets/icons/ui/khung-phe-han.png",
+  "khung-phe-duong": "assets/icons/ui/khung-phe-duong.png",
+  "khung-phe-tan": "assets/icons/ui/khung-phe-tan.png",
+  "khung-phe-co-de": "assets/icons/ui/khung-phe-co-de.png",
+  "khung-phe-3q": "assets/icons/ui/khung-phe-3q.png"
 }
