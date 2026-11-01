@@ -365,10 +365,10 @@ var UIICON={"phe-3q": "assets/icons/ui/phe-3q.png", "phe-han": "assets/icons/ui/
 function ui(key,fallback,cls){return UIICON[key]?`<img class="uii ${cls||""}" src="${UIICON[key]}" alt="">`:fallback}
 function rarityBadge(r){const key={"SSR+":"rarity-ssr-plus","SSR":"rarity-ssr","SR":"rarity-sr"}[r];return key?`<span class="quality-badge" role="img" aria-label="${esc(r)}">${ui(key,esc(r),"")}</span>`:esc(r||"")}
 const PHEKEY={"3Q":"phe-3q","Hán":"phe-han","Tần":"phe-tan","Đường":"phe-duong","Cổ Đế":"phe-co-de"},NHOMKEY={"Công":"nhom-tan-cong","Thủ":"nhom-do-don","Trợ":"nhom-bo-tro","Thuật Sĩ":"nhom-thuat-si"};
-function heroImg(n){return HART[n]||(typeof ICONS!=="undefined"&&ICONS[n])||""}
+function heroImg(n){return HFULL[n]||HART[n]||(typeof ICONS!=="undefined"&&ICONS[n])||""}
 const PHE_SHORT={"3Q":"3Q","Hán":"Hán","Tần":"Tần","Đường":"Đường"};
 function starRow(s){s=+s||0;if(s>15)return `<span class="gstars nt" aria-label="Nhập Thánh ${s-15}">${"🔥".repeat(Math.min(5,s-15))}</span>`;const tier=s<=5?"g":s<=10?"r":"c",k=s<=5?s:s<=10?s-5:Math.min(5,s-10);return `<span class="gstars ${tier}" aria-label="${s} sao">${"★".repeat(Math.max(k,0))}</span>`}
-function heroCard(n,us){const u0=us[0],lv=((X.hlv||{})[n])||LV||"",img=heroImg(n),full=!!HART[n],r=u0.r||"SSR+";
+function heroCard(n,us){const u0=us[0],lv=((X.hlv||{})[n])||LV||"",img=heroImg(n),full=!!(HFULL[n]||HART[n]),r=u0.r||"SSR+";
  return `<div class="gcard r-${r.replace("+","p")} ${CORE.has(n)?"core":""}" tabindex="0" data-gc="${esc(n)}">
   <div class="gart ${full?"full":"small"}">${img?`<img src="${img}" alt="" loading="lazy">`:`<span class="gph">${esc(short(n))}</span>`}</div>
   <span class="grar">${rarityBadge(r)}</span>${r==="SSR+"&&window.PLAN?(PLAN.keep[n]?'<span class="gbadge k">Giữ</span>':PLAN.res[n]?'<span class="gbadge r">Dự bị</span>':PLAN.mat[n]?'<span class="gbadge m">Nguyên liệu</span>':""):r!=="SSR+"?'<span class="gbadge m">Nguyên liệu</span>':""}${lv?`<span class="glv">${lv}</span>`:""}${us.length>1?`<span class="gcnt">×${us.length}</span>`:""}
