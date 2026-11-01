@@ -6,7 +6,7 @@
 <title>Sổ Tay Quân Sư S2</title>
 <meta name="theme-color" content="#17130f">
 <link rel="icon" href="assets/images/site-icon-fantasy.jpg">
-<link rel="stylesheet" href="style.css?v=decb6652">
+<link rel="stylesheet" href="style.css?v=1a7249de">
 </head>
 <body>
 
@@ -109,7 +109,7 @@
 
   <section id="kho" hidden>
     <h2>Kho tướng</h2>
-    <p class="lead">Kho lưu ngay trong trình duyệt này. Bấm <b>Nâng sao</b> trên một thẻ, chọn tướng làm nguyên liệu, file tự trừ kho và cầu cam. Quay được tướng mới thì bấm <b>Thêm tướng</b>.</p>
+    <p class="lead">Chọn thẻ tướng để nâng sao hoặc xem Tuyệt kỹ khi đã Nhập Thánh. Quay được tướng mới thì bấm <b>Thêm tướng</b>.</p>
     <div class="khobar">
       <label for="orb">Cầu cam</label><input id="orb" type="number" min="0">
       <label for="kLv">Cấp chung</label><input id="kLv" type="number" min="1" max="999" style="width:80px" placeholder="vd 130">
@@ -187,7 +187,7 @@
   <section id="tuyetky" hidden>
     <h2>Tuyệt kỹ (Nhập Thánh)</h2>
     <p class="lead">Từ <b>Nhập Thánh 2 lửa</b>, mỗi mốc lửa mở 1 hàng Tuyệt kỹ, chọn 1 trong 4 (đổi được). Bảng dưới liệt kê tướng đã Nhập Thánh, Tuyệt kỹ đang chọn và gợi ý theo vai trò của tướng (bảng <code>SYN</code>). Hàng chưa mở vẫn hiện để lên kế hoạch trước.</p>
-    <div id="tkList"></div>
+    <div class="acts" style="justify-content:flex-start"><button class="btn ghost" type="button" id="tkAll" hidden>Xem tất cả tướng Nhập Thánh</button></div><div id="tkList"></div>
     <div class="panel" style="margin-top:14px"><h3>Còn thiếu dữ liệu</h3><ul><li>Tuyệt kỹ hàng <b>Nhập Thánh 4, 5 và Thánh Tôn</b> (đang khóa).</li><li>4 lựa chọn mỗi hàng có <b>giống nhau cho mọi tướng</b> không (hiện mới có ảnh của Lữ Bố).</li><li>Nộ của Lữ Bố có giới hạn tối đa không (ảnh hưởng giá trị “Càng Đánh Càng Mạnh”).</li></ul></div>
   </section>
 
@@ -400,6 +400,6 @@
   <div class="dh"><div id="dlg-token"></div><div><h3 id="dlg-title"></h3><div class="meta" id="dlg-meta"></div></div><button class="x" id="dlg-x" aria-label="Đóng">×</button></div>
   <div class="db" id="dlg-body"></div>
 </dialog>
-<script src="script.js?v=decb6652"></script>
+<script src="script.js?v=1a7249de"></script>
 </body>
 </html>

@@ -12,9 +12,9 @@ Trên điện thoại, bấm **Menu** để mở thanh bên và chọn nhóm ch�
 | Nhóm | Dùng khi nào |
 |---|---|
 | Tổng quan | Kiểm tra kho, xem đội PVP và việc có thể làm; mở kế hoạch đầy đủ khi cần |
-| Kho & nâng cấp | Quản lý tướng, sao và tài nguyên; xem điều kiện nâng sao |
+| Kho & nâng cấp | Quản lý tướng, sao và tài nguyên; xem điều kiện nâng sao và Tuyệt kỹ Nhập Thánh |
 | Đội hình & đối đầu | Xem và chọn đội PVP/Boss/PVE; phân tích đội địch và ghi nhật ký trận |
-| Trợ trận | Công pháp, thần thú, linh phù, chiến hồn, tuyệt kỹ và trang bị |
+| Trợ trận | Công pháp, thần thú, linh phù, chiến hồn và trang bị |
 | Tra cứu & sự kiện | Tra cứu tướng, quy tắc, cẩm nang; xem lịch sự kiện và Cổ Đế Viêm |
 
 ## Cấu trúc
