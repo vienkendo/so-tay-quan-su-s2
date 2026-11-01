@@ -22,6 +22,26 @@ const r=await p.evaluate(()=>{const out={pass:0,fail:[]};const ok=(c,m)=>{if(c)o
  /* T4: tag "back" chỉ là kiểu nhắm mục tiêu (đánh hàng sau địch) – không được làm đổi vị trí */
  const withBack=["Lữ Bố","Quỷ Cốc Tử","Lý Long Cơ","Vương Chiêu Quân","Võ Tắc Thiên","Điêu Thuyền"];const p1=placeTeam(withBack,own);
  ok(JSON.stringify(p1)===JSON.stringify(placeTeam(withBack,own)),"T4 xếp vị trí ổn định");
+ /* T5: vai trò có mốc sao (SYN) – không tính hiệu ứng chưa mở, không nhận nhầm */
+ const F=(n,st)=>heroFlags(n,st),has=(n,st,f)=>!!(F(n,st)&f);
+ ok(!has("Huyền Trang",5,F_TANK)&&!has("Huyền Trang",5,F_SHIELD)&&!has("Huyền Trang",5,F_RAGE),"T5 Huyền Trang 5★ chưa có khiên/cấp Nộ");
+ ok(has("Huyền Trang",9,F_RAGE)&&has("Huyền Trang",11,F_FEED)&&has("Huyền Trang",13,F_SHIELD),"T5 Huyền Trang mở theo 9/11/13★");
+ ok(!has("Thái Văn Cơ",8,F_RAGE)&&has("Thái Văn Cơ",11,F_RAGE),"T5 Thái Văn Cơ cấp Nộ từ 11★");
+ ok(!has("Triệu Vân",15,F_CTRL),"T5 Triệu Vân tự choáng không phải khống chế");
+ ok(!has("Lữ Bố",17,F_RAGE)&&has("Lữ Bố",17,F_DEP),"T5 Lữ Bố là carry mạnh theo Nộ, không phải nguồn Nộ");
+ ok(!has("Quỷ Cốc Tử",8,F_RAGE)&&has("Quỷ Cốc Tử",9,F_RAGE),"T5 Quỷ Cốc Tử chuyển Nộ cho carry từ 9★");
+ ok(has("Vương Chiêu Quân",13,F_SHIELD)&&!has("Vương Chiêu Quân",13,F_TANK)&&has("Vương Chiêu Quân",9,F_FEED),"T5 Vương Chiêu Quân: khiên + nuôi carry, không phải tank");
+ ok(has("Lý Thế Dân",8,F_TANK),"T5 Lý Thế Dân là tank");
+ ok(has("Điêu Thuyền",9,F_FEED)&&!has("Điêu Thuyền",8,F_FEED),"T5 Điêu Thuyền liên kết carry từ 9★");
+ /* T6: không cộng trùng "Công cao nhất" (heroVal chỉ còn điểm chế độ + sao) */
+ const o1={"Vương Chiêu Quân":8},o2={"Vương Chiêu Quân":9};ok(Math.abs(heroVal("Vương Chiêu Quân","pvp",o2)-heroVal("Vương Chiêu Quân","pvp",o1)-0.6)<1e-9,"T6 heroVal 8→9★ chỉ +0.6");
+ /* T7: tiêu chí theo chế độ – cùng đội không tank thật: PVP bị trừ nhiều hơn Boss */
+ const ros={"Lữ Bố":15,"Điêu Thuyền":12,"Vương Chiêu Quân":12,"Quỷ Cốc Tử":12,"Lý Long Cơ":12,"Võ Tắc Thiên":10,"Lý Thế Dân":5};
+ const iP=DATA.teams.findIndex(t=>t.mode==="PVP"),iB=DATA.teams.findIndex(t=>t.mode==="Boss");
+ const rp=bestTeams(iP,ros,"bal"),rb=bestTeams(iB,ros,"bal");
+ ok([...rp.front,...rp.back].includes("Lý Thế Dân"),"T7 PVP ưu tiên có tank thật (Lý Thế Dân 5★) dù sao thấp");
+ ok(rp.pros.some(x=>x.startsWith("Carry: Lữ Bố"))&&rp.pros.some(x=>x.startsWith("Tank:")),"T7 có lý do chọn đội (carry, tank)");
+ ok(Array.isArray(rb.why),"T7 Boss trả về đánh đổi");
  return out});
 console.log(`PASS ${r.pass}  FAIL ${r.fail.length}`);r.fail.forEach(f=>console.log('  ✗ '+f));if(errs.length)console.log('PAGE ERRORS',errs);
 await b.close();process.exit(r.fail.length||errs.length?1:0)})();

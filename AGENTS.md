@@ -95,4 +95,5 @@ index.html, script.js, style.css   SINH TỰ ĐỘNG – không sửa tay
   - Có 3 profile `bal`, `dmg`, `tough`, và đội lâu dài khi max sao (`lateGame`).
 - **Kế hoạch** (`computePlan`): phân loại SSR+ thành giữ / dự bị / nguyên liệu (`KEEPSET`). Chỉ gợi ý nâng sao và chia sách cho tướng "giữ".
 - **Phân sách** (`suggestBooks`): tướng theo thứ tự đội ở tab Kế hoạch, ưu tiên `BOOKPREF`, sau đó một lượt lấp ô trống theo vai trò.
+- Vai trò/cộng hưởng của tướng lấy từ bảng **`SYN`** (`[cờ, sao tối thiểu]`: carry, tank, shield, heal, rage, feed, amp, ctrl, bleed, aoe, dep). Thêm tướng mới thì thêm vào `SYN`, có mốc sao mở; tướng thiếu trong `SYN` rơi về regex và bị ghi "độ tin cậy thấp". `shield` ≠ `tank`. Hiệu ứng "Công cao nhất" chỉ tính qua cờ `feed`, không cộng trong `heroVal`.
 - `EDB` là object `{tên: {name, phe, tags, desc}}`, không phải mảng.
