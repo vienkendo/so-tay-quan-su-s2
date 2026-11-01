@@ -163,6 +163,23 @@ h3.sub{font:600 19px var(--display);margin:26px 0 4px}
 .unit button{border:0;background:transparent;color:var(--muted);cursor:pointer;font:600 12px var(--body);padding:2px 5px;border-radius:4px}
 .unit button.up{color:var(--accent)}
 .unit button:hover{background:var(--line)}
+.hv{position:relative;border-radius:14px;overflow:hidden;background:#15111a;color:#fff;margin:-4px 0 12px}
+.hv-art{position:relative;height:430px;background-color:#1d1626;background-repeat:no-repeat;background-position:center top;background-size:cover}
+.hv-art:after{content:"";position:absolute;inset:auto 0 0 0;height:90px;background:linear-gradient(transparent,#f4efe6)}
+.hv-top{position:absolute;inset:10px 10px auto 10px;display:flex;align-items:flex-start;gap:8px;z-index:2}
+.hv-dia{display:inline-grid;place-items:center;width:34px;height:34px;transform:rotate(45deg);border:2px solid #fff;border-radius:6px;font:800 11px var(--body);box-shadow:0 2px 6px rgba(0,0,0,.5)}.hv-dia span{transform:rotate(-45deg)}
+.hv-name{margin-left:auto;margin-right:auto;text-align:center;text-shadow:0 2px 4px #000}.hv-name b{font:800 20px var(--body);letter-spacing:2px}.hv-name .r{color:#ff4b3a;font-style:italic;margin-right:6px}
+.hv-tag{position:absolute;left:10px;top:56px;z-index:2;background:linear-gradient(90deg,#1f8fa6,#3cc3c9);border:2px solid #bff;border-radius:6px;padding:2px 10px;font:700 12px var(--body)}
+.hv-tn{position:absolute;left:10px;top:92px;z-index:2;width:118px;text-shadow:0 1px 3px #000}.hv-tn .t{font:700 13px var(--body);margin-bottom:4px}.hv-tn .p{display:flex;gap:4px}.hv-tn .p .token{width:52px;height:52px;border-radius:6px}.hv-tn .b{color:#7dff7d;font:700 11px var(--body);margin-top:4px}
+.hv-pan{position:relative;background:#f4efe6;color:#2b2218;padding:4px 12px 12px}
+.hv-lc{display:inline-block;background:linear-gradient(90deg,#3a1408,#7a2e10);color:#ffd36b;font:800 22px var(--body);font-style:italic;padding:2px 14px;border-radius:6px;margin-top:-26px;position:relative;z-index:3;box-shadow:0 2px 8px rgba(0,0,0,.4)}
+.hv-row{display:grid;grid-template-columns:1.15fr .85fr;gap:10px;margin-top:8px}
+.hv-st{display:grid;gap:3px}.hv-st div{display:flex;justify-content:space-between;background:linear-gradient(90deg,#2d2a2a,#5b5650);color:#fff;border-radius:4px;padding:3px 8px;font:700 13px var(--body)}.hv-st span:first-child{color:#e9dcc0}
+.hv-sb{display:flex;gap:6px;justify-content:space-around;align-items:flex-start}.hv-sb button{background:none;border:0;cursor:pointer;color:#5a3a1a;font:700 11px var(--body);display:grid;justify-items:center;gap:3px}.hv-sb i{display:grid;place-items:center;width:46px;height:46px;border-radius:50%;background:radial-gradient(#e0458a,#6d1240);border:2px solid #f0b9d8;font-style:normal;color:#fff;font-size:20px}.hv-sb button[aria-pressed=true] i{box-shadow:0 0 0 3px #f5c542}
+.hv-sk{margin-top:8px;background:#fff;border:1px solid #d8cdb8;border-radius:8px;padding:8px 10px;font-size:13px;line-height:1.5;color:#2b2218}.hv-sk ol{margin:0;padding-left:18px}.hv-sk .ok{color:#1e7a3a;font-weight:700}
+.hv-bot{display:flex;gap:8px;justify-content:flex-end;margin-top:10px}.hv-bot button{border:2px solid #c9b48a;background:radial-gradient(#7c6a55,#3b3127);color:#fff;border-radius:999px;padding:6px 12px;font:700 12px var(--body);cursor:pointer}.hv-bot button[aria-pressed=true]{background:radial-gradient(#ffcf5a,#d77a12);color:#3a1a00}
+.uii.dia{width:40px;height:40px;object-fit:contain}.uii.fl{width:22px;height:22px}.uii.st{width:16px;height:16px;vertical-align:-3px;margin-right:4px}.uii.sk{width:48px;height:48px;border-radius:50%}.uii.bt{width:20px;height:20px;vertical-align:-5px;margin-right:4px}.hv-sb button[aria-pressed=true] .uii.sk{box-shadow:0 0 0 3px #f5c542}
+.hv-ed{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.hv-ed label{display:grid;font-size:11px;color:#6b5a44}.hv-ed input{width:100%}
 .chcard.q-Đỏ{border-left:4px solid #c0392b}.chcard.q-Tím{border-left:4px solid #8e44ad}.chcard.q-Cam{border-left:4px solid #e67e22}
 .unit input.dsel{width:16px;height:16px;margin:0 2px 0 0;accent-color:var(--accent)}
 .unit.sel{border-color:#c0392b;background:rgba(192,57,43,.12)}
@@ -700,6 +717,8 @@ h3 { cursor: pointer; }
         <tr><td>11→12★</td><td class="num">2,000</td><td>Điêu Thuyền (server cũ)</td></tr>
         <tr><td>12→13★</td><td class="num">5,000</td><td>Tây Thi (server cũ)</td></tr>
         <tr><td>13→14★</td><td class="num">2,500</td><td>Lý Long Cơ (server cũ)</td></tr>
+        <tr><td>15★→Nhập Thánh 1</td><td class="num">5,000</td><td>+ 2 bản trùng + 1 tướng cùng phe 10★</td></tr>
+        <tr><td>NT2→NT3</td><td class="num">4 × 3,000</td><td>4 ô: bản trùng 6★ / tướng 8★ / 7★ / 10★ bất kỳ</td></tr>
         </tbody></table></div>
         <p class="meta" style="margin:8px 0 0">Mốc mở Đặc tính (9, 11, 13★) tốn nhiều hơn mốc chỉ số.</p></div>
       </div>
@@ -991,6 +1010,35 @@ document.getElementById("grid").addEventListener("click",e=>{const b=e.target.cl
 const dlg=document.getElementById("dlg");
 document.getElementById("dlg-x").addEventListener("click",()=>dlg.close());
 dlg.addEventListener("click",e=>{ if(e.target===dlg) dlg.close(); });
+/* ===== Giao diện chi tiết tướng kiểu trong game ===== */
+const HFULL={"Lữ Bố":"assets/images/heroes/full/lu-bo.jpg"};/* ảnh toàn thân cắt từ ảnh người chơi; tướng khác dùng ảnh thẻ */
+function heroStarNow(n){const us=(typeof K!=="undefined"&&K||[]).filter(u=>u.name===n);return us.length?Math.max(...us.map(u=>u.star)):((byName[n]||{}).sao||0)}
+function heroView(n){const h=byName[n]||{name:n},st=heroStarNow(n),hs=((typeof X!=="undefined"&&X&&X.hs)||{})[n]||{},lv=((X&&X.hlv)||{})[n]||LV||"",f=heroFlags(n,st);
+ const tag=(f&F_CARRY)?"Cốt Lõi ST Cao":(f&F_TANK)?"Trụ Hàng Trước":(f&F_HEAL)?"Hồi Máu":(f&F_FEED)?"Hỗ Trợ Carry":(f&F_SHIELD)?"Khiên Đội":(f&F_AMP)?"Khuếch Đại":(f&F_CTRL)?"Khống Chế":"Hỗ Trợ";
+ const bg=[HFULL[n],HART[n],(typeof ICONS!=="undefined"&&ICONS[n])].filter(Boolean).map(u=>`url('${String(u).replace(/'/g,"%27")}')`).join(",");
+ const tn=h.tn||"",pn=tn.split(" – ")[0].split(" (")[0].trim(),tb=(tn.split("–")[1]||"").trim(),ph=byName[pn];
+ const flames=st>15?(UIICON["nt-flame"]?`<div>${ui("nt-flame","","fl").repeat(Math.min(5,st-15))}</div>`:`<div style="font-size:18px;filter:hue-rotate(195deg) saturate(1.6)">${"🔥".repeat(Math.min(5,st-15))}</div>`):starRow(st);
+ const v=x=>x?(x>=100000?(Math.round(x/1000)/10).toString().replace(/\.0$/,"")+"vạn":String(x)):"—";/* như game: ≥10 vạn ghi "194vạn", "29.8vạn"; nhỏ hơn ghi số thường */
+ return `<div class="hv"><div class="hv-art" style="background-image:${bg||"none"};${HFULL[n]?"":HART[n]?"background-size:contain;background-position:center":"background-size:220px;background-position:center 60%"}">
+  <div class="hv-top">${ui(PHEKEY[h.phe],`<span class="hv-dia" style="background:${PHE_COLOR[h.phe]||"#555"}"><span>${esc(PHE_SHORT[h.phe]||h.phe||"")}</span></span>`,"dia")}${ui(NHOMKEY[h.nhom],`<span class="hv-dia" style="background:#a8321e"><span>${esc((h.nhom||"").slice(0,1))}</span></span>`,"dia")}
+   <div class="hv-name">${flames}<div><b class="r">SSR+</b><b>${esc(n)}</b></div></div></div>
+  <div class="hv-tag">${esc(tag)}</div>
+  ${pn?`<div class="hv-tn"><div class="t">Tình Nghĩa</div><div class="p">${token(h)}${ph?token(ph):`<span class="token">${esc(short(pn))}</span>`}</div><div class="b">${esc(pn)}${tb?" · đồng thời ra trận, "+esc(tb):""}</div></div>`:""}
+ </div><div class="hv-pan"><div class="hv-lc">Chiến ${hs.lc?esc(fmtLC(hs.lc).replace(" vạn ","vạn")):"—"}</div>
+  <div class="hv-row"><div class="hv-st"><div><span>${ui("st-cap","","st")}Cấp</span><span>${lv||"—"}/${hs.lvmax||"—"}</span></div><div><span>${ui("st-hp","","st")}HP</span><span>${v(hs.hp)}</span></div><div><span>${ui("st-cong","","st")}Công</span><span>${v(hs.atk)}</span></div><div><span>${ui("st-thu","","st")}Thủ</span><span>${v(hs.def)}</span></div></div>
+   <div class="hv-sb"><button data-hvs="dt" aria-pressed="false">${ui("sk-danh-thuong","<i>⚔</i>","sk")}Đánh Thường</button><button data-hvs="tc" aria-pressed="false">${ui("sk-tuyet-chieu","<i>✦</i>","sk")}Tuyệt Chiêu</button><button data-hvs="tn" aria-pressed="false">${ui("sk-tiem-nang","<i>☯</i>","sk")}Tiềm Năng</button></div></div>
+  <div class="hv-sk" id="hvSk" hidden></div>
+  <div class="hv-bot"><button data-hvb="cp">${ui("btn-cong-phap","","bt")}Công Pháp</button><button data-hvb="tk">${ui("btn-tuyet-ky","","bt")}Tuyệt Kỹ</button><button data-hvb="tt">${ui("btn-thuoc-tinh","","bt")}Thuộc Tính</button></div></div></div>`}
+function heroViewBind(n){const h=byName[n]||{},sk=document.getElementById("hvSk");if(!sk)return;const st=heroStarNow(n);
+ const base=h.base||"",parts=base.split(/;\s*(?=TC\b)/),dt=/^ĐT\b/.test(parts[0])?parts[0].replace(/^ĐT\s*/,""):base,tc=parts[1]?parts[1].replace(/^TC\s*/,""):/Không thi triển kỹ năng/i.test(base)?"Không thi triển kỹ năng – sức mạnh nằm ở đánh thường và Nộ":"Chưa tách được, xem Đánh thường";
+ const show=(k,html)=>{document.querySelectorAll("#dlg-body [data-hvs],#dlg-body [data-hvb]").forEach(b=>b.setAttribute("aria-pressed",(b.dataset.hvs||b.dataset.hvb)===k));sk.hidden=false;sk.innerHTML=html};
+ const SK={dt:()=>`<b>Đánh thường</b><br>${esc(dt)}`,tc:()=>`<b>Tuyệt chiêu</b><br>${esc(tc)}`,
+  tn:()=>`<b>Tiềm năng</b> (xanh = đã mở, đang ${st>15?"15★+NT"+(st-15):st+"★"})<ol>${[["9★",h.s9,9],["11★",h.s11,11],["13★",h.s13,13],["Nhập Thánh",h.nt,16]].map(([l,t,m])=>`<li class="${st>=m?"ok":""}">${l}: ${esc(t||"Chưa có dữ liệu")}</li>`).join("")}</ol>`,
+  cp:()=>{const al=(typeof suggestBooks==="function"?suggestBooks():{})[n]||[],byId=Object.fromEntries((X.books||[]).map(b=>[b.id,b]));return `<b>Công pháp</b> – ${SLOTN(st)} ô (gợi ý phân sách)<ol>${al.length?al.map(id=>{const b=byId[id];return `<li>${b?esc(b.name)+" "+b.q+" "+b.star+"★ – "+esc((BOOKFX[b.name]||[""])[0]):"— trống —"}</li>`}).join(""):"<li>Tướng này chưa nằm trong danh sách chia sách (không thuộc nhóm giữ).</li>"}</ol>`},
+  tk:()=>{const t=(X.tk||{})[n]||{};return st>15?`<b>Tuyệt kỹ</b><ol>${TKROW.map(([r,l])=>`<li>${l}: ${t[r]?esc(t[r]):(typeof r==="number"&&st-15>=r?"chưa chọn":"chưa mở")}</li>`).join("")}</ol><p class="meta">Chọn ở Trợ trận → Tuyệt kỹ.</p>`:`<b>Tuyệt kỹ</b><br>Mở từ Nhập Thánh 2 lửa (đang ${st}★).`},
+  tt:()=>{const hs=(X.hs||{})[n]||{};return `<b>Thuộc tính</b> – nhập theo màn hình tướng trong game (lực chiến dạng "601vạn8348")<div class="hv-ed" style="margin-top:6px">${[["lc","Chiến lực",hs.lc?fmtLC(hs.lc).replace(" vạn ","vạn"):""],["lvmax","Cấp tối đa",hs.lvmax||""],["hp","HP",hs.hp?fmtLC(hs.hp).replace(" vạn ","vạn"):""],["atk","Công",hs.atk?fmtLC(hs.atk).replace(" vạn ","vạn"):""],["def","Thủ",hs.def||""]].map(([k,l,val])=>`<label>${l}<input data-hse="${k}" value="${esc(String(val))}"></label>`).join("")}</div><div class="acts" style="justify-content:flex-start;margin-top:6px"><button class="btn" id="hvSave" type="button">Lưu thuộc tính</button></div>`}};
+ document.querySelectorAll("#dlg-body [data-hvs],#dlg-body [data-hvb]").forEach(b=>b.onclick=()=>{const k=b.dataset.hvs||b.dataset.hvb;show(k,SK[k]());
+  const sv=document.getElementById("hvSave");if(sv)sv.onclick=()=>{X.hs=X.hs||{};const o=X.hs[n]=X.hs[n]||{};document.querySelectorAll("#dlg-body [data-hse]").forEach(i=>{const raw=i.value.trim();if(!raw){delete o[i.dataset.hse];return}o[i.dataset.hse]=["lc","hp","atk"].includes(i.dataset.hse)?parseLC(raw):Math.round(+raw)||0});KLOG.push(`${today()} · Thuộc tính ${n}: ${JSON.stringify(o)}`);ksave();dlg.close();setTimeout(()=>openHero(n),30)}})}
 function openHero(n){
   const h=byName[n]; if(!h) return;
   document.getElementById("dlg-token").innerHTML=token(h);
@@ -998,7 +1046,7 @@ function openHero(n){
   document.getElementById("dlg-meta").textContent=`${h.phe} · ${h.nhom} · ${h.sao}★ hiện tại · ${h.keep}`;
   const teams=DATA.teams.filter(t=>[...t.front,...t.back].includes(n)).map(t=>t.name);
   const step=(lv,txt,need)=>{const cut=/Chưa có|bị cắt/.test(txt||""); return `<li><span class="lv ${h.sao>=need?"reached":""}">${lv}</span><span class="${cut?"cut":""}">${esc(txt)}</span></li>`};
-  document.getElementById("dlg-body").innerHTML=`
+  document.getElementById("dlg-body").innerHTML=heroView(n)+`<details><summary class="rowlab" style="cursor:pointer">Phân tích chi tiết</summary>
     <dl class="kv">
       <dt>Vai trò</dt><dd>${esc(h.role)}</dd>
       <dt>Kỹ năng</dt><dd>${esc(h.base)}</dd>
@@ -1012,7 +1060,8 @@ function openHero(n){
     </dl>
     <div><div class="rowlab">Tiềm năng (màu xanh = đã đạt)</div>
     <ol class="steps">${step("9★",h.s9,9)}${step("11★",h.s11,11)}${step("13★",h.s13,13)}${step("Nhập Thánh",h.nt,16)}</ol></div>
-    <div class="acts" style="justify-content:flex-start;margin-top:10px"><button class="btn ghost" id="hCmp">So sánh với tướng khác</button></div>`;
+    </details><div class="acts" style="justify-content:flex-start;margin-top:10px"><button class="btn ghost" id="hCmp">So sánh với tướng khác</button></div>`;
+  heroViewBind(n);
   document.getElementById("hCmp").onclick=()=>{dlg.close();showTab("tuong");setTimeout(()=>window.cmpWith&&cmpWith(h.name),50)};
   dlg.showModal();
 }
@@ -1027,10 +1076,10 @@ function renderUp(){
   const names=bookHeroes().filter(n=>K.some(u=>u.name===n));
   const rows=names.map(n=>{const us=K.filter(u=>u.name===n),cur=Math.max(...us.map(u=>u.star)),nx=cur+1,h=byName[n]||{},R=RULE[cur]||{copy:null,fs:null,fc:null,orb:null},u0=us[0];
     const unlock=h["s"+nx]?`${nx}★: ${h["s"+nx]}`:(nx===6?"+2 Nộ, mở 2 ô công pháp, giới hạn cấp 145":nx===10?"Mở thêm 2 ô công pháp (5 ô)":nx===12?"Mở thêm 1 ô công pháp":"Tăng chỉ số");
-    const copyHave=us.length-1, copyTxt=R.copy==null?"?":R.copy?`${Math.min(copyHave,1)}/1`:"không cần";
+    const copyHave=us.length-1, copyTxt=R.copy==null?"?":R.copy?`${Math.min(copyHave,R.copy)}/${R.copy}`:"không cần";
     const fh=R.fs==null?null:K.filter(x=>x.phe===u0.phe&&x.name!==n&&x.r!=="SR"&&x.r!=="R"&&!CORE.has(x.name)&&x.star===R.fs).length;
     const fodTxt=R.fs==null?"?":`Tướng ${u0.phe} ${R.fs}★ × ${R.fc}`, fodHave=fh==null?"?":`${Math.min(fh,R.fc)}/${R.fc}`;
-    const okCopy=R.copy===0||(R.copy&&copyHave>=1), okFod=fh!=null&&fh>=R.fc, okOrb=R.orb!=null&&have>=R.orb;
+    const okCopy=R.copy===0||(R.copy&&copyHave>=R.copy), okFod=fh!=null&&fh>=R.fc, okOrb=R.orb!=null&&have>=R.orb;
     let st; if(R.fs==null||R.orb==null&&R.copy==null) st=`<span>Không rõ</span>`;
      else if(okCopy&&okFod&&(R.orb==null||okOrb)) st=`<span class="ok">Đủ</span>`;
      else st=`<span class="no">Thiếu ${[!okCopy?"bản trùng":"",!okFod?"nguyên liệu":"",R.orb!=null&&!okOrb?(R.orb-have).toLocaleString("vi-VN")+" cầu":""].filter(Boolean).join(", ")}</span>`;
@@ -1060,7 +1109,8 @@ renderTeam(); renderGrid(); renderUp();
 /* ===== KHO ===== */
 const KDEF=/*__KHO__*/[];var KORB=/*__KORB__*/0;var KDEFX=/*__KX__*/null;
 const RULE={5:{copy:1,fs:5,fc:1,orb:0},6:{copy:0,fs:5,fc:2,orb:1000},7:{copy:0,fs:6,fc:1,orb:1000},8:{copy:1,fs:8,fc:1,orb:2000},
- 9:{copy:0,fs:6,fc:1,orb:1000},10:{copy:1,fs:8,fc:1,orb:3000},11:{copy:0,fs:6,fc:1,orb:2000},12:{copy:1,fs:8,fc:1,orb:5000},13:{copy:0,fs:6,fc:2,orb:2500}};
+ 9:{copy:0,fs:6,fc:1,orb:1000},10:{copy:1,fs:8,fc:1,orb:3000},11:{copy:0,fs:6,fc:1,orb:2000},12:{copy:1,fs:8,fc:1,orb:5000},13:{copy:0,fs:6,fc:2,orb:2500},
+ 15:{copy:2,fs:10,fc:1,orb:5000}};/* 15★ → Nhập Thánh 1 lửa (16): 2 bản trùng + 1 tướng cùng phe 10★ + 5000 cầu (người chơi 01/11). 14→15 và NT1→NT2 chưa có; NT2→NT3 xem NTCOST */
 var CORE=new Set(DATA.teams.flatMap(t=>[...t.front,...t.back]));
 let K, KLOG, KUNDO, ORB, kf="Tất cả";
 function kload(){try{const s=JSON.parse(localStorage.getItem("kho2")||"null");if(s){K=s.k;KLOG=s.log||[];KUNDO=s.undo||[];ORB=s.orb;M5=!!s.m5;LV=+s.lv||0;ATK=s.atk||{};if(s.x)X=Object.assign({battles:[],orbDay:0,books:[],alloc:{}},s.x);const m1=kmig(),m2=kpatch();if(m1||m2)ksave();return}}catch(e){}
@@ -1072,13 +1122,14 @@ const KPATCH=[{id:"2026-10-23-tui",lv:160,hlv:{"Lữ Bố":170,"Điêu Thuyền"
  {id:"2026-11-01-cp",top:{"Lữ Bố":[17]},hlv:{"Lữ Bố":210},bdlv:298,books:[["Thuần Vu Quỳnh", "Tím", 5], ["Tuân Úc", "Tím", 5], ["Bách Lý Hề", "Tím", 5], ["Liêm Pha", "Tím", 5], ["Thái Bình Công Chúa", "Tím", 5], ["Trương Công Cẩn", "Tím", 5], ["Khương Duy", "Tím", 5], ["Trương Mạn Thành", "Tím", 5], ["Lý Long Cơ", "Cam", 3], ["Tây Thi", "Cam", 2], ["Lỗ Ban", "Cam", 2], ["Bạch Khởi", "Cam", 2], ["Vệ Tử Phu", "Cam", 1], ["Ban Chiêu", "Cam", 1], ["Lý Tú Ninh", "Cam", 1], ["Triệu Vân", "Cam", 1], ["Điển Vi", "Cam", 1], ["Quỷ Cốc Tử", "Cam", 1], ["Vệ Thanh", "Cam", 1], ["Thượng Quan Uyển Nhi", "Cam", 1], ["Chung Vô Diệm", "Cam", 1], ["Thái Văn Cơ", "Cam", 0], ["Hàn Tín", "Cam", 0], ["Hồng Phất Nữ", "Cam", 0], ["Chân Cơ", "Cam", 0], ["Lỗ Trí Thâm", "Cam", 0], ["Ngu Cơ", "Cam", 0], ["Tôn Sách", "Cam", 0]]},
  {id:"2026-11-01-tui",lv:189,clearHlv:true,hlv:{"Lữ Bố":210,"Điêu Thuyền":190,"Quỷ Cốc Tử":191,"Vương Chiêu Quân":189,"Lý Long Cơ":190,"Võ Tắc Thiên":195},
  top:{"Lữ Bố":[17],"Điêu Thuyền":[15],"Quỷ Cốc Tử":[15],"Vương Chiêu Quân":[13],"Lý Long Cơ":[13],"Võ Tắc Thiên":[10],"Mạc Tà":[8],"Lý Thế Dân":[8],"Ban Chiêu":[8],"Tư Mã Ý":[7],"Tôn Sách":[7],"Ngu Cơ":[7]},books:[["Tần Thủy Hoàng","Đỏ",0],["Lữ Bố","Đỏ",0],["Điêu Thuyền","Đỏ",0],["Hạng Vũ","Đỏ",0],["Lý Bạch","Đỏ",0],["Lý Thế Dân","Đỏ",0]]},
+ {id:"2026-11-01-hs-lu-bo",hs:{"Lữ Bố":{lc:6018348,lvmax:400,hp:1940000,atk:298000,def:55703}}},
  {id:"2026-11-01-nt3",ntp:{"Lữ Bố":{"3":{"Phá Quân":true,"Loạn Vũ":true}}},hlv:{"Lữ Bố":220}},
  {id:"2026-11-01-tuyetky",tk:{"Lữ Bố":{"2":"Đấu Chí Sục Sôi"}}},
  {id:"2026-11-01-tran-lieu-nhu-ye",battles:[{"t": 1793499300000, "win": false, "mode": "PVP – Đấu trường", "lv": 190, "my": 189, "lcMe": 0, "lcEn": 0, "en": [{"n": "Tư Mã Ý", "i": 0, "st": "", "lv": 200, "tags": []}, {"n": "Vương Chiêu Quân", "i": 1, "st": "", "lv": 205, "tags": []}, {"n": "Biển Thước", "i": 2, "st": "", "lv": 180, "tags": []}, {"n": "Quan Vũ", "i": 3, "st": "", "lv": 181, "tags": []}, {"n": "Tướng Hán (chưa rõ tên)", "i": 4, "st": "", "lv": 180, "tags": []}, {"n": "Lữ Bố", "i": 5, "st": "", "lv": 191, "tags": []}], "note": "Liễu Như Yê. Thua ngay hiệp 1/20. Thần thú địch → Tư Mã Ý ô 1 ra đòn trước mọi tướng mình; ~11 lần tuyệt chiêu/truy kích trong vòng 1, ST mỗi đòn tăng 22k → 232k. Mình chỉ có Lộc Thục (hồi 87 vạn) và Lý Long Cơ (1 đòn + đòn tử trận) kịp ra tay; 5/6 tướng chưa tới lượt. Vương Chiêu Quân địch cho Công/Bạo/Khiên/Vô Địch + đòn thêm cho Tư Mã Ý.", "r": 1, "car": null, "stMe": 1630000, "stEn": 19995000, "per": {"me": [1630000, 0, 0, 0, 0, 0], "en": [18100000, 725000, 0, 0, 0, 1170000]}, "team": {"i": 0, "name": "PVP", "front": ["Lý Long Cơ", "Lý Thế Dân", "Quỷ Cốc Tử"], "back": ["Lữ Bố", "Điêu Thuyền", "Võ Tắc Thiên"]}}]}];
 function kpatch(){X.patches=X.patches||[];let done=false;if(Array.isArray(X.books)){const seen=new Set();let mxb=Math.max(Date.now(),...X.books.map(b=>+b.id||0));X.books.forEach(b=>{if(seen.has(b.id)){b.id=++mxb;done=true}seen.add(b.id)})}KPATCH.forEach(p=>{if(X.patches.includes(p.id))return;snap();const ch=[];let mx=Math.max(0,...K.map(u=>+u.id||0));
  Object.entries(p.top||{}).forEach(([n,sts])=>{const us=K.filter(u=>u.name===n).sort((a,b)=>b.star-a.star);sts.forEach((st,i)=>{let u=us[i];if(!u){const h=(typeof H!=="undefined"&&H.find(x=>x.name===n))||{};const e=(typeof EDB!=="undefined"&&EDB&&EDB[n])||{};u={name:n,phe:h.phe||e.phe||"",star:5,r:"SSR+",id:++mx};K.push(u);ch.push(`+${n}`)}if(u.star!==st){ch.push(`${n} ${stars(u.star)}→${stars(st)}`);u.star=st}})});
  if(p.lv)LV=p.lv;if(p.hlv){X.hlv=p.clearHlv?{}:(X.hlv||{});Object.assign(X.hlv,p.hlv)}
- if(p.bdlv)X.bdlv=p.bdlv;if(p.ntp){X.ntp=X.ntp||{};Object.entries(p.ntp).forEach(([n,o])=>{X.ntp[n]=X.ntp[n]||{};Object.entries(o).forEach(([l,d])=>{X.ntp[n][l]=Object.assign({},d,X.ntp[n][l]||{})})});ch.push("tiến độ Nhập Thánh")}if(p.tk){X.tk=X.tk||{};Object.entries(p.tk).forEach(([n,o])=>{X.tk[n]=Object.assign({},o,X.tk[n]||{})});ch.push("Tuyệt kỹ: "+Object.keys(p.tk).join(", "))}
+ if(p.bdlv)X.bdlv=p.bdlv;if(p.hs){X.hs=X.hs||{};Object.entries(p.hs).forEach(([n,o])=>{X.hs[n]=Object.assign({},o,X.hs[n]||{})});ch.push("thuộc tính "+Object.keys(p.hs).join(", "))}if(p.ntp){X.ntp=X.ntp||{};Object.entries(p.ntp).forEach(([n,o])=>{X.ntp[n]=X.ntp[n]||{};Object.entries(o).forEach(([l,d])=>{X.ntp[n][l]=Object.assign({},d,X.ntp[n][l]||{})})});ch.push("tiến độ Nhập Thánh")}if(p.tk){X.tk=X.tk||{};Object.entries(p.tk).forEach(([n,o])=>{X.tk[n]=Object.assign({},o,X.tk[n]||{})});ch.push("Tuyệt kỹ: "+Object.keys(p.tk).join(", "))}
  if(p.battles){X.battles=X.battles||[];p.battles.forEach(b=>{if(!X.battles.some(x=>x.t===b.t)){const c=JSON.parse(JSON.stringify(b));if(c.team&&c.team.i===0&&DATA.teams[0])c.team.name=DATA.teams[0].name;X.battles.push(c);ch.push("+trận "+new Date(c.t).toLocaleDateString("vi-VN")+(c.win?" thắng":" thua"))}});X.battles.sort((a,b)=>a.t-b.t)}
  if(p.books){X.books=X.books||[];let bid=Math.max(Date.now(),...X.books.map(b=>+b.id||0));p.books.forEach(([n,q,st])=>{let b=X.books.find(x=>x.name===n&&x.q===q);if(!b){b={id:++bid,name:n,q,star:st,max:st+1};X.books.push(b);ch.push(`+sách ${n} ${q} ${st}★`)}else if(b.star!==st){ch.push(`sách ${n} ${b.star}→${st}★`);b.star=st;b.max=st+1}})}
  X.patches.push(p.id);KLOG.push(`${today()} · Cập nhật theo ảnh (${p.id}): ${ch.join(", ")||"không đổi"}${p.lv?"; cấp chung "+p.lv:""}`);done=true});return done}
@@ -1162,7 +1213,7 @@ function upPlan(){
   const u=us[0], R=RULE[u.star];
   if(!R||R.fs==null){out.push({u,st:"unk"});continue}
   const miss=[], pick=[];
-  if(R.copy){const c=us.slice(1).sort((a,b)=>a.star-b.star).find(x=>!used.has(x.id)); if(c) pick.push(c); else miss.push(`1 bản trùng ${n}`)}
+  if(R.copy){const cs=us.slice(1).sort((a,b)=>a.star-b.star).filter(x=>!used.has(x.id)).slice(0,R.copy); pick.push(...cs); if(cs.length<R.copy) miss.push(`${R.copy-cs.length} bản trùng ${n}`)}
   const pool=K.filter(x=>x.phe===u.phe&&x.name!==n&&x.star===R.fs&&x.r!=="SR"&&x.r!=="R"&&!CORE.has(x.name)&&!(window.KEEPSET&&KEEPSET.has(x.name))&&!(window.PLAN&&PLAN.res[x.name]&&K.filter(u=>u.name===x.name).length<=1)&&!used.has(x.id)&&!pick.includes(x))
    .sort((a,b)=>(a.r==="SSR"?0:1)-(b.r==="SSR"?0:1));
   const f=pool.slice(0,R.fc); pick.push(...f); if(f.length<R.fc) miss.push(`${R.fc-f.length} tướng ${u.phe} ${R.fs}★ (không tính tướng đội chính)`);
@@ -1198,6 +1249,10 @@ const stars=s=>s>15?`15★+NT${s-15}`:`${s}★`;
 
 /* ===== Thẻ tướng kiểu game ===== */
 var HART=/*__HEROART__*/{};
+/* Biểu tượng giao diện do người chơi cung cấp (src/ui_icons.json → assets/icons/ui/). Không có ảnh thì dùng bản vẽ HTML dự phòng. */
+var UIICON=/*__UIICONS__*/{};
+function ui(key,fallback,cls){return UIICON[key]?`<img class="uii ${cls||""}" src="${UIICON[key]}" alt="">`:fallback}
+const PHEKEY={"3Q":"phe-3q","Hán":"phe-han","Tần":"phe-tan","Đường":"phe-duong","Cổ Đế":"phe-co-de"},NHOMKEY={"Công":"nhom-cong","Thủ":"nhom-thu","Trợ":"nhom-tro","Thuật Sĩ":"nhom-thuat-si"};
 function heroImg(n){return HART[n]||(typeof ICONS!=="undefined"&&ICONS[n])||""}
 const PHE_SHORT={"3Q":"3Q","Hán":"Hán","Tần":"Tần","Đường":"Đường"};
 function starRow(s){s=+s||0;if(s>15)return `<span class="gstars nt" aria-label="Nhập Thánh ${s-15}">${"🔥".repeat(Math.min(5,s-15))}</span>`;const tier=s<=5?"g":s<=10?"r":"c",k=s<=5?s:s<=10?s-5:Math.min(5,s-10);return `<span class="gstars ${tier}" aria-label="${s} sao">${"★".repeat(Math.max(k,0))}</span>`}
@@ -1239,7 +1294,7 @@ const KACT=e=>{
  const cand=K.filter(x=>x.id!==u.id&&(x.name===u.name||x.phe===u.phe)).sort((a,b)=>{const rk=x=>x.name===u.name?0:x.r==="SSR"?1:CORE.has(x.name)?3:2;return rk(a)-rk(b)||b.star-a.star||a.name.localeCompare(b.name,"vi")});
  const fmt=v=>v==null?"?":v; const RSV=reservedMap();
  const hint=`<div class="hint">Gợi ý cho mốc <b>${stars(u.star)} → ${stars(u.star+1)}</b> (theo các ảnh đã gửi, kiểm tra lại trong game):<br>
-  Bản trùng ${esc(u.name)}: <b>${R.copy==null?"?":R.copy?"1":"không cần"}</b> · Tướng ${esc(u.phe)} <b>${fmt(R.fs)}★ × ${fmt(R.fc)}</b> · Cầu cam <b>${R.orb==null?"?":R.orb.toLocaleString("vi-VN")}</b></div>`;
+  Bản trùng ${esc(u.name)}: <b>${R.copy==null?"?":R.copy?R.copy:"không cần"}</b> · Tướng ${esc(u.phe)} <b>${fmt(R.fs)}★ × ${fmt(R.fc)}</b> · Cầu cam <b>${R.orb==null?"?":R.orb.toLocaleString("vi-VN")}</b></div>`;
  const list=cand.map(x=>{const warn=CORE.has(x.name)&&x.name!==u.name;return `<label class="pick ${warn?"warn":""}"><input type="checkbox" value="${x.id}"> ${esc(x.name)} ${stars(x.star)} <span class="rarity">${x.r}</span>${x.name===u.name?" · bản trùng":""}${warn?" · ⚠ tướng đội chính":""}${RSV[x.id]&&RSV[x.id]!==u.name?` · 🔒 đang giữ cho ${esc(RSV[x.id])}`:""}</label>`}).join("")||'<p class="meta">Không có tướng cùng phe.</p>';
  modal(`Nâng sao ${u.name}`,`${hint}<div class="form"><label for="mOrb">Cầu cam tiêu</label><input id="mOrb" type="number" min="0" value="${R.orb??0}"></div>
   <div><div class="rowlab">Chọn tướng làm nguyên liệu (sẽ bị trừ khỏi kho)</div><div class="picks">${list}</div></div>`,()=>{
@@ -1318,7 +1373,7 @@ function roadmap(name,target){
  const u=us[0], steps=[]; let copy=0, orb=0, unk=[]; const fod={};
  for(let s=u.star;s<target;s++){const R=RULE[s];
   if(!R||R.fs==null){unk.push(`${s}→${s+1}★`);steps.push({s,unk:true});continue}
-  copy+=R.copy?1:0; if(R.orb==null)unk.push(`cầu cam ${s}→${s+1}★`); else orb+=R.orb;
+  copy+=R.copy||0; if(R.orb==null)unk.push(`cầu cam ${s}→${s+1}★`); else orb+=R.orb;
   const k=`${u.phe} ${R.fs}★`; fod[k]=(fod[k]||0)+R.fc; steps.push({s,R});}
  const haveCopy=us.length-1;
  const fodHave=Object.fromEntries(Object.keys(fod).map(k=>{const st=+k.split(" ")[1].replace("★","");return [k,K.filter(x=>x.phe===u.phe&&x.name!==name&&x.r!=="SR"&&!CORE.has(x.name)&&x.star===st).length]}));

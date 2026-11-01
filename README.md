@@ -52,7 +52,7 @@ Chỉ cần Python 3, không phụ thuộc thư viện ngoài. Thư mục `build
 - **Mặc định khi nhận:** SSR+ 5★, SSR (cam, nguyên liệu) 5★, SR (tím) 4★, R (xanh) 3★.
 - **Chỉ SSR+ là tướng thật:** SSR cam chỉ dùng làm nguyên liệu nâng sao; kỹ năng/tiềm năng của SSR, SR, R chỉ để phân tích đội địch (Đối đầu). Quy tắc, gợi ý đội, radar kho chỉ xét SSR+.
 - **Chi phí nâng sao** (bản trùng · tướng cùng phe làm nguyên liệu · cầu cam):
-  5→6: 1 bản · 1×5★ · 0 — 6→7: 0 · 2×5★ · 1000 — 7→8: 0 · 1×6★ · 1000 — 8→9: 1 · 1×8★ · 2000 — 9→10: 0 · 1×6★ · 1000 — 10→11: 1 · 1×8★ · 3000 — 11→12: 0 · 1×6★ · 2000 — 12→13: 1 · 1×8★ · 5000 — 13→14: 0 · 2×6★ · 2500.
+  5→6: 1 bản · 1×5★ · 0 — 6→7: 0 · 2×5★ · 1000 — 7→8: 0 · 1×6★ · 1000 — 8→9: 1 · 1×8★ · 2000 — 9→10: 0 · 1×6★ · 1000 — 10→11: 1 · 1×8★ · 3000 — 11→12: 0 · 1×6★ · 2000 — 12→13: 1 · 1×8★ · 5000 — 13→14: 0 · 2×6★ · 2500 — 15★→Nhập Thánh 1: 2 bản · 1×10★ · 5000 — NT2→NT3: 4 ô × 3000 cầu (bản trùng 6★ / tướng 8★ / 7★ / 10★ bất kỳ).
 - **Ô công pháp theo sao:** 6★: 2 · 9★: 3 · 10★: 5 · 12★: 6 · 14★: 7 · 15★: 8.
 - **Công pháp:** số người đeo = sao sách + 1. Bản trùng để lên sao: Tím 2→4→8→16→32; Cam/Đỏ 1→2→4→8→16 (mỗi sao gấp đôi).
 - **Mảnh:** 50 mảnh = 1 tướng / 1 thần thú; 100 Mảnh Vạn Năng = chọn 1 tướng bất kỳ; ghép mảnh phe 5★ ra tướng ngẫu nhiên.

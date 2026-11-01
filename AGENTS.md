@@ -29,6 +29,8 @@ index.html, script.js, style.css   SINH TỰ ĐỘNG – không sửa tay
 - Build: `python3 src/make.py .` (chạy trong thư mục repo). Lệnh này ghi `index.html`, `style.css?v=hash`, `script.js?v=hash` (cache-busting) và bản offline vào `build/`. Thư mục `build/` không commit.
 - Placeholder trong template bị `make.py` thay thế: `/*__DATA__*/null`, `/*__ICONS__*/{}`, `/*__BOOKICONS__*/{}`, `/*__KHO__*/[]`, `/*__KORB__*/0`, `/*__KX__*/null`, `/*__HEROART__*/{}`, `/*__EDB__*/[]`.
 - Ảnh:
+  - `assets/icons/ui/*.png`: biểu tượng giao diện do người chơi cung cấp (vẽ bằng ChatGPT), map trong `src/ui_icons.json`; danh sách tên file và kích thước ở `assets/icons/ui/README.md`. **Không tự vẽ icon bằng HTML/SVG thay thế**: người chơi muốn dùng ảnh. Dùng `ui(key, fallback)` trong template.
+  - `assets/images/heroes/full/*.jpg`: ảnh toàn thân cho giao diện chi tiết tướng (`HFULL`).
   - `assets/images/heroes/*.jpg`: card art 240×480, map trong `src/hero_art.json`.
   - `assets/icons/books/*.jpg`: icon công pháp 96×96, map trong `src/book_icons.json`.
 - **Bản web Claude (artifact) đang tạm ngưng.** Chỉ cập nhật GitHub Pages; không publish artifact trừ khi người chơi yêu cầu.

@@ -17,11 +17,14 @@ import base64
 BOOKIDX = json.load(open(B + "book_icons.json", encoding="utf-8"))   # tên công pháp -> assets/icons/books/*.jpg
 HEROIDX = json.load(open(B + "hero_art.json", encoding="utf-8")) if os.path.exists(B + "hero_art.json") else {}   # tên tướng -> assets/images/heroes/*.jpg
 HERO_INLINE = {n: "data:image/jpeg;base64," + base64.b64encode(open(B + "../" + f, "rb").read()).decode() for n, f in HEROIDX.items()}
+UIIDX = json.load(open(B + "ui_icons.json", encoding="utf-8")) if os.path.exists(B + "ui_icons.json") else {}   # khóa biểu tượng giao diện -> assets/icons/ui/*.png
+def _mime(f): return "image/png" if f.lower().endswith(".png") else "image/webp" if f.lower().endswith(".webp") else "image/jpeg"
+UI_INLINE = {k: "data:%s;base64," % _mime(f) + base64.b64encode(open(B + "../" + f, "rb").read()).decode() for k, f in UIIDX.items()}
 BOOK_INLINE = {n: "data:image/jpeg;base64," + base64.b64encode(open(B + "../" + f, "rb").read()).decode() for n, f in BOOKIDX.items()}
 
 data = dict(heroes=ns["heroes"], teams=ns["TEAMS"], ups=ns["UP"], pr=ns["PR"], books=[], alloc={}, allocWhy={})
 
-def fill(kdef, korb, footer, bookicons=None, heroart=None):
+def fill(kdef, korb, footer, bookicons=None, heroart=None, uiicons=None):
     s = (tpl.replace("/*__DATA__*/null", json.dumps(data, ensure_ascii=False))
             .replace("/*__ICONS__*/{}", open(B + "icons_s2.json", encoding="utf-8").read())
             .replace("/*__BOOKICONS__*/{}", json.dumps(bookicons if bookicons is not None else BOOK_INLINE, ensure_ascii=False))
@@ -29,6 +32,7 @@ def fill(kdef, korb, footer, bookicons=None, heroart=None):
             .replace("/*__KORB__*/0", str(korb))
             .replace("/*__KX__*/null", json.dumps(kho.get("x") if kdef else None, ensure_ascii=False))
             .replace("/*__HEROART__*/{}", json.dumps(heroart if heroart is not None else HERO_INLINE, ensure_ascii=False))
+            .replace("/*__UIICONS__*/{}", json.dumps(uiicons if uiicons is not None else UI_INLINE, ensure_ascii=False))
             .replace("/*__EDB__*/[]", json.dumps(en["DB"], ensure_ascii=False)))
     return s.replace("File chạy offline, không cần kết nối mạng.", footer)
 
@@ -43,7 +47,7 @@ w = re.sub(r"(?is)</body>\s*</html>\s*$", "", w)
 open(OUT + "so_tay_quan_su_s2_web.html", "w", encoding="utf-8").write(w); print("web", len(w))
 
 if REPO:
-    g = fill(kho["k"], kho["orb"], "Bản GitHub Pages: Kho lưu trong trình duyệt – dùng Kho → Sao lưu để chuyển máy. Bản đồng bộ đám mây chạy trên web Claude.", BOOKIDX, HEROIDX)
+    g = fill(kho["k"], kho["orb"], "Bản GitHub Pages: Kho lưu trong trình duyệt – dùng Kho → Sao lưu để chuyển máy. Bản đồng bộ đám mây chạy trên web Claude.", BOOKIDX, HEROIDX, UIIDX)
     css = re.search(r"(?s)<style>\n?(.*?)</style>", g).group(1)
     js = re.search(r"(?s)<script>\n?(.*?)</script>", g).group(1)
     body = re.search(r"(?s)<body[^>]*>(.*?)<script>", g).group(1).rstrip()
