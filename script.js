@@ -198,11 +198,14 @@ function kload(){try{const s=JSON.parse(localStorage.getItem("kho2")||"null");if
 let CLOUD=null,LASTTS=0,PUSHT=null,M5=false;var LV=0,ATK={};
 /* Cập nhật Kho từ ảnh "Túi" trong game (giá trị tuyệt đối, chạy 1 lần/bản cập nhật; chạy lại cũng không sai) */
 const KPATCH=[{id:"2026-10-23-tui",lv:160,hlv:{"Lữ Bố":170,"Điêu Thuyền":170,"Quỷ Cốc Tử":170,"Lý Long Cơ":170,"Lý Thế Dân":163,"Võ Tắc Thiên":160},clearHlv:true,
- top:{"Lữ Bố":[15],"Điêu Thuyền":[12],"Quỷ Cốc Tử":[12],"Lý Long Cơ":[12],"Ban Chiêu":[10],"Lý Thế Dân":[8],"Vương Chiêu Quân":[8],"Mạc Tà":[8],"Biển Thước":[8],"Thái Văn Cơ":[8],"Chân Cơ":[8],"Ngu Cơ":[7],"Chung Vô Diệm":[7],"Triệu Vân":[6],"Tây Thi":[6],"Lữ Hậu":[6]}}];
+ top:{"Lữ Bố":[15],"Điêu Thuyền":[12],"Quỷ Cốc Tử":[12],"Lý Long Cơ":[12],"Ban Chiêu":[10],"Lý Thế Dân":[8],"Vương Chiêu Quân":[8],"Mạc Tà":[8],"Biển Thước":[8],"Thái Văn Cơ":[8],"Chân Cơ":[8],"Ngu Cơ":[7],"Chung Vô Diệm":[7],"Triệu Vân":[6],"Tây Thi":[6],"Lữ Hậu":[6]}},
+ {id:"2026-11-01-cp",top:{"Lữ Bố":[17]},hlv:{"Lữ Bố":210},bdlv:298,books:[["Thuần Vu Quỳnh", "Tím", 5], ["Tuân Úc", "Tím", 5], ["Bách Lý Hề", "Tím", 5], ["Liêm Pha", "Tím", 5], ["Thái Bình Công Chúa", "Tím", 5], ["Trương Công Cẩn", "Tím", 5], ["Khương Duy", "Tím", 5], ["Trương Mạn Thành", "Tím", 5], ["Lý Long Cơ", "Cam", 3], ["Tây Thi", "Cam", 2], ["Lỗ Ban", "Cam", 2], ["Bạch Khởi", "Cam", 2], ["Vệ Tử Phu", "Cam", 1], ["Ban Chiêu", "Cam", 1], ["Lý Tú Ninh", "Cam", 1], ["Triệu Vân", "Cam", 1], ["Điển Vi", "Cam", 1], ["Quỷ Cốc Tử", "Cam", 1], ["Vệ Thanh", "Cam", 1], ["Thượng Quan Uyển Nhi", "Cam", 1], ["Chung Vô Diệm", "Cam", 1], ["Thái Văn Cơ", "Cam", 0], ["Hàn Tín", "Cam", 0], ["Hồng Phất Nữ", "Cam", 0], ["Chân Cơ", "Cam", 0], ["Lỗ Trí Thâm", "Cam", 0], ["Ngu Cơ", "Cam", 0], ["Tôn Sách", "Cam", 0]]}];
 function kpatch(){X.patches=X.patches||[];let done=false;KPATCH.forEach(p=>{if(X.patches.includes(p.id))return;snap();const ch=[];let mx=Math.max(0,...K.map(u=>+u.id||0));
- Object.entries(p.top||{}).forEach(([n,sts])=>{const us=K.filter(u=>u.name===n).sort((a,b)=>b.star-a.star);sts.forEach((st,i)=>{let u=us[i];if(!u){const h=(typeof H!=="undefined"&&H.find(x=>x.name===n))||{};const e=(typeof EDB!=="undefined"&&EDB||[]).find(x=>x[0]===n)||[];u={name:n,phe:h.phe||e[1]||"",star:5,r:"SSR+",id:++mx};K.push(u);ch.push(`+${n}`)}if(u.star!==st){ch.push(`${n} ${u.star}→${st}★`);u.star=st}})});
+ Object.entries(p.top||{}).forEach(([n,sts])=>{const us=K.filter(u=>u.name===n).sort((a,b)=>b.star-a.star);sts.forEach((st,i)=>{let u=us[i];if(!u){const h=(typeof H!=="undefined"&&H.find(x=>x.name===n))||{};const e=(typeof EDB!=="undefined"&&EDB||[]).find(x=>x[0]===n)||[];u={name:n,phe:h.phe||e[1]||"",star:5,r:"SSR+",id:++mx};K.push(u);ch.push(`+${n}`)}if(u.star!==st){ch.push(`${n} ${stars(u.star)}→${stars(st)}`);u.star=st}})});
  if(p.lv)LV=p.lv;if(p.hlv){X.hlv=p.clearHlv?{}:(X.hlv||{});Object.assign(X.hlv,p.hlv)}
- X.patches.push(p.id);KLOG.push(`${today()} · Cập nhật theo ảnh Túi (${p.id}): ${ch.join(", ")||"sao không đổi"}; cấp chung ${p.lv||LV}`);done=true});return done}
+ if(p.bdlv)X.bdlv=p.bdlv;
+ if(p.books){X.books=X.books||[];let bid=Date.now();p.books.forEach(([n,q,st])=>{let b=X.books.find(x=>x.name===n&&x.q===q);if(!b){b={id:++bid,name:n,q,star:st,max:st+1};X.books.push(b);ch.push(`+sách ${n} ${q} ${st}★`)}else if(b.star!==st){ch.push(`sách ${n} ${b.star}→${st}★`);b.star=st;b.max=st+1}})}
+ X.patches.push(p.id);KLOG.push(`${today()} · Cập nhật theo ảnh (${p.id}): ${ch.join(", ")||"không đổi"}${p.lv?"; cấp chung "+p.lv:""}`);done=true});return done}
 function klocal(){try{localStorage.setItem("kho2",JSON.stringify({k:K,log:KLOG,undo:KUNDO.slice(-30),orb:ORB,m5:M5?1:0,lv:LV,atk:ATK,x:X}))}catch(e){}}
 function kmig(){if(M5)return false;let c=0;K.forEach(u=>{if(u.r==="SSR"&&u.star<5){u.star=5;c++}});M5=true;if(c)KLOG.push(`${today()} · Chuẩn hóa ${c} tướng SSR cam lên 5★`);return true}
 function ksave(){try{if(GH.cfg())GH.meta("dirty",1);localStorage.setItem("kho2",JSON.stringify({k:K,log:KLOG,undo:KUNDO.slice(-30),orb:ORB,m5:M5?1:0,lv:LV,atk:ATK,x:X}));localStorage.setItem("cash",String(ORB))}catch(e){}
@@ -315,13 +318,13 @@ function syncHeroes(){H.forEach(h=>{const us=K.filter(u=>u.name===h.name);if(us.
 const kfEl=document.getElementById("kFilter");
 ["Tất cả","3Q","Hán","Tần","Đường","SSR+","SSR (nguyên liệu)","SR (tím)","R (xanh)"].forEach(v=>{const b=document.createElement("button");b.textContent=v;b.dataset.v=v;b.setAttribute("aria-pressed",v===kf);
  b.onclick=()=>{kf=v;[...kfEl.children].forEach(x=>x.setAttribute("aria-pressed",x.dataset.v===v));krender()};kfEl.appendChild(b)});
-const stars=s=>`${s}★`;
+const stars=s=>s>15?`15★+NT${s-15}`:`${s}★`;
 
 /* ===== Thẻ tướng kiểu game ===== */
 var HART={"Hạng Vũ": "assets/images/heroes/hang-vu.jpg", "Lữ Bố": "assets/images/heroes/lu-bo.jpg", "Mạc Tà": "assets/images/heroes/mac-ta.jpg", "Huyền Trang": "assets/images/heroes/huyen-trang.jpg", "Gia Cát Lượng": "assets/images/heroes/gia-cat-luong.jpg", "Võ Tắc Thiên": "assets/images/heroes/vo-tac-thien.jpg", "Bạch Khởi": "assets/images/heroes/bach-khoi.jpg", "Dương Ngọc Hoàn": "assets/images/heroes/duong-ngoc-hoan.jpg", "Hoắc Khứ Bệnh": "assets/images/heroes/hoac-khu-benh.jpg", "Biển Thước": "assets/images/heroes/bien-thuoc.jpg"};
 function heroImg(n){return HART[n]||(typeof ICONS!=="undefined"&&ICONS[n])||""}
 const PHE_SHORT={"3Q":"3Q","Hán":"Hán","Tần":"Tần","Đường":"Đường"};
-function starRow(s){s=+s||0;const tier=s<=5?"g":s<=10?"r":"c",k=s<=5?s:s<=10?s-5:Math.min(5,s-10);return `<span class="gstars ${tier}" aria-label="${s} sao">${"★".repeat(Math.max(k,0))}</span>`}
+function starRow(s){s=+s||0;if(s>15)return `<span class="gstars nt" aria-label="Nhập Thánh ${s-15}">${"🔥".repeat(Math.min(5,s-15))}</span>`;const tier=s<=5?"g":s<=10?"r":"c",k=s<=5?s:s<=10?s-5:Math.min(5,s-10);return `<span class="gstars ${tier}" aria-label="${s} sao">${"★".repeat(Math.max(k,0))}</span>`}
 function heroCard(n,us){const u0=us[0],lv=((X.hlv||{})[n])||LV||"",img=heroImg(n),full=!!HART[n],r=u0.r||"SSR+";
  return `<div class="gcard r-${r.replace("+","p")} ${CORE.has(n)?"core":""}" tabindex="0" data-gc="${esc(n)}">
   <div class="gart ${full?"full":"small"}">${img?`<img src="${img}" alt="" loading="lazy">`:`<span class="gph">${esc(short(n))}</span>`}</div>
@@ -354,7 +357,7 @@ const KACT=e=>{
  const qa=e.target.closest("[data-qadd]");
  if(qa){const n=qa.dataset.qadd,u0=K.find(x=>x.name===n);if(!u0)return;const s=u0.r==="SR"?4:u0.r==="R"?3:5;snap();K.push({id:nid(),name:n,phe:u0.phe,star:s,r:u0.r});KLOG.push(`${today()} · Thêm 1 × ${n} ${stars(s)}`);ksave();krender();syncHeroes();return}
  const st=e.target.closest("[data-set]");
- if(st){const u=K.find(x=>x.id==st.dataset.set);modal(`Sửa sao ${u.name}`,`<p class="meta">Dùng khi đã nâng sao trong game mà chưa ghi vào đây. Chỉ đổi số sao, không trừ tướng hay cầu cam.</p><div class="form"><label for="sS">Số sao</label><input id="sS" type="number" min="1" max="20" value="${u.star}"></div>`,()=>{const v=Math.round(+document.getElementById("sS").value);if(!(v>=1&&v<=20))return "Số sao không hợp lệ.";if(v===u.star)return;snap();KLOG.push(`${today()} · Sửa sao ${u.name} ${stars(u.star)}→${stars(v)}`);u.star=v;ksave();krender();syncHeroes()},"Lưu");return}
+ if(st){const u=K.find(x=>x.id==st.dataset.set);modal(`Sửa sao ${u.name}`,`<p class="meta">Dùng khi đã nâng sao trong game mà chưa ghi vào đây. Chỉ đổi số sao, không trừ tướng hay cầu cam. Nhập Thánh: 16 = 1 lửa, 17 = 2 lửa…</p><div class="form"><label for="sS">Số sao</label><input id="sS" type="number" min="1" max="20" value="${u.star}"></div>`,()=>{const v=Math.round(+document.getElementById("sS").value);if(!(v>=1&&v<=20))return "Số sao không hợp lệ.";if(v===u.star)return;snap();KLOG.push(`${today()} · Sửa sao ${u.name} ${stars(u.star)}→${stars(v)}`);u.star=v;ksave();krender();syncHeroes()},"Lưu");return}
  if(d){const u=K.find(x=>x.id==d.dataset.del);modal(`Xóa ${u.name} ${stars(u.star)}?`,`<p>Dùng khi bản này đã bị tiêu hao ở việc khác hoặc nhập nhầm.</p>`,()=>{snap();K=K.filter(x=>x!==u);KLOG.push(`${today()} · Xóa ${u.name} ${stars(u.star)}`);ksave();krender();syncHeroes()},"Xóa");return}
  if(!up)return; const u=K.find(x=>x.id==up.dataset.up), R=RULE[u.star]||{copy:null,fs:null,fc:null,orb:null};
  const cand=K.filter(x=>x.id!==u.id&&(x.name===u.name||x.phe===u.phe)).sort((a,b)=>{const rk=x=>x.name===u.name?0:x.r==="SSR"?1:CORE.has(x.name)?3:2;return rk(a)-rk(b)||b.star-a.star||a.name.localeCompare(b.name,"vi")});
