@@ -7,18 +7,13 @@ Sổ tay xây đội, quản lý kho tướng và tài nguyên cho server mới 
 
 ## Các mục
 
-| Menu | Nội dung |
+| Nhóm | Dùng khi nào |
 |---|---|
-| Đội hình | Đội PVP/Tháp, Boss, PVE; Tình nghĩa, Chiến Sách, mốc sao kế tiếp, tải ảnh đội; **radar vai trò** và so sánh 2 đội |
-| Tướng | Danh sách, lọc phe/nhóm/giữ, chi tiết kỹ năng 9★/11★/13★/Nhập Thánh |
-| Phân tích | Lọc theo phe, nhóm, từ khóa kỹ năng; so sánh 2 tướng |
-| Đối đầu | 9 phụ bản (PVP 20 hiệp, Tháp, PVE ngày, Trấn thủ, Nam chinh, Rèn luyện Bang 5 hiệp…), cấp/sao từng ô địch, lực chiến, thứ tự ra đòn, đánh theo làn, gợi ý khắc chế từ kho, nhật ký trận |
-| Kho | Thẻ từng bản tướng, nâng sao theo bảng chi phí thật, thêm nhanh/nhập nhanh, hoàn tác, sao lưu; độ phủ vai trò |
-| Trợ trận | **Công pháp** (kho sách, phân sách, chi phí bản trùng) · **Thần thú** · **Linh phù** · **Chiến hồn** (8 ô, Cộng hưởng, mốc PVP, thứ tự cường hóa) · **Trang bị** (chờ dữ liệu) |
-| Nâng sao | Kế hoạch nâng sao lấy trực tiếp từ Kho |
-| Quy tắc | Nguyên tắc xây đội |
-| Cổ Đế Viêm | Số liệu trận boss sự kiện + ghi chú |
-| Cẩm nang | Phe, vai trò, phẩm chất, các bước dựng đội |
+| Tổng quan | Kiểm tra kho, xem đội PVP và việc có thể làm; mở kế hoạch đầy đủ khi cần |
+| Kho & nâng cấp | Quản lý tướng, sao và tài nguyên; xem điều kiện nâng sao |
+| Đội hình & đối đầu | Xem và chọn đội PVP/Boss/PVE; phân tích đội địch và ghi nhật ký trận |
+| Trợ trận | Công pháp, thần thú, linh phù, chiến hồn, tuyệt kỹ và trang bị |
+| Tra cứu & sự kiện | Tra cứu tướng, quy tắc, cẩm nang; xem lịch sự kiện và Cổ Đế Viêm |
 
 ## Cấu trúc
 

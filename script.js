@@ -1169,8 +1169,15 @@ function renderPlan(){const box=document.getElementById("planBox");if(!box||!win
  const ups=upPlan().filter(p=>p.st==="ok").slice(0,4);
  const card3=`<div class="panel"><h3>3. Làm ngay</h3><ul>${ups.length?ups.map(p=>`<li>Nâng <b>${esc(p.u.name)}</b> ${p.u.star}→${p.u.star+1}★ (tab Kho → Gợi ý nâng sao)</li>`).join(""):"<li>Chưa đủ điều kiện nâng sao tướng đội chính – tích bản trùng, cầu cam.</li>"}
   <li>Bản trùng ưu tiên: ${K1.filter(n=>P.modes.some(m=>m.late&&[...m.late.front,...m.late.back].includes(n))).sort((a,b)=>P.own[b]-P.own[a]).slice(0,4).map(esc).join(" › ")}.</li></ul></div>`;
- box.innerHTML=`<div class="plangrid">${card1}${card2}</div>${card3}`;
+ const pvp=P.modes.find(m=>m.mode==="PVP"),suggest=pvp&&pvp.now, warnings=suggest?suggest.why:[], first=ups[0];
+ const quick=`<div class="overview-grid">
+  <div class="panel overview-card"><h3>1. Cập nhật kho</h3><p>Có ${Object.keys(P.own).length} tướng SSR+ khác nhau. Kiểm tra số sao và tài nguyên trước khi xem gợi ý.</p><button class="btn ghost" data-go="kho">Mở Kho tướng</button></div>
+  <div class="panel overview-card"><h3>2. Xem đội PVP</h3><p>${suggest?`Carry gợi ý: <b>${esc(suggest.carry||"chưa xác định")}</b>. ${warnings.length?`Cần chú ý: ${esc(warnings[0])}.`:"Xem đội và lý do chọn."}`:"Cần ít nhất 6 tướng có dữ liệu để gợi ý đội."}</p><button class="btn ghost" data-go="doi">Xem đội hình</button></div>
+  <div class="panel overview-card"><h3>3. Việc có thể làm</h3><p>${first?`Có thể xem điều kiện nâng <b>${esc(first.u.name)}</b> ${first.u.star}→${first.u.star+1}★.`:"Chưa có gợi ý nâng sao đủ điều kiện; xem Kho để kiểm tra."}</p><button class="btn ghost" data-go="sao">Xem nâng sao</button></div></div>`;
+ const wasOpen=!!box.querySelector("#plan-details[open]");
+ box.innerHTML=quick+`<details id="plan-details" ${wasOpen?"open":""}><summary>Xem kế hoạch đầy đủ</summary><div class="plangrid">${card1}${card2}</div>${card3}</details>`;
  if(typeof krender==="function"&&!window.__pk){window.__pk=1;document.querySelectorAll("#kList .gcard").length&&_kr0();window.__pk=0}}
+document.getElementById("planBox").addEventListener("click",e=>{const b=e.target.closest("[data-go]");if(b)showTab(b.dataset.go)});
 function initTeamRadar(){const box=document.getElementById("teamRadar");if(!box)return;const opts=DATA.teams.map((t,i)=>`<option value="${i}">${esc(t.name)}</option>`).join("");
  box.innerHTML=`<h3>Hồ sơ vai trò của đội</h3><div class="tools"><label>Đội <select id="trA">${opts}</select></label><label>So với <select id="trB"><option value="">— không —</option>${opts}</select></label></div><div id="teamRadarOut"></div>`;
  const A=document.getElementById("trA");A.value=String(curTeam);A.onchange=renderTeamRadar;document.getElementById("trB").onchange=renderTeamRadar;renderTeamRadar();
@@ -1298,11 +1305,14 @@ function renderChienHon(){const g=document.getElementById("chGrid");if(!g||!wind
   <p class="meta">Mức tăng mỗi cấp gần như như nhau giữa các Chiến hồn (≈ +128 HP, +16–18 Công, +4–5 Thủ) nên ưu tiên theo <b>mốc mở thêm</b> và <b>Cộng hưởng</b>, không theo phẩm. Giá mỗi lần cường hóa lấy từ ảnh (50 ở dưới +40, 60 ở +40–69, 90 từ +70) – mốc giá chính xác giữa các khoảng chưa xác nhận. Tăng ST PVP (Mộc) có lợi cho Lữ Bố gánh sát thương; Miễn ST PVP (Kim) giúp sống qua đòn dồn như Tư Mã Ý.</p>`;
  g.querySelectorAll("[data-ch]").forEach(i=>i.onchange=()=>{const v=Math.max(0,Math.round(+i.value)||0);C.lv[i.dataset.ch]=v;ksave();renderChienHon()});
  const m=document.getElementById("chMat");if(m)m.onchange=()=>{C.mat=Math.max(0,+m.value||0);ksave()}}
-const SUBG={trotran:{label:"Trợ trận",def:"cp",tabs:[["cp","Công pháp"],["thanthu","Thần thú"],["linhphu","Linh phù"],["chienhon","Chiến hồn"],["tuyetky","Tuyệt kỹ"],["trangbi","Trang bị"]]},
- sukien:{label:"Sự kiện",def:"evlist",tabs:[["evlist","Lịch sự kiện"],["codviem","Cổ Đế Viêm"]]}};
+const SUBG={
+ "kho-nangcap":{label:"Kho & nâng cấp",def:"kho",tabs:[["kho","Kho tướng"],["sao","Nâng sao"]]},
+ "doi-doidau":{label:"Đội hình & đối đầu",def:"doi",tabs:[["doi","Đội hình"],["vs","Đối đầu"]]},
+ trotran:{label:"Trợ trận",def:"cp",tabs:[["cp","Công pháp"],["thanthu","Thần thú"],["linhphu","Linh phù"],["chienhon","Chiến hồn"],["tuyetky","Tuyệt kỹ"],["trangbi","Trang bị"]]},
+ tracuu:{label:"Tra cứu & sự kiện",def:"tuong",tabs:[["tuong","Tướng"],["quy","Quy tắc"],["camnang","Cẩm nang"],["evlist","Lịch sự kiện"],["codviem","Cổ Đế Viêm"]]}};
 const TROTRAN=SUBG.trotran.tabs.map(t=>t[0]);
 const groupOf=id=>Object.keys(SUBG).find(g=>SUBG[g].tabs.some(t=>t[0]===id));
-(function(){const _st=showTab;showTab=function(id){if(SUBG[id])id=store.get(id+"Sub",SUBG[id].def);_st(id);const g=groupOf(id),bar=document.getElementById("subnav");
+(function(){const _st=showTab;showTab=function(id){if(id==="sukien")id="evlist";if(SUBG[id]){const group=SUBG[id],saved=store.get(id+"Sub",group.def);id=group.tabs.some(([k])=>k===saved)?saved:group.def;}_st(id);const g=groupOf(id),bar=document.getElementById("subnav");
  if(bar){bar.hidden=!g;if(g){bar.setAttribute("aria-label",SUBG[g].label);bar.innerHTML=SUBG[g].tabs.map(([k,t])=>`<button data-sub="${k}" aria-pressed="${k===id}">${t}</button>`).join("")}}
  if(g){const tb=document.querySelector(`nav [data-tab="${g}"]`);document.querySelectorAll("nav button").forEach(b=>b.setAttribute("aria-selected",b===tb));store.set(g+"Sub",id)}
  if(id==="thanthu")renderThanThu();if(id==="linhphu")renderLinhPhu();if(id==="chienhon")renderChienHon();if(id==="tuyetky")renderTuyetKy();if(id==="evlist")renderEvents();if(id==="quy")renderRules();if(id==="kho"&&window.PLAN)_kr0();if(id==="cp"&&window.PLAN)renderBooks();if(id==="plan"&&window.KREADY)renderPlan()}})();

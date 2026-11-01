@@ -371,7 +371,7 @@ footer{padding-top:4px}
 @media (max-width:700px){
   .bar{padding:9px 14px;gap:10px}
   .brand{width:100%}.brand h1{font-size:19px}
-  nav{flex-wrap:nowrap;width:calc(100% + 10px);overflow-x:auto;padding:1px 4px 7px;margin:0 -4px;scrollbar-width:none}
+  nav{flex-wrap:wrap;width:100%;overflow:visible;padding:0;margin:0;gap:4px}
   nav::-webkit-scrollbar{display:none}
   nav button{flex:none;padding:7px 10px}
   nav button[aria-selected="true"]::after{bottom:-4px}
@@ -503,6 +503,7 @@ h3 { cursor: pointer; }
 .gphe{position:absolute;z-index:5;bottom:0;left:50%;transform:translateX(-50%);min-width:28px;padding:2px 6px 6px;font-size:9px;font:700 10px/1 var(--display);color:#3a2405;text-align:center;background:linear-gradient(180deg,#f5d77e,#c9921f);clip-path:polygon(0 0,100% 0,100% 70%,50% 100%,0 70%);filter:drop-shadow(0 0 1px #6b4410)}
 .gphe.p-3Q{background:linear-gradient(180deg,#8fb6ef,#2f62b3);color:#fff}.gphe.p-Hán{background:linear-gradient(180deg,#8fd6a8,#2f8a57);color:#fff}.gphe.p-Tần{background:linear-gradient(180deg,#f5d77e,#c9921f);color:#3a2405}.gphe.p-Đường{background:linear-gradient(180deg,#c9a8ee,#7b4bb0);color:#fff}
 
+.overview-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:16px}.overview-card{display:flex;flex-direction:column;gap:8px}.overview-card h3,.overview-card p{margin:0}.overview-card p{flex:1}.overview-card button{align-self:flex-start}.overview-grid+details>summary{cursor:pointer;font-weight:700;padding:10px 0}@media(max-width:700px){.overview-grid{grid-template-columns:1fr}}
 /* Kế hoạch */
 .plangrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px;margin-bottom:14px}@media(max-width:820px){.plangrid{grid-template-columns:minmax(0,1fr)}}
 .pmode{padding:8px 0;border-bottom:1px solid var(--line)}.pmh{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;margin-bottom:6px}
