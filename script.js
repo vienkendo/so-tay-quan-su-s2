@@ -19,9 +19,15 @@ const mk = (k)=>({PVP:"pvp",Boss:"boss",PVE:"pve"}[k]);
 const store = { get(k,d){ try{ const v=localStorage.getItem(k); return v==null?d:v }catch(e){ return d } }, set(k,v){ try{ localStorage.setItem(k,v) }catch(e){} } };
 
 /* tabs */
-document.querySelectorAll("nav button").forEach(b=>b.addEventListener("click",()=>showTab(b.dataset.tab)));
+document.querySelectorAll("nav [data-tab]").forEach(b=>b.addEventListener("click",()=>showTab(b.dataset.tab)));
+const navToggle=document.getElementById("nav-toggle"),navPanel=document.getElementById("app-nav"),navBackdrop=document.getElementById("nav-backdrop");
+function closeNav(restoreFocus=false){if(!navPanel.classList.contains("is-open"))return;navPanel.classList.remove("is-open");navBackdrop.hidden=true;navToggle.setAttribute("aria-expanded","false");document.body.classList.remove("menu-open");if(restoreFocus)navToggle.focus()}
+navToggle.addEventListener("click",()=>{if(navPanel.classList.contains("is-open")){closeNav(true);return}navPanel.classList.add("is-open");navBackdrop.hidden=false;navToggle.setAttribute("aria-expanded","true");document.body.classList.add("menu-open");(navPanel.querySelector('[aria-selected="true"]')||navPanel.querySelector("button"))?.focus()});
+navPanel.addEventListener("click",e=>{if(e.target.closest("button"))closeNav(true)});navBackdrop.addEventListener("click",()=>closeNav(true));
+document.addEventListener("keydown",e=>{if(!navPanel.classList.contains("is-open"))return;if(e.key==="Escape"){e.preventDefault();closeNav(true);return}if(e.key==="Tab"){const items=[...navPanel.querySelectorAll("button")].filter(b=>b.offsetParent!==null),first=items[0],last=items[items.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}}});
+window.matchMedia("(min-width: 701px)").addEventListener("change",e=>{if(e.matches)closeNav()});
 function showTab(id){
-  document.querySelectorAll("nav button").forEach(b=>b.setAttribute("aria-selected", b.dataset.tab===id));
+  document.querySelectorAll("nav [data-tab]").forEach(b=>b.setAttribute("aria-selected", b.dataset.tab===id));
   document.querySelectorAll("main section").forEach(s=>s.hidden = s.id!==id);
   store.set("tab",id); window.scrollTo(0,0);
 }
@@ -1314,7 +1320,8 @@ const TROTRAN=SUBG.trotran.tabs.map(t=>t[0]);
 const groupOf=id=>Object.keys(SUBG).find(g=>SUBG[g].tabs.some(t=>t[0]===id));
 (function(){const _st=showTab;showTab=function(id){if(id==="sukien")id="evlist";if(SUBG[id]){const group=SUBG[id],saved=store.get(id+"Sub",group.def);id=group.tabs.some(([k])=>k===saved)?saved:group.def;}_st(id);const g=groupOf(id),bar=document.getElementById("subnav");
  if(bar){bar.hidden=!g;if(g){bar.setAttribute("aria-label",SUBG[g].label);bar.innerHTML=SUBG[g].tabs.map(([k,t])=>`<button data-sub="${k}" aria-pressed="${k===id}">${t}</button>`).join("")}}
- if(g){const tb=document.querySelector(`nav [data-tab="${g}"]`);document.querySelectorAll("nav button").forEach(b=>b.setAttribute("aria-selected",b===tb));store.set(g+"Sub",id)}
+ if(g){const tb=document.querySelector(`nav [data-tab="${g}"]`);document.querySelectorAll("nav [data-tab]").forEach(b=>b.setAttribute("aria-selected",b===tb));store.set(g+"Sub",id)}
+ const current=document.querySelector('nav button[aria-selected="true"]');if(current)document.getElementById("nav-current").textContent=current.textContent;
  if(id==="thanthu")renderThanThu();if(id==="linhphu")renderLinhPhu();if(id==="chienhon")renderChienHon();if(id==="tuyetky")renderTuyetKy();if(id==="evlist")renderEvents();if(id==="quy")renderRules();if(id==="kho"&&window.PLAN)_kr0();if(id==="cp"&&window.PLAN)renderBooks();if(id==="plan"&&window.KREADY)renderPlan()}})();
 /* Lịch sự kiện */
 function EVS(){if(!Array.isArray(X.ev))X.ev=[{id:1,name:"Thí Luyện Cổ Đế Viêm",kind:"Tuần",end:"",goal:"Đạt mục tiêu ST mỗi ngày; xếp hạng theo ST cao nhất kỳ",reward:"",note:"Xem chi tiết ở tab Cổ Đế Viêm",done:false}];return X.ev}

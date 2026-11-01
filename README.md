@@ -7,6 +7,8 @@ Sổ tay xây đội, quản lý kho tướng và tài nguyên cho server mới 
 
 ## Các mục
 
+Trên điện thoại, bấm **Menu** để mở thanh bên và chọn nhóm chức năng.
+
 | Nhóm | Dùng khi nào |
 |---|---|
 | Tổng quan | Kiểm tra kho, xem đội PVP và việc có thể làm; mở kế hoạch đầy đủ khi cần |
