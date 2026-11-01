@@ -1104,7 +1104,7 @@ function renderUp(){
   const rows=names.map(n=>{const us=K.filter(u=>u.name===n),cur=Math.max(...us.map(u=>u.star)),nx=cur+1,h=byName[n]||{},R=RULE[cur]||{copy:null,fs:null,fc:null,orb:null},u0=us[0];
     const unlock=h["s"+nx]?`${nx}★: ${h["s"+nx]}`:(nx===6?"+2 Nộ, mở 2 ô công pháp, giới hạn cấp 145":nx===10?"Mở thêm 2 ô công pháp (5 ô)":nx===12?"Mở thêm 1 ô công pháp":"Tăng chỉ số");
     const copyHave=us.length-1, copyTxt=R.copy==null?"?":R.copy?`${Math.min(copyHave,R.copy)}/${R.copy}`:"không cần";
-    const fh=R.fs==null?null:K.filter(x=>x.phe===u0.phe&&x.name!==n&&x.r!=="SR"&&x.r!=="R"&&!CORE.has(x.name)&&x.star===R.fs).length;
+    const fh=R.fs==null?null:K.filter(x=>x.phe===u0.phe&&x.name!==n&&x.r==="SSR"&&!CORE.has(x.name)&&x.star===R.fs).length;
     const fodTxt=R.fs==null?"?":`Tướng ${u0.phe} ${R.fs}★ × ${R.fc}`, fodHave=fh==null?"?":`${Math.min(fh,R.fc)}/${R.fc}`;
     const okCopy=R.copy===0||(R.copy&&copyHave>=R.copy), okFod=fh!=null&&fh>=R.fc, okOrb=R.orb!=null&&have>=R.orb;
     let st; if(R.fs==null||R.orb==null&&R.copy==null) st=`<span>Không rõ</span>`;
@@ -1241,7 +1241,7 @@ function upPlan(){
   if(!R||R.fs==null){out.push({u,st:"unk"});continue}
   const miss=[], pick=[];
   if(R.copy){const cs=us.slice(1).sort((a,b)=>a.star-b.star).filter(x=>!used.has(x.id)).slice(0,R.copy); pick.push(...cs); if(cs.length<R.copy) miss.push(`${R.copy-cs.length} bản trùng ${n}`)}
-  const pool=K.filter(x=>x.phe===u.phe&&x.name!==n&&x.star===R.fs&&x.r!=="SR"&&x.r!=="R"&&!CORE.has(x.name)&&!(window.KEEPSET&&KEEPSET.has(x.name))&&!(window.PLAN&&PLAN.res[x.name]&&K.filter(u=>u.name===x.name).length<=1)&&!used.has(x.id)&&!pick.includes(x))
+  const pool=K.filter(x=>x.phe===u.phe&&x.name!==n&&x.star===R.fs&&x.r==="SSR"&&!CORE.has(x.name)&&!(window.KEEPSET&&KEEPSET.has(x.name))&&!(window.PLAN&&PLAN.res[x.name]&&K.filter(u=>u.name===x.name).length<=1)&&!used.has(x.id)&&!pick.includes(x))
    .sort((a,b)=>(a.r==="SSR"?0:1)-(b.r==="SSR"?0:1));
   const f=pool.slice(0,R.fc); pick.push(...f); if(f.length<R.fc) miss.push(`${R.fc-f.length} tướng ${u.phe} ${R.fs}★ (không tính tướng đội chính)`);
   if(R.orb!=null&&ORB<R.orb) miss.push(`${(R.orb-ORB).toLocaleString("vi-VN")} cầu cam${dTxt(R.orb-ORB)}`);
@@ -1739,6 +1739,7 @@ Chỉ trả về JSON: {"win":true,"rounds":13,"maxRounds":15,"mine":[{"dmg":441
   document.getElementById("blCar").value=top;
   msg.innerHTML=`✓ ${d.win===true?"<b>Thắng</b>":d.win===false?"<b>Thua</b>":"?"} · ${d.rounds||"?"} hiệp · ST mình ${fmtLC(me)} / địch ${fmtLC(en)}. Ô "ST carry" đã điền ST cao nhất đội mình (${fmtLC(top)}) – nếu carry gây 0 ST, sửa thành 0.${zero?` Có ${zero} tướng mình 0 ST & 0 hồi.`:""} Rồi bấm ${d.win===true?"Lưu: Thắng":d.win===false?"Lưu: Thua":"Lưu"}.`;
  }catch(e){msg.textContent="✗ "+(OCRERR[e&&e.code]||"Không đọc được ảnh này – thử ảnh rõ hơn hoặc nhập tay.")}}
+function withinFactionCapAfterSwap(pick,out,candidate,pheOf,phe,cap){return pheOf(candidate)!==phe||pick.filter(n=>n!==out&&pheOf(n)===phe).length<cap}
 function vsRun(){
  const en=VS.slots.map((s,i)=>({...s,i,st:s.st||VS.st||"",tags:EDB[s.n]?EDB[s.n].tags:s.tags})).filter(s=>s.n);
  if(!en.length){document.getElementById("vsOut").innerHTML='<p class="empty">Nhập ít nhất 1 tướng địch.</p>';return}
@@ -1791,12 +1792,13 @@ function vsRun(){
    if(pick.some(p=>partner(p)===n||partner(n)===p))v+=1.2; if(t.includes("carry"))v-=1.5; if(t.includes("heal")&&pick.filter(p=>tagOf(p).includes("heal")).length>=2)v-=2; return [n,v]}).sort((a,b)=>b[1]-a[1]);
    if(!cand.length)break; take(cand[0][0]);}
  const reach=n=>tagOf(n).includes("back")||(tagOf(n).includes("aoe")&&n!==carry);
- if(backHeal.length&&pick.length>=4&&!pick.some(reach)){const hb=Object.keys(sc).filter(n=>!pick.includes(n)&&reach(n)&&(pheOf(n)!==capP||true)).sort((a,b)=>sc[b]-sc[a])[0];
-  if(hb){const locked=new Set([carry,pick[1],pick[2],"Lý Long Cơ"]);const out=pick.filter(n=>!locked.has(n)).sort((a,b)=>sc[a]-sc[b])[0];
-   if(out){pick.splice(pick.indexOf(out),1,hb);why[hb]=[...(why[hb]||[]),`thay ${out} để có người đánh tới healer hàng sau`];}}}
+ if(backHeal.length&&pick.length>=4&&!pick.some(reach)){
+  const locked=new Set([carry,pick[1],pick[2],"Lý Long Cơ"]);const out=pick.filter(n=>!locked.has(n)).sort((a,b)=>sc[a]-sc[b])[0];
+  if(out){const hb=Object.keys(sc).filter(n=>!pick.includes(n)&&reach(n)&&withinFactionCapAfterSwap(pick,out,n,pheOf,capP,capN)).sort((a,b)=>sc[b]-sc[a])[0];
+   if(hb){pick.splice(pick.indexOf(out),1,hb);why[hb]=[...(why[hb]||[]),`thay ${out} để có người đánh tới healer hàng sau`];}}}
  {const md=VS.mode||"pvp";if(NMAX===6&&capN>=6){const key=/pvp|thap/.test(md)?"pvp":MODES[md].dmg?"boss":"pve",prof=MODES[md].dmg?"dmg":"bal";
   const r=bestTeams(0,null,prof,false,{key,extra:EXV});if(r){pick.splice(0,pick.length,...r.front,...r.back);carry=r.carry||carry;
-   T.push(["lo","Cách chọn đội",`Duyệt toàn bộ tổ hợp 6 tướng SSR+ trong kho: điểm ${key.toUpperCase()} × sao + synergy kỹ năng + điểm khắc chế đội địch này${MODES[md].dmg?" (ưu tiên dồn sát thương)":""}. Điểm đội: ${r.v.toFixed(1)}.`])}}}
+   T.push(["lo","Cách chọn đội",`Duyệt toàn bộ tổ hợp 6 tướng SSR+ trong kho: điểm ${key.toUpperCase()} + điểm sao + synergy kỹ năng + điểm khắc chế đội địch này${MODES[md].dmg?" (ưu tiên dồn sát thương)":""}. Điểm đội: ${r.v.toFixed(1)}.`])}}}
  // xếp ô
  const isFront=n=>{const t=tagOf(n);return t.includes("tank")||t.includes("shield")||n==="Lý Long Cơ"||t.includes("ctrl")};
  let front=pick.filter(isFront).sort((a,b)=>(a==="Lý Long Cơ")-(b==="Lý Long Cơ")).reverse(), back=pick.filter(n=>!isFront(n));
@@ -1930,10 +1932,10 @@ function teamEval(names,key,own){let v=0;const why=[];names.forEach(n=>v+=heroVa
   if(/Công/.test(tn.split("–")[1]||"")){if(n===mc||p===mc)bonds+=1;else bonds-=0.5}else bonds+=1});v+=bonds*0.5;
  const cs=chienSach(names).best;if(cs)v+=(cs[2]+cs[3])/8;
  return {v,why,carry:mc}}
-function placeTeam(names,own){const T=n=>tagsOf(n),fr=n=>(T(n).includes("tank")?3:0)+(T(n).includes("shield")?1.5:0)+(T(n).includes("amp")?1:0)+(T(n).includes("ctrl")?0.5:0)-(T(n).includes("carry")?4:0)-(T(n).includes("heal")?2:0);/* tag "back" = ĐÁNH hàng sau địch (Quỷ Cốc Tử, Tôn Sách, Vệ Thanh), không phải đứng hàng sau → không ảnh hưởng vị trí */
+function placeTeam(names,own){const f=n=>heroFlags(n,(own||{})[n]||0),has=(n,flag)=>!!(f(n)&flag),fr=n=>(has(n,F_TANK)?3:0)+(has(n,F_SHIELD)?1.5:0)+(has(n,F_AMP)?1:0)+(has(n,F_CTRL)?0.5:0)-(has(n,F_CARRY)?4:0)-(has(n,F_HEAL)?2:0);
  const s=names.slice().sort((a,b)=>fr(b)-fr(a));let front=s.slice(0,3),back=s.slice(3);
- const c=back.find(n=>T(n).includes("carry"))||back[0];back=[c,...back.filter(n=>n!==c)];
- const amp=front.find(n=>T(n).includes("amp"));if(amp)front=[amp,...front.filter(n=>n!==amp)];else{const tk=front.slice().sort((a,b)=>fr(b)-fr(a))[0];front=[tk,...front.filter(n=>n!==tk)]}
+ const c=back.find(n=>has(n,F_CARRY))||back[0];back=[c,...back.filter(n=>n!==c)];
+ const amp=front.find(n=>has(n,F_AMP));if(amp)front=[amp,...front.filter(n=>n!==amp)];else{const tk=front.slice().sort((a,b)=>fr(b)-fr(a))[0];front=[tk,...front.filter(n=>n!==tk)]}
  return {front,back}}
 /* ===== Chọn đội: duyệt toàn bộ + cắt nhánh (branch & bound), synergy rút từ chữ kỹ năng, 3 phương án ===== */
 const F_CARRY=1,F_TANK=2,F_HEAL=4,F_RAGE=8,F_AMP=16,F_CTRL=32,F_BLEED=64,F_AOE=128,F_DEP=256,F_SHIELD=512,F_FEED=1024;
@@ -2006,7 +2008,10 @@ function bestTeams(i,ownOv,prof,noPrune,opt){prof=prof||"bal";opt=opt||{};const 
   if(!EXPL)return {v,why,mc};
   const nm=f=>S.filter(k=>H[k].f&f).map(k=>H[k].n),pros=[];if(mc>=0)pros.push("Carry: "+H[mc].n);
   const tk=nm(F_TANK);pros.push(tk.length?"Tank: "+tk.join(", "):"Không có tank thật");const sh=nm(F_SHIELD);if(sh.length)pros.push("Khiên: "+sh.join(", "));const he=nm(F_HEAL);if(he.length)pros.push("Hồi máu: "+he.join(", "));
-  const fe=S.filter(k=>k!==mc&&(H[k].f&F_FEED)).map(k=>H[k].n);if(fe.length)pros.push("Nuôi carry: "+fe.join(", "));const rg=S.filter(k=>k!==mc&&(H[k].f&F_RAGE)).map(k=>H[k].n);if(rg.length)pros.push("Cấp Nộ: "+rg.join(", ")+(mc>=0&&(H[mc].f&F_DEP)?"":" (carry không phụ thuộc Nộ)"));
+  const fe=S.filter(k=>k!==mc&&(H[k].f&F_FEED)).map(k=>H[k].n);if(fe.length)pros.push("Nuôi carry: "+fe.join(", "));
+  if(mc>=0&&S.some(k=>k!==mc&&/Công cao nhất/i.test(skillText(H[k].n,H[k].st)))){const atk=S.map(k=>({n:H[k].n,v:+((typeof ATK!=="undefined"&&ATK)||{})[H[k].n]||0})),cv=atk.find(x=>x.n===H[mc].n).v,hi=atk.filter(x=>x.n!==H[mc].n&&x.v>cv).sort((a,b)=>b.v-a.v)[0];
+   if(cv&&hi)why.push(`${hi.n} có Công cao hơn ${H[mc].n}; hiệu ứng Công cao nhất có thể không vào carry`);
+   else if(!cv||atk.some(x=>!x.v)||atk.some(x=>x.n!==H[mc].n&&x.v===cv))why.push("chưa xác nhận carry có Công cao nhất; kiểm tra chỉ số cả đội và trang bị");}const rg=S.filter(k=>k!==mc&&(H[k].f&F_RAGE)).map(k=>H[k].n);if(rg.length)pros.push("Cấp Nộ: "+rg.join(", ")+(mc>=0&&(H[mc].f&F_DEP)?"":" (carry không phụ thuộc Nộ)"));
   const am=nm(F_AMP);if(am.length)pros.push("Khuếch đại: "+am.join(", "));const cx=nm(F_CTRL);if(cx.length)pros.push("Khống chế: "+cx.join(", "));
   const bp=[];for(const k of S){const x=H[k];if(x.pi>=0&&S.includes(x.pi)&&!bp.includes(x.pn+"–"+x.n))bp.push(x.n+"–"+x.pn)}if(bp.length)pros.push("Tình Nghĩa: "+bp.join(", "));
   const csr=CSACH.find(r=>r[4](c)&&(r[2]+r[3])/8===cs);if(csr)pros.push("Chiến Sách: "+csr[0]);
@@ -2040,7 +2045,7 @@ function renderTeamOpt(){renderLate();const box=document.getElementById("teamOpt
  const curSet=new Set([...t.front,...t.back]);
  const cell=n=>`<div class="optc ${curSet.has(n)?"":"new"}">${token(byName[n])}<b>${esc(n)}</b><small>${own[n]}★${curSet.has(n)?"":" · mới"}</small></div>`;
  box.innerHTML=`<h3>Đội tối ưu từ kho – ${esc(t.mode)} ${t.ov?'<span class="chip on">đang dùng đội tự dựng</span>':""}</h3>
- <p class="meta">Duyệt <b>toàn bộ</b> tổ hợp 6 tướng SSR+ trong kho (cắt nhánh, ${ms} ms). Điểm = điểm ${esc(t.mode)} × hệ số sao + synergy rút từ kỹ năng đã mở (nguồn Nộ cho carry, khuếch đại, Huyết Tích, khống chế, hiệu ứng "Công cao nhất") + Tình Nghĩa + Chiến Sách; bắt buộc 1 carry, có tank (chỉ có khiên thì phạt nhẹ hơn; PVP phạt thêm khi thiếu tank thật), có hồi máu (trừ PVE). Vai trò lấy theo bảng <code>SYN</code> có mốc sao mở; tướng chưa có trong bảng ghi “độ tin cậy thấp”.</p>
+ <p class="meta">Duyệt <b>toàn bộ</b> tổ hợp 6 tướng SSR+ trong kho (cắt nhánh, ${ms} ms). Điểm = điểm ${esc(t.mode)} + điểm sao + synergy rút từ kỹ năng đã mở (nguồn Nộ cho carry, khuếch đại, Huyết Tích, khống chế, hiệu ứng "Công cao nhất") + Tình Nghĩa + Chiến Sách; ưu tiên 1 carry, tank (chỉ có khiên thì phạt nhẹ hơn; PVP phạt thêm khi thiếu tank thật) và hồi máu (trừ PVE). Vai trò lấy theo bảng <code>SYN</code> có mốc sao mở; tướng chưa có trong bảng ghi “độ tin cậy thấp”.</p>
  ${opts.map((r,k)=>{const P=PROFILES[r.prof],same=[...r.front,...r.back].every(n=>curSet.has(n)),out=[...t.front,...t.back].filter(n=>!r.front.includes(n)&&!r.back.includes(n)),d=r.v-r.cur;
   return `<div class="optbox"><div class="pmh"><b>${k+1}. ${P.n}</b><span class="meta">${P.d}</span>${same?'<span class="chip on">trùng đội đang dùng</span>':r.prof==="bal"?(d<1.5?`<span class="chip">chênh ít (+${d.toFixed(1)})</span>`:`<span class="chip warn">+${d.toFixed(1)} điểm</span>`):""}</div>
   <div class="rowlab">Hàng trước</div><div class="optrow">${r.front.map(cell).join("")}</div><div class="rowlab">Hàng sau</div><div class="optrow">${r.back.map(cell).join("")}</div>
@@ -2056,11 +2061,12 @@ function renderTeamOpt(){renderLate();const box=document.getElementById("teamOpt
 var PLAN=null,PLANT=null;
 function computePlan(){const own=ownedStars(),modes=DATA.teams.map((t,i)=>{const alt=teamOptions(i),now=alt[0]||null,late=lateGame(i);return {i,name:t.name,mode:t.mode,now,late,alt}});
  const keep={},why=(n,r)=>{(keep[n]=keep[n]||[]).push(r)};
- modes.forEach(m=>{if(m.now)[...m.now.front,...m.now.back].forEach(n=>why(n,`đội ${m.mode} hiện tại`));if(m.late)[...m.late.front,...m.late.back].forEach(n=>why(n,`đội ${m.mode} lâu dài`))});
+ modes.forEach(m=>{m.alt.forEach((r,i)=>[...r.front,...r.back].forEach(n=>why(n,`đội ${m.mode} ${i?"phương án "+PROFILES[r.prof].n:"hiện tại"}`)));if(m.late)[...m.late.front,...m.late.back].forEach(n=>why(n,`đội ${m.mode} lâu dài`))});
  const T=n=>tagsOf(n),score=n=>{const h=byName[n]||{};return Math.max(h.pvp||0,h.boss||0,h.pve||0)};
  const rare=["ctrl","rage+","heal","tank","dispel","amp"];
  const res={},mat={};Object.keys(own).forEach(n=>{if(keep[n])return;const r=T(n).filter(k=>rare.includes(k));
-  if(score(n)>=4&&r.length)res[n]=`vai trò hiếm: ${r.map(k=>TAGN[k]||k).join(", ")}`;else mat[n]=score(n)?`điểm cao nhất ${score(n)}/5, không vào đội nào`:"chưa có dữ liệu đánh giá"});
+  res[n]=score(n)>=4&&r.length?`có vai trò ${r.map(k=>TAGN[k]||k).join(", ")}; xem xét theo đối thủ`:score(n)?`điểm cao nhất ${score(n)}/5; cần đánh giá thêm`:"chưa có dữ liệu đánh giá"});
+ Object.keys(own).forEach(n=>{const note=(byName[n]||{}).pvp_note;if(!note)return;if(keep[n])why(n,note);else res[n]+=" · "+note});
  const cnt={};(K||[]).forEach(u=>{(cnt[u.name]=cnt[u.name]||{n:0,r:u.r,phe:u.phe}).n++});
  return {modes,keep,res,mat,cnt,own}}
 function renderPlan(){const box=document.getElementById("planBox");if(!box||!window.KREADY)return;const P=PLAN=computePlan();window.KEEPSET=new Set(Object.keys(P.keep));try{renderUpHint();renderRoad()}catch(e){}
@@ -2071,8 +2077,8 @@ function renderPlan(){const box=document.getElementById("planBox");if(!box||!win
  const K1=Object.keys(P.keep).sort((a,b)=>P.own[b]-P.own[a]),K2=Object.keys(P.res).sort((a,b)=>P.own[b]-P.own[a]),K3=Object.keys(P.mat).sort((a,b)=>P.own[a]-P.own[b]);
  const card2=`<div class="panel"><h3>2. Tướng SSR+ giữ hay cho</h3>
   <div class="pgrp keep"><h4>Giữ & đầu tư (${K1.length})</h4><p class="meta">Có trong đội hiện tại hoặc đội lâu dài. Giữ <b>mọi bản trùng</b> – bản trùng là thứ hiếm nhất để lên 9★/11★/13★.</p><ul class="plist">${K1.map(n=>row(n,P.keep[n],"k")).join("")}</ul></div>
-  <div class="pgrp res"><h4>Dự bị (${K2.length})</h4><p class="meta">Không vào đội nhưng có vai trò kho đang thiếu. Giữ 1 bản để đổi theo đối thủ; bản trùng dư có thể làm nguyên liệu.</p><ul class="plist">${K2.map(n=>row(n,P.res[n],"r")).join("")||'<li class="meta">Không có</li>'}</ul></div>
-  <div class="pgrp mat"><h4>Dứt khoát làm nguyên liệu (${K3.length})</h4><p class="meta">Không vào đội nào, kể cả khi max sao. Dùng hết làm nguyên liệu nâng sao cùng phe cho nhóm Giữ.</p><ul class="plist">${K3.map(n=>row(n,P.mat[n],"m")).join("")||'<li class="meta">Không có</li>'}</ul></div>
+  <div class="pgrp res"><h4>Dự bị (${K2.length})</h4><p class="meta">Chưa vào đội đề xuất. Giữ để xem xét theo đối thủ và mốc kỹ năng; chưa đủ căn cứ tự động chọn làm nguyên liệu.</p><ul class="plist">${K2.map(n=>row(n,P.res[n],"r")).join("")||'<li class="meta">Không có</li>'}</ul></div>
+  <div class="pgrp mat"><h4>Chưa đề xuất SSR+ làm nguyên liệu (${K3.length})</h4><p class="meta">Đánh giá đội hình chưa đủ để kết luận tướng SSR+ nào nên dùng làm nguyên liệu.</p><ul class="plist">${K3.map(n=>row(n,P.mat[n],"m")).join("")||'<li class="meta">Không có</li>'}</ul></div>
   <p class="meta">SSR cam, SR, R luôn là nguyên liệu. Phân loại tự đổi khi bạn nâng sao, thêm tướng hoặc kho thay đổi.</p></div>`;
  const ups=upPlan().filter(p=>p.st==="ok").slice(0,4);
  const card3=`<div class="panel"><h3>3. Làm ngay</h3><ul>${ups.length?ups.map(p=>`<li>Nâng <b>${esc(p.u.name)}</b> ${p.u.star}→${p.u.star+1}★ (tab Kho → Gợi ý nâng sao)</li>`).join(""):"<li>Chưa đủ điều kiện nâng sao tướng đội chính – tích bản trùng, cầu cam.</li>"}

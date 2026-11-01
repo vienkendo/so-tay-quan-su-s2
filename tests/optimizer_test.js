@@ -42,6 +42,28 @@ const r=await p.evaluate(()=>{const out={pass:0,fail:[]};const ok=(c,m)=>{if(c)o
  ok([...rp.front,...rp.back].includes("Lý Thế Dân"),"T7 PVP ưu tiên có tank thật (Lý Thế Dân 5★) dù sao thấp");
  ok(rp.pros.some(x=>x.startsWith("Carry: Lữ Bố"))&&rp.pros.some(x=>x.startsWith("Tank:")),"T7 có lý do chọn đội (carry, tank)");
  ok(Array.isArray(rb.why),"T7 Boss trả về đánh đổi");
+ /* T8a: vị trí phản ánh khiên của Huyền Trang mở ở 13★. */
+ const posNames=["Huyền Trang","Lý Long Cơ","Quỷ Cốc Tử","Lý Thế Dân","Lữ Bố","Điêu Thuyền"],pos5=Object.fromEntries(posNames.map(n=>[n,5])),pos13={...pos5,"Huyền Trang":13};
+ ok(placeTeam(posNames,pos5).back.includes("Huyền Trang")&&placeTeam(posNames,pos13).front.includes("Huyền Trang"),"T8a khiên 13★ ảnh hưởng vị trí, 5★ chưa có khiên");
+ /* T8: Giới hạn phe được tính sau khi thay người, kể cả khi đội đã đạt giới hạn. */
+ const phe=n=>({a:"3Q",b:"3Q",c:"Hán",d:"3Q",e:"Tần"}[n]);
+ ok(!withinFactionCapAfterSwap(["a","b","c"],"c","d",phe,"3Q",2),"T8 không thêm phe đã đủ giới hạn");
+ ok(withinFactionCapAfterSwap(["a","b","c"],"b","d",phe,"3Q",2),"T8 được thay cùng phe khi vẫn trong giới hạn");
+ ok(withinFactionCapAfterSwap(["a","b","c"],"c","e",phe,"3Q",2),"T8 phe không bị giới hạn");
+ /* T9: cảnh báo Công cao nhất dùng số liệu nhập và không kết luận khi thiếu. */
+ const prevAtk=ATK, pool2={"Lữ Bố":17,"Điêu Thuyền":12,"Vương Chiêu Quân":12,"Quỷ Cốc Tử":12,"Lý Long Cơ":12,"Lý Thế Dân":12};
+ try{ATK={};let x=bestTeams(iP,pool2,"bal");ok(x.why.some(t=>t.includes("chưa xác nhận carry có Công cao nhất")),"T9 thiếu Công phải cảnh báo");
+ ATK=Object.fromEntries(Object.keys(pool2).map(n=>[n,100]));ATK["Lữ Bố"]=200;ATK["Lý Thế Dân"]=300;x=bestTeams(iP,pool2,"bal");ok(x.why.some(t=>t.includes("Lý Thế Dân có Công cao hơn Lữ Bố")),"T9 cảnh báo đồng đội có Công cao hơn carry");
+ ATK["Lý Thế Dân"]=100;x=bestTeams(iP,pool2,"bal");ok(!x.why.some(t=>t.includes("Công cao nhất")||t.includes("Công cao hơn")),"T9 đủ số liệu và carry cao nhất không cảnh báo");}finally{ATK=prevAtk}
+ /* T10: không tự đề nghị SSR+ khác làm nguyên liệu; bản trùng vẫn dùng được. */
+ const prevK=K,prevOrder=bookHeroes,prevOrb=ORB,prevKeep=window.KEEPSET,prevPlan=window.PLAN;
+ try{K=[{id:1,name:"Lữ Bố",phe:"3Q",r:"SSR+",star:5},{id:2,name:"Lữ Bố",phe:"3Q",r:"SSR+",star:5},{id:3,name:"Quan Vũ",phe:"3Q",r:"SSR+",star:5},{id:4,name:"Nguyên liệu",phe:"3Q",r:"SSR",star:5}];bookHeroes=()=>["Lữ Bố"];ORB=0;window.KEEPSET=new Set();window.PLAN=null;
+ const u=upPlan()[0];ok(u.pick.some(x=>x.id===2)&&u.pick.some(x=>x.id===4)&&!u.pick.some(x=>x.id===3),"T10 bản trùng và SSR cam được chọn, SSR+ khác được giữ");
+ K=K.filter(x=>x.id!==4);ok(upPlan()[0].st==="no", "T10 thiếu SSR nguyên liệu không dùng SSR+ thay thế");
+ }finally{K=prevK;bookHeroes=prevOrder;ORB=prevOrb;window.KEEPSET=prevKeep;window.PLAN=prevPlan}
+ const pp=computePlan();ok(Object.keys(pp.mat).length===0,"T10 kế hoạch không tự phân SSR+ làm nguyên liệu");
+ ok((byName["Tư Mã Ý"].pvp_note||"").includes("3 lửa"),"T11 ghi nhận tiềm năng PVP Tư Mã Ý từ phản hồi người chơi");
+ ok(!pp.own["Tư Mã Ý"]||JSON.stringify(pp.keep["Tư Mã Ý"]||pp.res["Tư Mã Ý"]).includes("3 lửa"),"T11 tiềm năng PVP xuất hiện trong kế hoạch");
  return out});
 console.log(`PASS ${r.pass}  FAIL ${r.fail.length}`);r.fail.forEach(f=>console.log('  ✗ '+f));if(errs.length)console.log('PAGE ERRORS',errs);
 await b.close();process.exit(r.fail.length||errs.length?1:0)})();

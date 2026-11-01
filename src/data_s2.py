@@ -27,6 +27,9 @@ H["Hàn Tín"].update(keep="Cốt lõi (PVE)"); H["Chân Cơ"].update(keep="Cố
 H["Tây Thi"].update(keep="Phương án", role="Healer dài hạn – Nhập Thánh cho Lữ Bố tới +6 Nộ")
 for n in ["Lưu Bang","Ngu Cơ"]: H[n]["keep"]="Dự bị (nguyên liệu Hán)"
 for n in ["Tư Mã Ý","Chung Vô Diệm","Biển Thước","Thượng Quan Uyển Nhi","Thái Văn Cơ"]: H[n]["keep"]="Dự bị"
+# Nhận xét PVP do người chơi xác nhận; chưa đủ dữ liệu định lượng để đổi điểm.
+H["Tư Mã Ý"]["role"]="Carry mạnh dần theo trận; có tiềm năng PVP khi Nhập Thánh 3"
+H["Tư Mã Ý"]["pvp_note"]="Người chơi quan sát: Nhập Thánh 3 lửa được dùng nhiều trong PVP và có thể ra đòn gần như liên tục; cần xác nhận chi tiết kỹ năng và điều kiện kích hoạt."
 H["Can Tương"].update(keep="Dự bị", role="Bổ trợ [Huyết Tích] – thiếu Tần Thủy Hoàng nên không phát huy")
 heroes.append(dict(name="Lý Bạch",phe="Đường",nhom="Công",sao=5,role="Carry toàn địch dựa vào Bạo Kích, mạnh dần theo trận",
   base="ĐT 70% ST vật lý hàng dọc; TC đánh toàn địch 108% ST, ST Bạo lần này +25%; 1 hiệp sau Miễn Khống Chế và Tỷ lệ Bạo +25%",
