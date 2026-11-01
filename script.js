@@ -395,13 +395,37 @@ document.getElementById("kIO").onclick=()=>{
  document.getElementById("ioCopy").onclick=()=>{const t=document.getElementById("ioT");navigator.clipboard?.writeText(t.value).catch(()=>{});t.select();};
  document.getElementById("ioReset").onclick=()=>{snap();K=KDEF.map((u,i)=>({...u,id:i+1}));ORB=KORB;KLOG.push(`${today()} · Đặt lại kho gốc`);ksave();krender();syncHeroes();dlg.close();};};
 
+function kDelIds(ids){const set=new Set(ids.map(Number)),used=K.filter(x=>set.has(+x.id));if(!used.length)return;snap();K=K.filter(x=>!set.has(+x.id));
+ const by={};used.forEach(x=>{const k=x.name+" "+stars(x.star);by[k]=(by[k]||0)+1});
+ KLOG.push(`${today()} · Xóa ${used.length} bản: ${Object.entries(by).map(([k,c])=>c>1?k+" ×"+c:k).join(", ")}`);ksave();krender();syncHeroes()}
+function kDelMany(){const groups={};K.forEach(u=>{(groups[u.name]=groups[u.name]||[]).push(u)});
+ const RK={"SSR+":0,"SSR":1,"SR":2,"R":3};
+ const names=Object.keys(groups).sort((a,b)=>(RK[groups[a][0].r]??4)-(RK[groups[b][0].r]??4)||a.localeCompare(b,"vi"));
+ const html=`<p class="meta">Chọn các bản đã dùng làm nguyên liệu hoặc nhập nhầm rồi bấm Xóa. Xóa xong vẫn bấm <b>Hoàn tác</b> được. "Chọn bản trùng" chọn mọi bản trừ bản sao cao nhất.</p>
+ <div class="dmtools"><input type="search" id="dmQ" placeholder="Lọc theo tên…" aria-label="Lọc theo tên"><button class="btn ghost" id="dmNone" type="button">Bỏ chọn hết</button></div>
+ <div class="dmlist">${names.map(n=>{const us=groups[n].slice().sort((a,b)=>b.star-a.star),u0=us[0];
+  return `<div class="dmgrp" data-dmn="${esc(n)}"><div class="dmhead"><b>${esc(n)}</b><span class="meta">${esc(u0.phe)} · <span class="rarity">${esc(u0.r||"SSR+")}</span> · ${us.length} bản</span>${us.length>1?`<button class="btn ghost" type="button" data-dmdup="${esc(n)}" style="padding:2px 8px;font-size:12px">Chọn bản trùng</button>`:""}</div>
+  <div class="units">${us.map((u,i)=>`<label class="unit"><input type="checkbox" class="dsel" value="${u.id}">${stars(u.star)}${i===0&&CORE.has(n)?' <span class="meta">⚠ đội chính</span>':""}</label>`).join("")}</div></div>`}).join("")}</div>`;
+ modal("Xóa nhiều bản tướng",html,()=>{const ids=[...document.querySelectorAll("#dlg-body input.dsel:checked")].map(b=>+b.value);if(!ids.length)return "Chưa chọn bản nào.";kDelIds(ids)},"Xóa đã chọn");
+ const ok=document.getElementById("mOk"),boxes=[...document.querySelectorAll("#dlg-body input.dsel")];
+ const upd=()=>{const c=boxes.filter(b=>b.checked).length;boxes.forEach(b=>b.closest(".unit").classList.toggle("sel",b.checked));ok.textContent=c?`Xóa ${c} bản`:"Xóa đã chọn"};
+ boxes.forEach(b=>b.addEventListener("change",upd));
+ document.querySelectorAll("#dlg-body [data-dmdup]").forEach(btn=>btn.onclick=()=>{const g=btn.closest(".dmgrp");const bs=[...g.querySelectorAll("input.dsel")];const all=bs.slice(1).every(b=>b.checked);bs.forEach((b,i)=>b.checked=i>0&&!all);upd()});
+ document.getElementById("dmNone").onclick=()=>{boxes.forEach(b=>b.checked=false);upd()};
+ document.getElementById("dmQ").addEventListener("input",e=>{const q=e.target.value.trim().toLowerCase();document.querySelectorAll("#dlg-body .dmgrp").forEach(g=>g.hidden=!!q&&!g.dataset.dmn.toLowerCase().includes(q))})}
+document.getElementById("kDelMany").onclick=kDelMany;
 document.addEventListener("click",e=>{const v=e.target.closest("[data-kv]");if(v){try{localStorage.setItem("kview",v.dataset.kv)}catch(x){}krender();return}
  const c=e.target.closest("[data-gc]");if(!c)return;const n=c.dataset.gc,us=K.filter(u=>u.name===n).sort((a,b)=>b.star-a.star),u0=us[0];
  modal(n,`<div class="meta">${esc(u0.phe)} · ${esc(u0.r||"SSR+")} · ${us.length} bản${CORE.has(n)?" · Đội chính":""}</div>
-  <div class="units" style="margin-top:10px">${us.map(u=>`<span class="unit"><button class="setst" data-set="${u.id}">${u.star}★ ✎</button><button class="up" data-up="${u.id}">▲ Nâng</button><button data-del="${u.id}">✕</button></span>`).join("")}</div>
-  <div class="acts" style="justify-content:flex-start;margin-top:10px"><button class="btn ghost" data-qadd="${esc(n)}">+1 bản</button>${byName[n]?`<button class="btn ghost" data-hinfo="${esc(n)}">Xem kỹ năng</button>`:""}</div>`,()=>{},"Đóng");
+  <div class="units" style="margin-top:10px">${us.map(u=>`<span class="unit"><input type="checkbox" class="dsel" value="${u.id}" aria-label="Chọn bản ${stars(u.star)}"><button class="setst" data-set="${u.id}">${stars(u.star)} ✎</button><button class="up" data-up="${u.id}">▲ Nâng</button><button data-del="${u.id}">✕</button></span>`).join("")}</div>
+  <div class="acts" style="justify-content:flex-start;margin-top:10px"><button class="btn ghost" data-qadd="${esc(n)}">+1 bản</button>${us.length>1?`<button class="btn ghost" id="hdSelDup">Chọn bản trùng</button><button class="btn" id="hdDel" disabled>Xóa đã chọn</button>`:""}${byName[n]?`<button class="btn ghost" data-hinfo="${esc(n)}">Xem kỹ năng</button>`:""}</div>`,()=>{},"Đóng");
  document.querySelectorAll("#dlg-body [data-set],#dlg-body [data-up],#dlg-body [data-del],#dlg-body [data-qadd]").forEach(b=>b.addEventListener("click",ev=>{ev.stopPropagation();ev.preventDefault();dlg.close();setTimeout(()=>KACT({target:b}),0)}));
- const hi=document.querySelector("#dlg-body [data-hinfo]");if(hi)hi.onclick=()=>{dlg.close();openHero(n)}});
+ const hi=document.querySelector("#dlg-body [data-hinfo]");if(hi)hi.onclick=()=>{dlg.close();openHero(n)};
+ const hd=document.getElementById("hdDel");if(hd){const boxes=[...document.querySelectorAll("#dlg-body input.dsel")];
+  const upd=()=>{const c=boxes.filter(b=>b.checked).length;boxes.forEach(b=>b.closest(".unit").classList.toggle("sel",b.checked));hd.disabled=!c;hd.textContent=c?`Xóa ${c} bản đã chọn`:"Xóa đã chọn"};
+  boxes.forEach(b=>b.addEventListener("change",upd));
+  document.getElementById("hdSelDup").onclick=()=>{boxes.forEach((b,i)=>b.checked=i>0);upd()};
+  hd.onclick=()=>{const ids=boxes.filter(b=>b.checked).map(b=>+b.value);if(!ids.length)return;kDelIds(ids);dlg.close()}}});
 document.addEventListener("keydown",e=>{if(e.key==="Enter"&&e.target.matches&&e.target.matches("[data-gc]"))e.target.click()});
 /* ===== 8 TÍNH NĂNG BỔ SUNG ===== */
 var X=X||{battles:[],orbDay:0,books:[],alloc:{}};

@@ -156,6 +156,12 @@ h3.sub{font:600 19px var(--display);margin:26px 0 4px}
 .unit button{border:0;background:transparent;color:var(--muted);cursor:pointer;font:600 12px var(--body);padding:2px 5px;border-radius:4px}
 .unit button.up{color:var(--accent)}
 .unit button:hover{background:var(--line)}
+.unit input.dsel{width:16px;height:16px;margin:0 2px 0 0;accent-color:var(--accent)}
+.unit.sel{border-color:#c0392b;background:rgba(192,57,43,.12)}
+.dmgrp{border-top:1px solid var(--line);padding:8px 0}.dmgrp:first-child{border-top:0}
+.dmhead{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:6px}.dmhead b{font-size:14px}
+.dmlist{max-height:60vh;overflow:auto;margin-top:8px}
+.dmtools{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.dmtools input[type=search]{flex:1;min-width:140px}
 .tagcore{font:600 10px var(--body);color:var(--good);border:1px solid var(--good);border-radius:4px;padding:0 4px}
 .rarity{font:600 10px var(--body);color:var(--muted)}
 .klog{margin:0;padding-left:20px;font-size:13px;display:flex;flex-direction:column;gap:4px;max-height:240px;overflow:auto}
