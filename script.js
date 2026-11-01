@@ -361,7 +361,7 @@ const stars=s=>s>15?`15★+NT${s-15}`:`${s}★`;
 /* ===== Thẻ tướng kiểu game ===== */
 var HART={"Hạng Vũ": "assets/images/heroes/hang-vu.jpg", "Lữ Bố": "assets/images/heroes/lu-bo.jpg", "Mạc Tà": "assets/images/heroes/mac-ta.jpg", "Huyền Trang": "assets/images/heroes/huyen-trang.jpg", "Gia Cát Lượng": "assets/images/heroes/gia-cat-luong.jpg", "Võ Tắc Thiên": "assets/images/heroes/vo-tac-thien.jpg", "Bạch Khởi": "assets/images/heroes/bach-khoi.jpg", "Dương Ngọc Hoàn": "assets/images/heroes/duong-ngoc-hoan.jpg", "Hoắc Khứ Bệnh": "assets/images/heroes/hoac-khu-benh.jpg", "Biển Thước": "assets/images/heroes/bien-thuoc.jpg"};
 /* Biểu tượng giao diện do người chơi cung cấp (src/ui_icons.json → assets/icons/ui/). Không có ảnh thì dùng bản vẽ HTML dự phòng. */
-var UIICON={};
+var UIICON={"sk-danh-thuong": "assets/icons/ui/sk-danh-thuong.png"};
 function ui(key,fallback,cls){return UIICON[key]?`<img class="uii ${cls||""}" src="${UIICON[key]}" alt="">`:fallback}
 const PHEKEY={"3Q":"phe-3q","Hán":"phe-han","Tần":"phe-tan","Đường":"phe-duong","Cổ Đế":"phe-co-de"},NHOMKEY={"Công":"nhom-cong","Thủ":"nhom-thu","Trợ":"nhom-tro","Thuật Sĩ":"nhom-thuat-si"};
 function heroImg(n){return HART[n]||(typeof ICONS!=="undefined"&&ICONS[n])||""}
