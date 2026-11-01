@@ -175,19 +175,19 @@ h3.sub{font:600 19px var(--display);margin:26px 0 4px}
 .hv-portrait{display:block;width:100%;height:auto;object-fit:contain}
 .hv-portrait.hv-icon{aspect-ratio:4/5;object-fit:contain;padding:24px}
 /* Full scene art keeps its native ratio; game information overlays the scenery. */
-.hv-full .hv-heading{position:absolute;inset:0 0 auto;z-index:2;background:linear-gradient(rgba(12,9,22,.8),rgba(12,9,22,.35) 75%,transparent);padding:12px 10px 20px}
-.hv-full .hv-tn{position:absolute;left:8px;top:112px;z-index:2;display:block;width:104px;padding:6px;border-radius:8px;background:rgba(20,14,30,.72)}
+.hv-full .hv-heading{grid-area:1/1;align-self:start;position:relative;z-index:2;background:linear-gradient(rgba(12,9,22,.8),rgba(12,9,22,.35) 75%,transparent);padding:12px 10px 20px}
+.hv-full .hv-tn{position:relative;z-index:2;display:block;width:104px;margin-top:6px;padding:6px;border-radius:8px;background:rgba(20,14,30,.72)}
 .hv-full .hv-tn .p{flex-direction:column}
 .hv-full .hv-tn .p .token{width:46px;height:46px}
 .hv-full .hv-tn .b{font-size:10px;line-height:1.4}
-.hv-full{display:grid;grid-template-columns:minmax(0,1fr)}
-.hv-full .hv-art{grid-area:1/1;aspect-ratio:1080/1900;overflow:hidden}
+.hv-full{display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(0,1fr) auto}
+.hv-full .hv-art{grid-area:1/1/4/2;aspect-ratio:1080/1900;min-width:0;overflow:hidden}
 .hv-full .hv-portrait{position:absolute;inset:0 0 auto;width:100%;height:auto}
 .hv-full .hv-pan{display:contents}
-.hv-full .hv-summary{grid-area:1/1;align-self:end;position:relative;z-index:3;padding:28px 12px 12px;color:#2b2218;background:linear-gradient(transparent,rgba(244,239,230,.92) 22%,#f4efe6)}
-.hv-full .hv-sk{margin:0;border-radius:0}
+.hv-full .hv-summary{grid-area:3/1;align-self:end;position:relative;z-index:3;padding:28px 12px 12px;color:#2b2218;background:linear-gradient(transparent,rgba(244,239,230,.92) 22%,#f4efe6)}
+.hv-full .hv-sk{grid-area:4/1;margin:0;border-radius:0}
 .hv-full .hv-bot{margin:10px 0 0;padding:0;background:transparent}
-@media(max-width:420px){.hv-full .hv-tn{top:112px;width:84px}.hv-full .hv-tn .p .token{width:38px;height:38px}.hv-full .hv-tn .t{font-size:11px}.hv-full .hv-tn .b{font-size:9px}}
+@media(max-width:420px){.hv-full .hv-tn{width:84px}.hv-full .hv-tn .p .token{width:38px;height:38px}.hv-full .hv-tn .t{font-size:11px}.hv-full .hv-tn .b{font-size:9px}}
 
 .hv-heading{padding:10px;background:linear-gradient(#302337,#1d1626)}
 
@@ -1044,15 +1044,15 @@ function heroView(n){const h=byName[n]||{name:n},st=heroStarNow(n),hs=((typeof X
  const tag=(f&F_CARRY)?"Cốt Lõi ST Cao":(f&F_TANK)?"Trụ Hàng Trước":(f&F_HEAL)?"Hồi Máu":(f&F_FEED)?"Hỗ Trợ Carry":(f&F_SHIELD)?"Khiên Đội":(f&F_AMP)?"Khuếch Đại":(f&F_CTRL)?"Khống Chế":"Hỗ Trợ";
  const art=HFULL[n]||HART[n]||(typeof ICONS!=="undefined"&&ICONS[n])||"";
  const tn=h.tn||"",pn=tn.split(" – ")[0].split(" (")[0].trim(),tb=(tn.split("–")[1]||"").trim(),ph=byName[pn];
+ const bond=pn?`<div class="hv-tn"><div class="t">Tình Nghĩa</div><div class="p">${token(h)}${ph?token(ph):`<span class="token">${esc(short(pn))}</span>`}</div><div class="b">${esc(pn)}${tb?" · đồng thời ra trận, "+esc(tb):""}</div></div>`:"";
  const flames=st>15?(UIICON["nt-flame"]?`<div>${ui("nt-flame","","fl").repeat(Math.min(5,st-15))}</div>`:`<div style="font-size:18px;filter:hue-rotate(195deg) saturate(1.6)">${"🔥".repeat(Math.min(5,st-15))}</div>`):starRow(st);
  const v=x=>x?(x>=100000?(Math.round(x/1000)/10).toString().replace(/\.0$/,"")+"vạn":String(x)):"—";/* như game: ≥10 vạn ghi "194vạn", "29.8vạn"; nhỏ hơn ghi số thường */
- return `<div class="hv${HFULL[n]?" hv-full":""}"><div class="hv-art"><div class="hv-heading">
+ const heading=`<div class="hv-heading">
   <div class="hv-top">${ui(PHEKEY[h.phe],`<span class="hv-dia" style="background:${PHE_COLOR[h.phe]||"#555"}"><span>${esc(PHE_SHORT[h.phe]||h.phe||"")}</span></span>`,"dia")}${ui(NHOMKEY[h.nhom],`<span class="hv-dia" style="background:#a8321e"><span>${esc((h.nhom||"").slice(0,1))}</span></span>`,"dia")}
    <div class="hv-name">${flames}<div>${rarityBadge("SSR+")}<b>${esc(n)}</b></div></div></div>
-  <div class="hv-tag" data-phe="${esc(h.phe||'')}">${ui("khung-"+PHEKEY[h.phe],"","")}<span>${esc(tag)}</span></div>
-  </div>${art?`<img class="hv-portrait${HFULL[n]||HART[n]?"":" hv-icon"}" src="${esc(art)}" alt="${esc(n)} – ảnh nhân vật" decoding="async">`:""}
-  ${pn?`<div class="hv-tn"><div class="t">Tình Nghĩa</div><div class="p">${token(h)}${ph?token(ph):`<span class="token">${esc(short(pn))}</span>`}</div><div class="b">${esc(pn)}${tb?" · đồng thời ra trận, "+esc(tb):""}</div></div>`:""}
- </div><div class="hv-pan"><div class="hv-summary"><div class="hv-lc" aria-label="Chiến lực">${ui("frame-chien", "", "")}<span>${hs.lc?esc(fmtLC(hs.lc).replace(" vạn ","vạn")):"—"}</span></div>
+  <div class="hv-tag" data-phe="${esc(h.phe||'')}">${ui("khung-"+PHEKEY[h.phe],"","")}<span>${esc(tag)}</span></div>${HFULL[n]?bond:""}</div>`;
+ const portrait=art?`<img class="hv-portrait${HFULL[n]||HART[n]?"":" hv-icon"}" src="${esc(art)}" alt="${esc(n)} – ảnh nhân vật" decoding="async">`:"";
+ return `<div class="hv${HFULL[n]?" hv-full":""}">${HFULL[n]?`<div class="hv-art">${portrait}</div>${heading}`:`<div class="hv-art">${heading}${portrait}${bond}</div>`} <div class="hv-pan"><div class="hv-summary"><div class="hv-lc" aria-label="Chiến lực">${ui("frame-chien", "", "")}<span>${hs.lc?esc(fmtLC(hs.lc).replace(" vạn ","vạn")):"—"}</span></div>
   <div class="hv-row"><div class="hv-st"><div><span>${ui("st-cap","","st")}Cấp</span><span>${lv||"—"}/${hs.lvmax||"—"}</span></div><div><span>${ui("st-hp","","st")}HP</span><span>${v(hs.hp)}</span></div><div><span>${ui("st-cong","","st")}Công</span><span>${v(hs.atk)}</span></div><div><span>${ui("st-thu","","st")}Thủ</span><span>${v(hs.def)}</span></div></div>
    <div class="hv-sb"><button data-hvs="dt" aria-pressed="false">${ui("sk-danh-thuong","<i>⚔</i>","sk")}Đánh Thường</button><button data-hvs="tc" aria-pressed="false">${ui("sk-tuyet-chieu","<i>✦</i>","sk")}Tuyệt Chiêu</button><button data-hvs="tn" aria-pressed="false">${ui("sk-tiem-nang","<i>☯</i>","sk")}Tiềm Năng</button></div></div>
   <div class="hv-bot"><button data-hvb="cp">${ui("btn-cong-phap","","bt")}Công Pháp</button><button data-hvb="tk">${ui("btn-tuyet-ky","","bt")}Tuyệt Kỹ</button><button data-hvb="tt">${ui("btn-thuoc-tinh","","bt")}Thuộc Tính</button></div></div><div class="hv-sk" id="hvSk" hidden></div></div></div>`}

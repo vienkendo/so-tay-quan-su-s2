@@ -128,15 +128,15 @@ function heroView(n){const h=byName[n]||{name:n},st=heroStarNow(n),hs=((typeof X
  const tag=(f&F_CARRY)?"Cốt Lõi ST Cao":(f&F_TANK)?"Trụ Hàng Trước":(f&F_HEAL)?"Hồi Máu":(f&F_FEED)?"Hỗ Trợ Carry":(f&F_SHIELD)?"Khiên Đội":(f&F_AMP)?"Khuếch Đại":(f&F_CTRL)?"Khống Chế":"Hỗ Trợ";
  const art=HFULL[n]||HART[n]||(typeof ICONS!=="undefined"&&ICONS[n])||"";
  const tn=h.tn||"",pn=tn.split(" – ")[0].split(" (")[0].trim(),tb=(tn.split("–")[1]||"").trim(),ph=byName[pn];
+ const bond=pn?`<div class="hv-tn"><div class="t">Tình Nghĩa</div><div class="p">${token(h)}${ph?token(ph):`<span class="token">${esc(short(pn))}</span>`}</div><div class="b">${esc(pn)}${tb?" · đồng thời ra trận, "+esc(tb):""}</div></div>`:"";
  const flames=st>15?(UIICON["nt-flame"]?`<div>${ui("nt-flame","","fl").repeat(Math.min(5,st-15))}</div>`:`<div style="font-size:18px;filter:hue-rotate(195deg) saturate(1.6)">${"🔥".repeat(Math.min(5,st-15))}</div>`):starRow(st);
  const v=x=>x?(x>=100000?(Math.round(x/1000)/10).toString().replace(/\.0$/,"")+"vạn":String(x)):"—";/* như game: ≥10 vạn ghi "194vạn", "29.8vạn"; nhỏ hơn ghi số thường */
- return `<div class="hv${HFULL[n]?" hv-full":""}"><div class="hv-art"><div class="hv-heading">
+ const heading=`<div class="hv-heading">
   <div class="hv-top">${ui(PHEKEY[h.phe],`<span class="hv-dia" style="background:${PHE_COLOR[h.phe]||"#555"}"><span>${esc(PHE_SHORT[h.phe]||h.phe||"")}</span></span>`,"dia")}${ui(NHOMKEY[h.nhom],`<span class="hv-dia" style="background:#a8321e"><span>${esc((h.nhom||"").slice(0,1))}</span></span>`,"dia")}
    <div class="hv-name">${flames}<div>${rarityBadge("SSR+")}<b>${esc(n)}</b></div></div></div>
-  <div class="hv-tag" data-phe="${esc(h.phe||'')}">${ui("khung-"+PHEKEY[h.phe],"","")}<span>${esc(tag)}</span></div>
-  </div>${art?`<img class="hv-portrait${HFULL[n]||HART[n]?"":" hv-icon"}" src="${esc(art)}" alt="${esc(n)} – ảnh nhân vật" decoding="async">`:""}
-  ${pn?`<div class="hv-tn"><div class="t">Tình Nghĩa</div><div class="p">${token(h)}${ph?token(ph):`<span class="token">${esc(short(pn))}</span>`}</div><div class="b">${esc(pn)}${tb?" · đồng thời ra trận, "+esc(tb):""}</div></div>`:""}
- </div><div class="hv-pan"><div class="hv-summary"><div class="hv-lc" aria-label="Chiến lực">${ui("frame-chien", "", "")}<span>${hs.lc?esc(fmtLC(hs.lc).replace(" vạn ","vạn")):"—"}</span></div>
+  <div class="hv-tag" data-phe="${esc(h.phe||'')}">${ui("khung-"+PHEKEY[h.phe],"","")}<span>${esc(tag)}</span></div>${HFULL[n]?bond:""}</div>`;
+ const portrait=art?`<img class="hv-portrait${HFULL[n]||HART[n]?"":" hv-icon"}" src="${esc(art)}" alt="${esc(n)} – ảnh nhân vật" decoding="async">`:"";
+ return `<div class="hv${HFULL[n]?" hv-full":""}">${HFULL[n]?`<div class="hv-art">${portrait}</div>${heading}`:`<div class="hv-art">${heading}${portrait}${bond}</div>`} <div class="hv-pan"><div class="hv-summary"><div class="hv-lc" aria-label="Chiến lực">${ui("frame-chien", "", "")}<span>${hs.lc?esc(fmtLC(hs.lc).replace(" vạn ","vạn")):"—"}</span></div>
   <div class="hv-row"><div class="hv-st"><div><span>${ui("st-cap","","st")}Cấp</span><span>${lv||"—"}/${hs.lvmax||"—"}</span></div><div><span>${ui("st-hp","","st")}HP</span><span>${v(hs.hp)}</span></div><div><span>${ui("st-cong","","st")}Công</span><span>${v(hs.atk)}</span></div><div><span>${ui("st-thu","","st")}Thủ</span><span>${v(hs.def)}</span></div></div>
    <div class="hv-sb"><button data-hvs="dt" aria-pressed="false">${ui("sk-danh-thuong","<i>⚔</i>","sk")}Đánh Thường</button><button data-hvs="tc" aria-pressed="false">${ui("sk-tuyet-chieu","<i>✦</i>","sk")}Tuyệt Chiêu</button><button data-hvs="tn" aria-pressed="false">${ui("sk-tiem-nang","<i>☯</i>","sk")}Tiềm Năng</button></div></div>
   <div class="hv-bot"><button data-hvb="cp">${ui("btn-cong-phap","","bt")}Công Pháp</button><button data-hvb="tk">${ui("btn-tuyet-ky","","bt")}Tuyệt Kỹ</button><button data-hvb="tt">${ui("btn-thuoc-tinh","","bt")}Thuộc Tính</button></div></div><div class="hv-sk" id="hvSk" hidden></div></div></div>`}
