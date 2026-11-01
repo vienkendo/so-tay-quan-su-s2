@@ -133,7 +133,7 @@ function heroView(n){const h=byName[n]||{name:n},st=heroStarNow(n),hs=((typeof X
  return `<div class="hv${HFULL[n]?" hv-full":""}"><div class="hv-art"><div class="hv-heading">
   <div class="hv-top">${ui(PHEKEY[h.phe],`<span class="hv-dia" style="background:${PHE_COLOR[h.phe]||"#555"}"><span>${esc(PHE_SHORT[h.phe]||h.phe||"")}</span></span>`,"dia")}${ui(NHOMKEY[h.nhom],`<span class="hv-dia" style="background:#a8321e"><span>${esc((h.nhom||"").slice(0,1))}</span></span>`,"dia")}
    <div class="hv-name">${flames}<div><b class="r">SSR+</b><b>${esc(n)}</b></div></div></div>
-  <div class="hv-tag">${ui("khung-"+PHEKEY[h.phe],"","")}<span>${esc(tag)}</span></div>
+  <div class="hv-tag" data-phe="${esc(h.phe||'')}">${ui("khung-"+PHEKEY[h.phe],"","")}<span>${esc(tag)}</span></div>
   </div>${art?`<img class="hv-portrait${HFULL[n]||HART[n]?"":" hv-icon"}" src="${esc(art)}" alt="${esc(n)} – ảnh nhân vật" decoding="async">`:""}
   ${pn?`<div class="hv-tn"><div class="t">Tình Nghĩa</div><div class="p">${token(h)}${ph?token(ph):`<span class="token">${esc(short(pn))}</span>`}</div><div class="b">${esc(pn)}${tb?" · đồng thời ra trận, "+esc(tb):""}</div></div>`:""}
  </div><div class="hv-pan"><div class="hv-summary"><div class="hv-lc">Chiến ${hs.lc?esc(fmtLC(hs.lc).replace(" vạn ","vạn")):"—"}</div>
