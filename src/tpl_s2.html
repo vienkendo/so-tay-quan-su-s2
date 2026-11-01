@@ -1252,7 +1252,7 @@ var HART=/*__HEROART__*/{};
 /* Biểu tượng giao diện do người chơi cung cấp (src/ui_icons.json → assets/icons/ui/). Không có ảnh thì dùng bản vẽ HTML dự phòng. */
 var UIICON=/*__UIICONS__*/{};
 function ui(key,fallback,cls){return UIICON[key]?`<img class="uii ${cls||""}" src="${UIICON[key]}" alt="">`:fallback}
-const PHEKEY={"3Q":"phe-3q","Hán":"phe-han","Tần":"phe-tan","Đường":"phe-duong","Cổ Đế":"phe-co-de"},NHOMKEY={"Công":"nhom-cong","Thủ":"nhom-thu","Trợ":"nhom-tro","Thuật Sĩ":"nhom-thuat-si"};
+const PHEKEY={"3Q":"phe-3q","Hán":"phe-han","Tần":"phe-tan","Đường":"phe-duong","Cổ Đế":"phe-co-de"},NHOMKEY={"Công":"nhom-tan-cong","Thủ":"nhom-do-don","Trợ":"nhom-bo-tro","Thuật Sĩ":"nhom-thuat-si"};
 function heroImg(n){return HART[n]||(typeof ICONS!=="undefined"&&ICONS[n])||""}
 const PHE_SHORT={"3Q":"3Q","Hán":"Hán","Tần":"Tần","Đường":"Đường"};
 function starRow(s){s=+s||0;if(s>15)return `<span class="gstars nt" aria-label="Nhập Thánh ${s-15}">${"🔥".repeat(Math.min(5,s-15))}</span>`;const tier=s<=5?"g":s<=10?"r":"c",k=s<=5?s:s<=10?s-5:Math.min(5,s-10);return `<span class="gstars ${tier}" aria-label="${s} sao">${"★".repeat(Math.max(k,0))}</span>`}
