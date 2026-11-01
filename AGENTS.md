@@ -40,7 +40,8 @@ index.html, script.js, style.css   SINH TỰ ĐỘNG – không sửa tay
    - mở đủ các tab chính và tab con ở viewport 390×844 và 1280×900;
    - không có `pageerror` hay console error;
    - không tràn ngang (`scrollWidth` bằng chiều rộng viewport);
-   - tính năng mới thì thử thao tác thật: nhập, lưu, tải lại trang, Hoàn tác.
+   - tính năng mới thì thử thao tác thật: nhập, lưu, tải lại trang, Hoàn tác;
+   - sửa bộ tối ưu đội thì chạy `node tests/optimizer_test.js` (B&B so với brute force, xếp vị trí) – phải PASS hết.
 3. Commit lên `main` rồi push.
 4. Báo người chơi bằng tiếng Việt, phân biệt rõ "đã commit" và "đã kiểm thử".
 
