@@ -180,7 +180,13 @@ h3.sub{font:600 19px var(--display);margin:26px 0 4px}
 .hv-full .hv-tn .p{flex-direction:column}
 .hv-full .hv-tn .p .token{width:46px;height:46px}
 .hv-full .hv-tn .b{font-size:10px;line-height:1.4}
-.hv-full .hv-pan{padding-top:12px}
+.hv-full{display:grid;grid-template-columns:minmax(0,1fr)}
+.hv-full .hv-art{grid-area:1/1;aspect-ratio:1080/1900;overflow:hidden}
+.hv-full .hv-portrait{position:absolute;inset:0 0 auto;width:100%;height:auto}
+.hv-full .hv-pan{display:contents}
+.hv-full .hv-summary{grid-area:1/1;align-self:end;position:relative;z-index:3;padding:28px 12px 12px;color:#2b2218;background:linear-gradient(transparent,rgba(244,239,230,.92) 22%,#f4efe6)}
+.hv-full .hv-sk{margin:0;border-radius:0}
+.hv-full .hv-bot{margin:10px 0 0;padding:0;background:transparent}
 @media(max-width:420px){.hv-full .hv-tn{top:100px;width:84px}.hv-full .hv-tn .p .token{width:38px;height:38px}.hv-full .hv-tn .t{font-size:11px}.hv-full .hv-tn .b{font-size:9px}}
 
 .hv-heading{padding:10px;background:linear-gradient(#302337,#1d1626)}
@@ -1045,11 +1051,10 @@ function heroView(n){const h=byName[n]||{name:n},st=heroStarNow(n),hs=((typeof X
   <div class="hv-tag">${esc(tag)}</div>
   </div>${art?`<img class="hv-portrait${HFULL[n]||HART[n]?"":" hv-icon"}" src="${esc(art)}" alt="${esc(n)} – ảnh nhân vật" decoding="async">`:""}
   ${pn?`<div class="hv-tn"><div class="t">Tình Nghĩa</div><div class="p">${token(h)}${ph?token(ph):`<span class="token">${esc(short(pn))}</span>`}</div><div class="b">${esc(pn)}${tb?" · đồng thời ra trận, "+esc(tb):""}</div></div>`:""}
- </div><div class="hv-pan"><div class="hv-lc">Chiến ${hs.lc?esc(fmtLC(hs.lc).replace(" vạn ","vạn")):"—"}</div>
+ </div><div class="hv-pan"><div class="hv-summary"><div class="hv-lc">Chiến ${hs.lc?esc(fmtLC(hs.lc).replace(" vạn ","vạn")):"—"}</div>
   <div class="hv-row"><div class="hv-st"><div><span>${ui("st-cap","","st")}Cấp</span><span>${lv||"—"}/${hs.lvmax||"—"}</span></div><div><span>${ui("st-hp","","st")}HP</span><span>${v(hs.hp)}</span></div><div><span>${ui("st-cong","","st")}Công</span><span>${v(hs.atk)}</span></div><div><span>${ui("st-thu","","st")}Thủ</span><span>${v(hs.def)}</span></div></div>
    <div class="hv-sb"><button data-hvs="dt" aria-pressed="false">${ui("sk-danh-thuong","<i>⚔</i>","sk")}Đánh Thường</button><button data-hvs="tc" aria-pressed="false">${ui("sk-tuyet-chieu","<i>✦</i>","sk")}Tuyệt Chiêu</button><button data-hvs="tn" aria-pressed="false">${ui("sk-tiem-nang","<i>☯</i>","sk")}Tiềm Năng</button></div></div>
-  <div class="hv-sk" id="hvSk" hidden></div>
-  <div class="hv-bot"><button data-hvb="cp">${ui("btn-cong-phap","","bt")}Công Pháp</button><button data-hvb="tk">${ui("btn-tuyet-ky","","bt")}Tuyệt Kỹ</button><button data-hvb="tt">${ui("btn-thuoc-tinh","","bt")}Thuộc Tính</button></div></div></div>`}
+  <div class="hv-bot"><button data-hvb="cp">${ui("btn-cong-phap","","bt")}Công Pháp</button><button data-hvb="tk">${ui("btn-tuyet-ky","","bt")}Tuyệt Kỹ</button><button data-hvb="tt">${ui("btn-thuoc-tinh","","bt")}Thuộc Tính</button></div></div><div class="hv-sk" id="hvSk" hidden></div></div></div>`}
 function heroViewBind(n){const h=byName[n]||{},sk=document.getElementById("hvSk");if(!sk)return;const st=heroStarNow(n);
  const base=h.base||"",parts=base.split(/;\s*(?=TC\b)/),dt=/^ĐT\b/.test(parts[0])?parts[0].replace(/^ĐT\s*/,""):base,tc=parts[1]?parts[1].replace(/^TC\s*/,""):/Không thi triển kỹ năng/i.test(base)?"Không thi triển kỹ năng – sức mạnh nằm ở đánh thường và Nộ":"Chưa tách được, xem Đánh thường";
  const show=(k,html)=>{document.querySelectorAll("#dlg-body [data-hvs],#dlg-body [data-hvb]").forEach(b=>b.setAttribute("aria-pressed",(b.dataset.hvs||b.dataset.hvb)===k));sk.hidden=false;sk.innerHTML=html};

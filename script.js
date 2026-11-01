@@ -136,11 +136,10 @@ function heroView(n){const h=byName[n]||{name:n},st=heroStarNow(n),hs=((typeof X
   <div class="hv-tag">${esc(tag)}</div>
   </div>${art?`<img class="hv-portrait${HFULL[n]||HART[n]?"":" hv-icon"}" src="${esc(art)}" alt="${esc(n)} – ảnh nhân vật" decoding="async">`:""}
   ${pn?`<div class="hv-tn"><div class="t">Tình Nghĩa</div><div class="p">${token(h)}${ph?token(ph):`<span class="token">${esc(short(pn))}</span>`}</div><div class="b">${esc(pn)}${tb?" · đồng thời ra trận, "+esc(tb):""}</div></div>`:""}
- </div><div class="hv-pan"><div class="hv-lc">Chiến ${hs.lc?esc(fmtLC(hs.lc).replace(" vạn ","vạn")):"—"}</div>
+ </div><div class="hv-pan"><div class="hv-summary"><div class="hv-lc">Chiến ${hs.lc?esc(fmtLC(hs.lc).replace(" vạn ","vạn")):"—"}</div>
   <div class="hv-row"><div class="hv-st"><div><span>${ui("st-cap","","st")}Cấp</span><span>${lv||"—"}/${hs.lvmax||"—"}</span></div><div><span>${ui("st-hp","","st")}HP</span><span>${v(hs.hp)}</span></div><div><span>${ui("st-cong","","st")}Công</span><span>${v(hs.atk)}</span></div><div><span>${ui("st-thu","","st")}Thủ</span><span>${v(hs.def)}</span></div></div>
    <div class="hv-sb"><button data-hvs="dt" aria-pressed="false">${ui("sk-danh-thuong","<i>⚔</i>","sk")}Đánh Thường</button><button data-hvs="tc" aria-pressed="false">${ui("sk-tuyet-chieu","<i>✦</i>","sk")}Tuyệt Chiêu</button><button data-hvs="tn" aria-pressed="false">${ui("sk-tiem-nang","<i>☯</i>","sk")}Tiềm Năng</button></div></div>
-  <div class="hv-sk" id="hvSk" hidden></div>
-  <div class="hv-bot"><button data-hvb="cp">${ui("btn-cong-phap","","bt")}Công Pháp</button><button data-hvb="tk">${ui("btn-tuyet-ky","","bt")}Tuyệt Kỹ</button><button data-hvb="tt">${ui("btn-thuoc-tinh","","bt")}Thuộc Tính</button></div></div></div>`}
+  <div class="hv-bot"><button data-hvb="cp">${ui("btn-cong-phap","","bt")}Công Pháp</button><button data-hvb="tk">${ui("btn-tuyet-ky","","bt")}Tuyệt Kỹ</button><button data-hvb="tt">${ui("btn-thuoc-tinh","","bt")}Thuộc Tính</button></div></div><div class="hv-sk" id="hvSk" hidden></div></div></div>`}
 function heroViewBind(n){const h=byName[n]||{},sk=document.getElementById("hvSk");if(!sk)return;const st=heroStarNow(n);
  const base=h.base||"",parts=base.split(/;\s*(?=TC\b)/),dt=/^ĐT\b/.test(parts[0])?parts[0].replace(/^ĐT\s*/,""):base,tc=parts[1]?parts[1].replace(/^TC\s*/,""):/Không thi triển kỹ năng/i.test(base)?"Không thi triển kỹ năng – sức mạnh nằm ở đánh thường và Nộ":"Chưa tách được, xem Đánh thường";
  const show=(k,html)=>{document.querySelectorAll("#dlg-body [data-hvs],#dlg-body [data-hvb]").forEach(b=>b.setAttribute("aria-pressed",(b.dataset.hvs||b.dataset.hvb)===k));sk.hidden=false;sk.innerHTML=html};
