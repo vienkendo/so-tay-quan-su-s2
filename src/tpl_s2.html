@@ -754,6 +754,7 @@ h3 { cursor: pointer; }
         <tr><td>12→13★</td><td class="num">5,000</td><td>Tây Thi (server cũ)</td></tr>
         <tr><td>13→14★</td><td class="num">2,500</td><td>Lý Long Cơ (server cũ)</td></tr>
         <tr><td>15★→Nhập Thánh 1</td><td class="num">5,000</td><td>+ 2 bản trùng + 1 tướng cùng phe 10★</td></tr>
+        <tr><td>NT1→NT2</td><td class="num">4 × 3,000</td><td>4 ô: 2 tướng 6★ cùng phe / 1 tướng 6★ cùng phe / tướng 8★ / 10★ bất kỳ</td></tr>
         <tr><td>NT2→NT3</td><td class="num">4 × 3,000</td><td>4 ô: bản trùng 6★ / tướng 8★ / 7★ / 10★ bất kỳ</td></tr>
         </tbody></table></div>
         <p class="meta" style="margin:8px 0 0">Mốc mở Đặc tính (9, 11, 13★) tốn nhiều hơn mốc chỉ số.</p></div>
@@ -1153,7 +1154,7 @@ renderTeam(); renderGrid(); renderUp();
 const KDEF=/*__KHO__*/[];var KORB=/*__KORB__*/0;var KDEFX=/*__KX__*/null;
 const RULE={5:{copy:1,fs:5,fc:1,orb:0},6:{copy:0,fs:5,fc:2,orb:1000},7:{copy:0,fs:6,fc:1,orb:1000},8:{copy:1,fs:8,fc:1,orb:2000},
  9:{copy:0,fs:6,fc:1,orb:1000},10:{copy:1,fs:8,fc:1,orb:3000},11:{copy:0,fs:6,fc:1,orb:2000},12:{copy:1,fs:8,fc:1,orb:5000},13:{copy:0,fs:6,fc:2,orb:2500},
- 15:{copy:2,fs:10,fc:1,orb:5000}};/* 15★ → Nhập Thánh 1 lửa (16): 2 bản trùng + 1 tướng cùng phe 10★ + 5000 cầu (người chơi 01/11). 14→15 và NT1→NT2 chưa có; NT2→NT3 xem NTCOST */
+ 15:{copy:2,fs:10,fc:1,orb:5000}};/* 15★ → Nhập Thánh 1 lửa (16): 2 bản trùng + 1 tướng cùng phe 10★ + 5000 cầu (người chơi 01/11). 14→15 chưa có; NT2→NT3 xem NTCOST */
 var CORE=new Set(DATA.teams.flatMap(t=>[...t.front,...t.back]));
 let K, KLOG, KUNDO, ORB, kf="Tất cả";
 function kload(){try{const s=JSON.parse(localStorage.getItem("kho2")||"null");if(s){K=s.k;KLOG=s.log||[];KUNDO=s.undo||[];ORB=s.orb;M5=!!s.m5;LV=+s.lv||0;ATK=s.atk||{};if(s.x)X=Object.assign({battles:[],orbDay:0,books:[],alloc:{}},s.x);const m1=kmig(),m2=kpatch();if(m1||m2)ksave();return}}catch(e){}
@@ -2172,8 +2173,8 @@ function renderLinhPhu(){const g=document.getElementById("lpGrid");if(!g||!windo
 const TK={2:[["Đấu Chí Sục Sôi","Tấn công","Khai chiến: tổng Công +15%"],["Ngưng Thần Tịnh Tâm","Sinh tồn","Khai chiến: HP +20%"],["Ý Chí Sắt Đá","Buff","Khai chiến: Thủ +20%"],["Tâm Thần Hợp Nhất","Buff","Khai chiến: Công +7%, HP +10%, Thủ +10%"]],
  3:[["Mềm Nắn Rắn Buông","Buff","Khi có mặt: mỗi debuff trên địch, địch +2% ST phải chịu (tối đa 10%)"],["Càng Đánh Càng Mạnh","Buff","Hạ địch: +1 Nộ; mỗi lần nhận ST: 30% +1 Nộ"],["Mưa Xuân Ươm Chồi","Trị liệu","Hồi máu dư chuyển thành khiên, tối đa 50% HP tối đa"],["Ý Chí Kiên Định","Trị liệu","Hạ địch: hồi 15% HP tối đa"]],
  4:null,5:null,"tt":null};
-/* Chi phí Nhập Thánh theo mốc lửa: 4 ô (làm theo thứ tự bất kỳ), xong cả 4 → lên lửa kế. Nguồn: người chơi 01/11 (2→3 lửa). */
-const NTCOST={3:[["Hỗn Dương",3000,"1 bản trùng 6★ (chính tướng này)"],["Phá Quân",3000,"1 tướng 8★ bất kỳ"],["Loạn Vũ",3000,"1 tướng 7★ bất kỳ"],["Tham Đấu",3000,"1 tướng 10★ bất kỳ"]]};
+/* Chi phí Nhập Thánh theo mốc lửa: 4 ô (làm theo thứ tự bất kỳ), xong cả 4 → lên lửa kế. Nguồn: người chơi 01/11 (2→3 lửa), 12/11 (1→2 lửa). Mỗi ô cộng HP/Công/Thủ +5% (Bậc Thần). */
+const NTCOST={2:[["Loạn Vũ",3000,"2 tướng 6★ cùng phe"],["Hỗn Dương",3000,"1 tướng 6★ cùng phe"],["Phá Quân",3000,"1 tướng 8★ bất kỳ"],["Tham Đấu",3000,"1 tướng 10★ bất kỳ"]],3:[["Hỗn Dương",3000,"1 bản trùng 6★ (chính tướng này)"],["Phá Quân",3000,"1 tướng 8★ bất kỳ"],["Loạn Vũ",3000,"1 tướng 7★ bất kỳ"],["Tham Đấu",3000,"1 tướng 10★ bất kỳ"]]};
 const NTBONUS="Chỉ số Nhập Thánh (ảnh Lữ Bố): HP +30% (mốc 1 lửa), Công +30%, Thủ +30% (mốc 3 lửa) – mốc của Công chưa rõ";
 const TKROW=[[2,"Nhập Thánh 2"],[3,"Nhập Thánh 3"],[4,"Nhập Thánh 4"],[5,"Nhập Thánh 5"],["tt","Thánh Tôn"]];
 function tkSuggest(n,row){const st=Math.max(16,...K.filter(u=>u.name===n).map(u=>u.star)),f=heroFlags(n,st),h=byName[n]||{},txt=(h.base||"")+(h.nt||"");
