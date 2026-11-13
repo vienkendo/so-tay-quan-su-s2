@@ -125,8 +125,8 @@ heroes.append(dict(name="Hoắc Khứ Bệnh",phe="Hán",nhom="Công",sao=5,role
   s11="Đánh thường gây ×2 ST",
   s13="Chịu ST trực tiếp: 50% đánh thường phản kích (tối đa 5 lần/hiệp)",
   nt="Tấn công kèm 35% hút HP; mỗi 3 lần tấn công, đòn kế tiếp +80% ST chung cuộc",
-  tn="Vệ Thanh – Công +15%",pvp=4,boss=3,pve=5,keep="Chưa sở hữu – carry thay thế (Hán)",gear="Công, Bạo Kích, Hút HP",books="",ban=1,
-  stat="Chưa sở hữu (ảnh Đồ Giám). Tiềm năng: bậc 1–5 Công +350, Công +10%, Công +800, Bạo +10%, Trúng +10%; 6★ Nộ +2 · 7★ Tăng ST +8% · 8★ Công +10% · 10★ Công +6% · 12★ Công +4% · 14★ Công +6% · 15★ đánh thường +10% ST. ⚠ Là carry thứ 2 – nếu ra trận cùng Lữ Bố sẽ tranh 'Công cao nhất'."))
+  tn="Vệ Thanh – Công +15%",pvp=4,boss=3,pve=5,keep="Đã sở hữu (13/11) – carry thay thế (Hán)",gear="Công, Bạo Kích, Hút HP",books="",ban=1,
+  stat="Đã sở hữu từ 13/11 (ảnh Đồ Giám). Tiềm năng: bậc 1–5 Công +350, Công +10%, Công +800, Bạo +10%, Trúng +10%; 6★ Nộ +2 · 7★ Tăng ST +8% · 8★ Công +10% · 10★ Công +6% · 12★ Công +4% · 14★ Công +6% · 15★ đánh thường +10% ST. ⚠ Là carry thứ 2 – nếu ra trận cùng Lữ Bố sẽ tranh 'Công cao nhất'."))
 
 UP=[dict(name="Vương Chiêu Quân",cur=5,next=6,unlock="Nộ cơ bản +2 · HP/Công/Thủ 100%→120% · giới hạn cấp 100→145",copy="0/1 (bản 3★)",
   fodder="Tướng Hán 5★",fodderHave="0/1",cost=None,note="Đang kẹt vì chưa có bản trùng. Nguyên liệu Hán: dùng Lưu Bang hoặc Ngu Cơ; KHÔNG dùng Ban Chiêu, Hàn Tín.")]
@@ -186,7 +186,7 @@ H={h["name"]:h for h in heroes}
 H["Quỷ Cốc Tử"].update(keep="Cốt lõi (Boss)")
 H["Tôn Sách"].update(keep="Dự bị (giữ nguyên liệu 3Q cho Lữ Bố)")
 
-_vt=dict(old["Vệ Thanh"]); _vt.update(sao=5,ban=2,books="",tn="Hoắc Khứ Bệnh (chưa sở hữu) – Công +15%",
+_vt=dict(old["Vệ Thanh"]); _vt.update(sao=5,ban=2,books="",tn="Hoắc Khứ Bệnh – Công +15%",
   s9="Sau khi dùng kỹ năng: bản thân và đồng đội ít HP nhất +2 Nộ",
   s11="Sau khi ra đòn 50%: 2 đồng đội ít HP nhất nhận Khiên 10% HP của Vệ Thanh, 1 hiệp",
   s13="Người nhận Khiên của Vệ Thanh được xóa toàn bộ debuff và Miễn Khống 1 hiệp",
