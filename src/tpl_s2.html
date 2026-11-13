@@ -2192,6 +2192,7 @@ const NTBONUS="Chỉ số Nhập Thánh (ảnh Lữ Bố): HP +30% (mốc 1 lử
 const TKROW=[[2,"Nhập Thánh 2"],[3,"Nhập Thánh 3"],[4,"Nhập Thánh 4"],[5,"Nhập Thánh 5"],["tt","Thánh Tôn"]];
 function tkSuggest(n,row){const st=Math.max(16,...K.filter(u=>u.name===n).map(u=>u.star)),f=heroFlags(n,st),h=byName[n]||{},txt=(h.base||"")+(h.nt||"");
  if(row===2){if(f&F_CARRY)return ["Đấu Chí Sục Sôi","carry: +15% Công ≈ +15% sát thương, giữ vị trí Công cao nhất để nhận buff"];
+  if(f&F_FEED&&/tử trận/.test(h.s9||""))return ["Ngưng Thần Tịnh Tâm","buff cho carry mất khi tướng này tử trận: sống lâu đáng hơn +15% Công của hỗ trợ (chỉ ~40% số đó sang carry)"];
   if(f&F_FEED&&/Công/.test(txt+(h.s9||"")))return ["Đấu Chí Sục Sôi","Công của tướng này được cộng sang carry / hồi máu theo Công"];
   if(f&(F_TANK|F_SHIELD))return ["Ngưng Thần Tịnh Tâm","tank/khiên theo HP tối đa: +20% HP vừa trụ vừa to khiên"];
   if(f&F_HEAL)return ["Đấu Chí Sục Sôi","hồi máu tính theo Công"];return ["Tâm Thần Hợp Nhất","hỗ trợ: cân bằng Công/HP/Thủ"]}

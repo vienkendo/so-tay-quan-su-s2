@@ -2,7 +2,7 @@
 DB=[
 ("Lữ Bố","3Q",["carry","rageDep"],"Carry đánh thường, mạnh theo Nộ"),
 ("Lý Long Cơ","Đường",["sub","amp"],"Gắn [Trường Hận] tăng ST mục tiêu phải chịu"),
-("Điêu Thuyền","3Q",["heal","cleanse"],"Hồi máu lớn; 11★ gánh khống chế cho carry"),
+("Điêu Thuyền","3Q",["heal","cleanse"],"Hồi máu lớn; 9★ liên kết +40% Công cho carry; 11★ gánh khống chế; 13★ tướng liên kết hồi 20% HP sau mỗi kỹ năng/xóa hiệu ứng; NT1 tướng liên kết +5% Công mỗi lần ra tay (tối đa 60%)"),
 ("Vương Chiêu Quân","Hán",["buff","shield"],"Buff Công, khiên toàn đội (11★)"),
 ("Ban Chiêu","Hán",["heal","buff"],"Hồi máu đều, buff Bạo Kích (11★)"),
 ("Lỗ Trí Thâm","Đường",["tank","ctrl","aoe"],"Tank khiêu khích"),
