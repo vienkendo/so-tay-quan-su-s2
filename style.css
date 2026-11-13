@@ -203,6 +203,7 @@ h3.sub{font:600 19px var(--display);margin:26px 0 4px}
 .hv-ed{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.hv-ed label{display:grid;font-size:11px;color:#6b5a44}.hv-ed input{width:100%;min-width:0}
 @media(max-width:600px){.hv-name b{font-size:15px;letter-spacing:1px}.hv-name .quality-badge{width:46px}.hv-tag{width:124px;min-height:36px;padding:6px 14px;font-size:11px}.hv-tag[data-phe]:not([data-phe="3Q"]){width:122px;min-height:30px;padding:4px 14px}.hv-lc{width:min(220px,100%);font-size:14px}}
 @media(max-width:420px){#dlg:has(.hv) .db{padding:8px}.hv-st div{font-size:11px;padding:4px 5px}.hv-sb button{font-size:10px;line-height:1.3;padding:4px 0}.hv-sb .uii.sk{width:40px;height:40px}.hv-sb i{width:38px;height:38px;font-size:18px}.hv-bot button{padding:8px;font-size:11px}.hv-ed{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.ttrow input[type=number]{width:58px}
 .chcard.q-Đỏ{border-left:4px solid #c0392b}.chcard.q-Tím{border-left:4px solid #8e44ad}.chcard.q-Cam{border-left:4px solid #e67e22}
 .unit input.dsel{width:16px;height:16px;margin:0 2px 0 0;accent-color:var(--accent)}
 .unit.sel{border-color:#c0392b;background:rgba(192,57,43,.12)}
