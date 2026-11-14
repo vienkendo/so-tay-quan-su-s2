@@ -85,7 +85,7 @@ index.html, script.js, style.css   SINH TỰ ĐỘNG – không sửa tay
 - **Lực chiến:** 1 vạn = 10.000 (`parseLC` đọc được "69.3vạn", "290vạn6676", "8.48ức").
 - **Trận:**
   - PVP: **bên phòng thủ (bị khiêu chiến) luôn đi trước**: thần thú có kỹ năng ra chiêu của bên đó → ô1 phòng thủ → ô1 khiêu chiến → ô2… (người chơi xác nhận 01/11). Đội tấn công cần sống qua đợt mở màn; đội phòng thủ đặt tướng dồn sát thương ở ô 1.
-    - Trận thắng Oz 14/11 (cùng đối thủ vừa thua): carry Lữ Bố ở **ô 1** (đối diện ô 1 địch gây ST thấp) ra đòn thứ 2 toàn trận và gánh 96% ST; tank (Lý Thế Dân) + tướng chịu đòn ở làn của Tư Mã Ý địch (ô 2–5). Một trận, chưa phải quy luật – cần thêm dữ liệu.
+    - Trận thắng Oz 14/11 (cùng đối thủ vừa thua): carry Lữ Bố ở **ô 1** (đối diện ô 1 địch gây ST thấp) ra đòn thứ 2 toàn trận và gánh 96% ST; tank (Lý Thế Dân) + tướng chịu đòn ở làn của Tư Mã Ý địch (ô 2–5). Nhưng gặp TiênHạ Nhiên (không có Tư Mã Ý, nhiều hồi máu, trận dài) Lữ Bố ô 1 lại chết và thua; Lữ Bố ô 4 sau Lý Long Cơ thì thắng hiệp 4. → Lữ Bố ô 1 chỉ khi cần ra đòn trước một carry bùng nổ (Tư Mã Ý); còn lại để tank đứng trước Lữ Bố trong cùng làn.
   - Trên màn hình trận, **hàng trong (gần giữa sân) = ô 1–3** từ trên xuống, hàng ngoài = ô 4–6 (người chơi xác nhận 14/11).
   - Đòn đơn thể đánh cùng làn dọc 1–4, 2–5, 3–6, ô trước trước.
   - Số hiệp tùy chế độ (thấy cả 5, 20, 30).
