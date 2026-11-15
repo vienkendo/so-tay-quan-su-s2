@@ -6,7 +6,7 @@
 <title>Sổ Tay Quân Sư S2</title>
 <meta name="theme-color" content="#17130f">
 <link rel="icon" href="assets/images/site-icon-fantasy.jpg">
-<link rel="stylesheet" href="style.css?v=6197c144">
+<link rel="stylesheet" href="style.css?v=1064f0cf">
 </head>
 <body>
 
@@ -123,6 +123,7 @@
     <div class="panel" id="kHint"></div>
     <div class="filters" id="kFilter"></div>
     <details class="panel" id="khoCov" style="margin:10px 0"></details>
+    <details class="panel" id="khoHunt" style="margin:10px 0"></details>
     <div class="kview" role="group" aria-label="Kiểu hiển thị"><button data-kv="card">Thẻ</button><button data-kv="list">Danh sách</button></div>
     <div id="kList" class="klist"></div>
     <div class="panel" style="margin-top:16px"><h3>Lịch sử</h3><ol id="kLog" class="klog"></ol></div>
@@ -201,7 +202,7 @@
   <section id="sao" hidden>
     <h2>Nâng sao</h2>
     <p class="lead">Bảng tự tính theo sao hiện tại trong Kho: mốc kế tiếp, bản trùng, tướng nguyên liệu (không tính tướng đội chính) và cầu cam.</p>
-    <div class="cash"><label for="cash">Nguyên liệu đang có</label><input id="cash" type="number" min="0" value=String(KORB)></div>
+    <div class="cash"><label for="cash">Nguyên liệu đang có</label><input id="cash" type="number" min="0"></div>
     <div class="tablewrap"><table>
       <thead><tr><th>Tướng</th><th>Sao</th><th>Mở khi lên sao kế</th><th>Bản sao</th><th>Tướng cùng phe</th><th>Nguyên liệu</th><th>Trạng thái</th><th>Lưu ý</th></tr></thead>
       <tbody id="upbody"></tbody>
@@ -401,6 +402,6 @@
   <div class="dh"><div id="dlg-token"></div><div><h3 id="dlg-title"></h3><div class="meta" id="dlg-meta"></div></div><button class="x" id="dlg-x" aria-label="Đóng">×</button></div>
   <div class="db" id="dlg-body"></div>
 </dialog>
-<script src="script.js?v=6197c144"></script>
+<script src="script.js?v=1064f0cf"></script>
 </body>
 </html>

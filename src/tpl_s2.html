@@ -646,6 +646,7 @@ h3 { cursor: pointer; }
     <div class="panel" id="kHint"></div>
     <div class="filters" id="kFilter"></div>
     <details class="panel" id="khoCov" style="margin:10px 0"></details>
+    <details class="panel" id="khoHunt" style="margin:10px 0"></details>
     <div class="kview" role="group" aria-label="Kiểu hiển thị"><button data-kv="card">Thẻ</button><button data-kv="list">Danh sách</button></div>
     <div id="kList" class="klist"></div>
     <div class="panel" style="margin-top:16px"><h3>Lịch sử</h3><ol id="kLog" class="klog"></ol></div>
@@ -724,7 +725,7 @@ h3 { cursor: pointer; }
   <section id="sao" hidden>
     <h2>Nâng sao</h2>
     <p class="lead">Bảng tự tính theo sao hiện tại trong Kho: mốc kế tiếp, bản trùng, tướng nguyên liệu (không tính tướng đội chính) và cầu cam.</p>
-    <div class="cash"><label for="cash">Nguyên liệu đang có</label><input id="cash" type="number" min="0" value=String(KORB)></div>
+    <div class="cash"><label for="cash">Nguyên liệu đang có</label><input id="cash" type="number" min="0"></div>
     <div class="tablewrap"><table>
       <thead><tr><th>Tướng</th><th>Sao</th><th>Mở khi lên sao kế</th><th>Bản sao</th><th>Tướng cùng phe</th><th>Nguyên liệu</th><th>Trạng thái</th><th>Lưu ý</th></tr></thead>
       <tbody id="upbody"></tbody>
@@ -1055,7 +1056,7 @@ const dlg=document.getElementById("dlg");
 document.getElementById("dlg-x").addEventListener("click",()=>dlg.close());
 dlg.addEventListener("click",e=>{ if(e.target===dlg) dlg.close(); });
 /* ===== Giao diện chi tiết tướng kiểu trong game ===== */
-const HFULL={"Ban Chiêu":"assets/images/heroes/full/ban-chieu.jpg","Hoắc Khứ Bệnh":"assets/images/heroes/full/hoac-khu-benh.jpg","Điêu Thuyền":"assets/images/heroes/full/dieu-thuyen.jpg","Lữ Bố":"assets/images/heroes/full/lu-bo.jpg","Lý Long Cơ":"assets/images/heroes/full/ly-long-co.jpg","Lý Thế Dân":"assets/images/heroes/full/ly-the-dan.jpg","Mạc Tà":"assets/images/heroes/full/mac-ta.jpg","Quan Vũ":"assets/images/heroes/full/quan-vu.jpg","Quỷ Cốc Tử":"assets/images/heroes/full/quy-coc-tu.jpg","Tư Mã Ý":"assets/images/heroes/full/tu-ma-y.jpg","Võ Tắc Thiên":"assets/images/heroes/full/vo-tac-thien.jpg","Vương Chiêu Quân":"assets/images/heroes/full/vuong-chieu-quan.jpg"};/* ảnh dọc đầy đủ do người chơi cung cấp; tướng khác dùng ảnh thẻ */
+const HFULL={"Phục Hy":"assets/images/heroes/full/phuc-hy.jpg","Ban Chiêu":"assets/images/heroes/full/ban-chieu.jpg","Hoắc Khứ Bệnh":"assets/images/heroes/full/hoac-khu-benh.jpg","Điêu Thuyền":"assets/images/heroes/full/dieu-thuyen.jpg","Lữ Bố":"assets/images/heroes/full/lu-bo.jpg","Lý Long Cơ":"assets/images/heroes/full/ly-long-co.jpg","Lý Thế Dân":"assets/images/heroes/full/ly-the-dan.jpg","Mạc Tà":"assets/images/heroes/full/mac-ta.jpg","Quan Vũ":"assets/images/heroes/full/quan-vu.jpg","Quỷ Cốc Tử":"assets/images/heroes/full/quy-coc-tu.jpg","Tư Mã Ý":"assets/images/heroes/full/tu-ma-y.jpg","Võ Tắc Thiên":"assets/images/heroes/full/vo-tac-thien.jpg","Vương Chiêu Quân":"assets/images/heroes/full/vuong-chieu-quan.jpg"};/* ảnh dọc đầy đủ do người chơi cung cấp; tướng khác dùng ảnh thẻ */
 function heroStarNow(n){const us=(typeof K!=="undefined"&&K||[]).filter(u=>u.name===n);return us.length?Math.max(...us.map(u=>u.star)):((byName[n]||{}).sao||0)}
 function heroView(n){const h=byName[n]||{name:n},st=heroStarNow(n),hs=((typeof X!=="undefined"&&X&&X.hs)||{})[n]||{},lv=((X&&X.hlv)||{})[n]||LV||"",f=heroFlags(n,st);
  const tag=(f&F_CARRY)?"Cốt Lõi ST Cao":(f&F_TANK)?"Trụ Hàng Trước":(f&F_HEAL)?"Hồi Máu":(f&F_FEED)?"Hỗ Trợ Carry":(f&F_SHIELD)?"Khiên Đội":(f&F_AMP)?"Khuếch Đại":(f&F_CTRL)?"Khống Chế":"Hỗ Trợ";
@@ -1290,7 +1291,7 @@ document.addEventListener("click",e=>{const b=e.target.closest("[data-uh]");if(!
  const t=document.createElement("span");t.dataset.up=b.dataset.uh;document.getElementById("kList").appendChild(t);t.click();t.remove();
  ids.forEach(id=>{const c=document.querySelector(`#dlg-body .picks input[value="${id}"]`);if(c)c.checked=true});});
 
-function krender(){_kr0();setTimeout(()=>{renderKhoCoverage();if(typeof renderTeamRadar==="function")renderTeamRadar();const sec=document.querySelector("main section:not([hidden])");if(sec&&sec.id==="thanthu")renderThanThu();if(sec&&sec.id==="linhphu")renderLinhPhu();if(sec&&sec.id==="chienhon")renderChienHon();if(sec&&sec.id==="tuyetky")renderTuyetKy();if(sec&&sec.id==="evlist")renderEvents();clearTimeout(PLANT);PLANT=setTimeout(()=>{renderPlan();const s2=document.querySelector("main section:not([hidden])");if(s2&&s2.id==="kho")_kr0()},50);if(sec&&sec.id==="quy")renderRules();if(window.cdvLoad)cdvLoad()},0);renderUpHint();renderRoad();renderBooks();renderBattles();const od=document.getElementById("kOd");if(od)od.value=X.orbDay||""}
+function krender(){_kr0();setTimeout(()=>{renderKhoCoverage();try{renderHunt()}catch(e){console.warn(e)}if(typeof renderTeamRadar==="function")renderTeamRadar();const sec=document.querySelector("main section:not([hidden])");if(sec&&sec.id==="thanthu")renderThanThu();if(sec&&sec.id==="linhphu")renderLinhPhu();if(sec&&sec.id==="chienhon")renderChienHon();if(sec&&sec.id==="tuyetky")renderTuyetKy();if(sec&&sec.id==="evlist")renderEvents();clearTimeout(PLANT);PLANT=setTimeout(()=>{renderPlan();const s2=document.querySelector("main section:not([hidden])");if(s2&&s2.id==="kho")_kr0()},50);if(sec&&sec.id==="quy")renderRules();if(window.cdvLoad)cdvLoad()},0);renderUpHint();renderRoad();renderBooks();renderBattles();const od=document.getElementById("kOd");if(od)od.value=X.orbDay||""}
 function snap(){KUNDO.push(JSON.stringify({k:K,orb:ORB,log:KLOG}))}
 const nid=()=>K.reduce((m,u)=>Math.max(m,u.id),0)+1;
 const today=()=>new Date().toLocaleString("vi-VN",{day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit"});
@@ -1309,7 +1310,7 @@ function ui(key,fallback,cls){return UIICON[key]?`<img class="uii ${cls||""}" sr
 function rarityBadge(r){const key={"SSR+":"rarity-ssr-plus","SSR":"rarity-ssr","SR":"rarity-sr"}[r];return key?`<span class="quality-badge" role="img" aria-label="${esc(r)}">${ui(key,esc(r),"")}</span>`:esc(r||"")}
 const PHEKEY={"3Q":"phe-3q","Hán":"phe-han","Tần":"phe-tan","Đường":"phe-duong","Cổ Đế":"phe-co-de"},NHOMKEY={"Công":"nhom-tan-cong","Thủ":"nhom-do-don","Trợ":"nhom-bo-tro","Thuật Sĩ":"nhom-thuat-si"};
 /* Ảnh riêng cho thẻ Kho được thu nhỏ chất lượng cao từ ảnh toàn thân. */
-const HCARD=new Set(["Ban Chiêu","Hoắc Khứ Bệnh","Điêu Thuyền","Lữ Bố","Lý Long Cơ","Lý Thế Dân","Mạc Tà","Quan Vũ","Quỷ Cốc Tử","Tư Mã Ý","Võ Tắc Thiên","Vương Chiêu Quân"]);
+const HCARD=new Set(["Phục Hy","Ban Chiêu","Hoắc Khứ Bệnh","Điêu Thuyền","Lữ Bố","Lý Long Cơ","Lý Thế Dân","Mạc Tà","Quan Vũ","Quỷ Cốc Tử","Tư Mã Ý","Võ Tắc Thiên","Vương Chiêu Quân"]);
 function heroImg(n){return (HCARD.has(n)&&HFULL[n]?HFULL[n].replace("/full/","/cards/").replace(/\.jpg$/i,".webp"):HFULL[n])||HART[n]||(typeof ICONS!=="undefined"&&ICONS[n])||""}
 const PHE_SHORT={"3Q":"3Q","Hán":"Hán","Tần":"Tần","Đường":"Đường"};
 function starRow(s){s=+s||0;if(s>15)return `<span class="gstars nt" aria-label="Nhập Thánh ${s-15}">${"🔥".repeat(Math.min(5,s-15))}</span>`;const tier=s<=5?"g":s<=10?"r":"c",k=s<=5?s:s<=10?s-5:Math.min(5,s-10);return `<span class="gstars ${tier}" aria-label="${s} sao">${"★".repeat(Math.max(k,0))}</span>`}
@@ -2004,7 +2005,13 @@ const SYN={
  "Lưu Bang":[["carry",0]],
  "Quan Vũ":[["carry",0]],
  "Tư Mã Ý":[["carry",0]],
- "Chung Vô Diệm":[["carry",0],["shield",11]]};
+ "Chung Vô Diệm":[["carry",0],["shield",11]],
+ /* Cổ Đế (nguồn: enemy_db). shield = bảo vệ cả đội (khiên/Giảm ST toàn đội); amp = tăng ST cho đồng đội hoặc giảm thủ địch */
+ "Cổ Đế Long Quân":[["aoe",0],["shield",9],["amp",16]],
+ "Đại Vũ":[["aoe",0]],
+ "Viêm Đế":[["carry",0],["amp",11]],
+ "Xi Vưu":[["carry",0]],
+ "Phục Hy":[["heal",0],["aoe",0],["amp",11],["rage",16]]};
 const SYNF={carry:F_CARRY,tank:F_TANK,heal:F_HEAL,rage:F_RAGE,amp:F_AMP,ctrl:F_CTRL,bleed:F_BLEED,aoe:F_AOE,dep:F_DEP,shield:F_SHIELD,feed:F_FEED};
 const heroConf=n=>SYN[n]?"ok":"low";
 const MILES=[["s9",9],["s11",11],["s13",13],["nt",16]];
@@ -2130,6 +2137,38 @@ function initTeamRadar(){const box=document.getElementById("teamRadar");if(!box)
 function renderKhoCoverage(){const box=document.getElementById("khoCov");if(!box||!window.KREADY)return;
  const names=[...new Set(K.filter(u=>u.r==="SSR+"||!u.r).map(u=>u.name))];const cnt={};RADAR_AX.slice(0,6).forEach(([k])=>cnt[k]=names.filter(n=>radarScore(n)[k]>=3).length);
  box.innerHTML=`<summary>Độ phủ vai trò trong kho (${names.length} tướng SSR+)</summary><div class="radar-legend" style="margin-top:8px">${RADAR_AX.slice(0,6).map(([k,t])=>`<span>${t}: <b>${cnt[k]}</b> tướng</span>`).join("")}</div><p class="meta">Đếm số tướng có điểm vai trò ≥ 3 (theo phân loại kỹ năng). Vai trò chỉ có 0–1 tướng là chỗ kho đang mỏng.</p>`}
+
+/* ===== Tướng nên săn: thử thêm từng tướng chưa có (mặc định phe Cổ Đế) vào kho ở các mốc sao, chạy lại bộ tối ưu đội ===== */
+var HUNT_PHE="Cổ Đế";const HUNT_MS=[6,9,11,13,16];
+function huntEval(n,phe){const own=ownedStars(),had=byName[n];if(!had)byName[n]={name:n,phe,tn:"",base:(EDB[n]||{}).desc||""};
+ try{const out={};DATA.teams.forEach((t,i)=>{if(i>1)return;const base=bestTeams(i,own,"bal");if(!base)return;const key=mk(t.mode),bt=[...base.front,...base.back].map(x=>+(byName[x]||{})[key]).filter(v=>!isNaN(v));if(!had)byName[n][key]=bt.length?bt.reduce((a,v)=>a+v,0)/bt.length:2.5;/* chưa có điểm chế độ → coi ngang trung bình đội hiện tại, để so thuần vai trò + sao */const rows=HUNT_MS.map(m=>{const r=bestTeams(i,Object.assign({},own,{[n]:Math.max(m,own[n]||0)}),"bal");const all=[...r.front,...r.back],bAll=[...base.front,...base.back];
+   return {m,inT:all.includes(n),d:r.v-base.v,out:bAll.filter(x=>!all.includes(x)),carry:r.carry}});out[i]={mode:t.mode,carry:base.carry,rows}});return out}
+ finally{if(!had)delete byName[n]}}
+function huntWhy(n,carry){const own=ownedStars(),why=[],warn=[],f9=heroFlags(n,13),d=(EDB[n]||{}).desc||"",ct=skillText(carry,own[carry]||0);
+ if(f9&F_CARRY)warn.push(`là carry thứ 2: giành vị trí carry và các hiệu ứng "Công cao nhất" với ${carry}`);
+ if(f9&F_SHIELD)why.push("bảo vệ cả đội");if(f9&F_AMP)why.push("tăng ST cho đồng đội / giảm thủ địch");if(f9&F_RAGE)why.push("cấp Nộ");if(f9&F_FEED)why.push("buff tướng Công cao nhất");if(f9&F_HEAL)why.push("hồi máu");if(f9&F_TANK)why.push("chịu đòn");
+ if(/vào trận|khai trận|khai chiến/i.test(d))why.push("có hiệu ứng ngay khi vào trận (PVP bên tấn công đi sau vẫn có)");
+ if(/thi triển KN/i.test(ct)&&/không tốn Nộ|thêm 1 lượt|thêm lượt|truy kích/i.test(d))why.push(`ra đòn nhiều lần → kích hoạt "đồng đội thi triển KN/ra tay" của ${carry}`);
+ if(/Công cao nhất/i.test(d)&&!(f9&F_CARRY))why.push("có hiệu ứng chuyển cho đồng đội Công cao nhất");
+ return {why,warn}}
+function renderHunt(){const box=document.getElementById("khoHunt");if(!box||!window.KREADY)return;const own=ownedStars(),open=box.open;
+ const phes=[...new Set(Object.values(EDB).map(e=>e.phe).filter(Boolean))];
+ const cands=Object.keys(EDB).filter(n=>EDB[n].phe===HUNT_PHE&&!(own[n]>=6)&&(SYN[n]||byName[n]));
+ const res=cands.map(n=>{const ev=huntEval(n,EDB[n].phe),pv=ev[0],first=pv?pv.rows.find(r=>r.inT):null,carry=pv?pv.carry:null;return {n,ev,first,carry,...huntWhy(n,carry||"")}})
+  .map(r=>({...r,fb:r.ev[1]?r.ev[1].rows.find(x=>x.inT):null})).sort((a,b)=>(a.first?a.first.m:99)-(b.first?b.first.m:99)||(a.fb?a.fb.m:99)-(b.fb?b.fb.m:99)||a.warn.length-b.warn.length||b.why.length-a.why.length||((b.first||{}).d||0)-((a.first||{}).d||0));
+ const mlab=m=>m>=16?"NT1":m+"★";
+ const cell=(ev,i)=>{const e=ev[i];if(!e)return "–";const f=e.rows.find(r=>r.inT);if(!f)return `<span class="meta">không vào đội tới NT1</span>`;
+  return `từ <b>${mlab(f.m)}</b> <span class="meta">(+${f.d.toFixed(1)} điểm${f.out.length?", thay "+f.out.map(esc).join(", "):""}${f.carry&&f.carry!==e.carry?`; carry đổi thành ${esc(f.carry)}`:""})</span>`};
+ const ml=(ev,i)=>esc((ev[i]||{}).mode||(i?"Boss":"PVP"));
+ const rows=res.map((r,k)=>`<div class="optbox" style="margin:8px 0">${heroImg(r.n)?`<img src="${esc(heroImg(r.n))}" alt="" loading="lazy" style="float:right;width:52px;height:104px;object-fit:cover;border-radius:6px;margin-left:8px">`:""}<div class="pmh"><b>${k+1}. ${esc(r.n)}</b><span class="meta">${(SYN[r.n]||[]).map(([f,m])=>(TAGN[f]||FNAME[SYNF[f]]||f)+(m?` (${mlab(m)})`:"")).join(", ")||"chưa có trong bảng SYN"}</span></div>
+  <p class="meta" style="margin:4px 0"><b>${ml(r.ev,0)}:</b> ${cell(r.ev,0)}<br><b>${ml(r.ev,1)}:</b> ${cell(r.ev,1)}</p>
+  <div>${r.why.map(w=>"✓ "+esc(w)).join("<br>")}</div>${r.warn.length?`<div class="warn">⚠ ${r.warn.map(esc).join("; ")}</div>`:""}</div>`).join("");
+ const carry=(res[0]||{}).carry;
+ box.innerHTML=`<summary>Tướng nên săn ${HUNT_PHE?"phe "+esc(HUNT_PHE):""}${carry?` – hợp ${esc(carry)}`:""}</summary>
+ <div class="filters" style="margin:8px 0">${phes.map(p=>`<button class="chip ${p===HUNT_PHE?"on":""}" data-hphe="${esc(p)}">${esc(p)}</button>`).join(" ")}</div>
+ <p class="meta">Thử thêm từng tướng SSR+ chưa có (hoặc dưới 6★) vào kho ở các mốc 6★/9★/11★/13★/NT1, rồi chạy lại bộ tối ưu đội. Cột đội cho biết tướng đó vào đội từ mốc nào và thay ai. Tướng chưa có điểm chế độ được coi ngang trung bình đội đang tối ưu, nên kết quả so thuần vai trò và sao; vai trò theo bảng <code>SYN</code>. Xếp theo mốc vào đội PVP sớm nhất, rồi Boss, rồi ít xung đột với carry.</p>
+ ${res.length?rows:'<p class="meta">Không có tướng nào của phe này đủ dữ liệu (cần có trong <code>SYN</code>), hoặc bạn đã có hết.</p>'}`;
+ box.open=open;box.querySelectorAll("[data-hphe]").forEach(b=>b.onclick=()=>{HUNT_PHE=b.dataset.hphe;renderHunt()})}
 
 /* ===== TRỢ TRẬN: Thần thú + Linh phù (dữ liệu lưu trong X, đồng bộ cùng Kho) ===== */
 const TT_POOL=[
