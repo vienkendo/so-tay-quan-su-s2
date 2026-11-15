@@ -1212,9 +1212,15 @@ function renderKhoCoverage(){const box=document.getElementById("khoCov");if(!box
 
 /* ===== Tướng nên săn: thử thêm từng tướng chưa có (mặc định phe Cổ Đế) vào kho ở các mốc sao, chạy lại bộ tối ưu đội ===== */
 var HUNT_PHE="Cổ Đế";const HUNT_MS=[6,9,11,13,16];
+/* Cổ Đế: liên kết với 1 Tướng Truyền Thuyết Cốt Lõi → cấp & sao đồng bộ theo tướng đó, và 2 tướng không cùng ra trận (luật event, ảnh 15/11).
+   → thử liên kết với từng tướng SSR+ ≥9★ đang có: Cổ Đế nhận sao của tướng đó, tướng đó bị loại khỏi đội. Phe khác: thử các mốc sao. */
+const HUNT_LINK=p=>p==="Cổ Đế";
 function huntEval(n,phe){const own=ownedStars(),had=byName[n];if(!had)byName[n]={name:n,phe,tn:"",base:(EDB[n]||{}).desc||""};
- try{const out={};DATA.teams.forEach((t,i)=>{if(i>1)return;const base=bestTeams(i,own,"bal");if(!base)return;const key=mk(t.mode),bt=[...base.front,...base.back].map(x=>+(byName[x]||{})[key]).filter(v=>!isNaN(v));if(!had)byName[n][key]=bt.length?bt.reduce((a,v)=>a+v,0)/bt.length:2.5;/* chưa có điểm chế độ → coi ngang trung bình đội hiện tại, để so thuần vai trò + sao */const rows=HUNT_MS.map(m=>{const r=bestTeams(i,Object.assign({},own,{[n]:Math.max(m,own[n]||0)}),"bal");const all=[...r.front,...r.back],bAll=[...base.front,...base.back];
-   return {m,inT:all.includes(n),d:r.v-base.v,out:bAll.filter(x=>!all.includes(x)),carry:r.carry}});out[i]={mode:t.mode,carry:base.carry,rows}});return out}
+ try{const out={};DATA.teams.forEach((t,i)=>{if(i>1)return;const base=bestTeams(i,own,"bal");if(!base)return;const key=mk(t.mode),bAll=[...base.front,...base.back],bt=bAll.map(x=>+(byName[x]||{})[key]).filter(v=>!isNaN(v));if(!had)byName[n][key]=bt.length?bt.reduce((a,v)=>a+v,0)/bt.length:2.5;/* chưa có điểm chế độ → coi ngang trung bình đội hiện tại, để so thuần vai trò + sao */
+   const run=(ov,extra)=>{const r=bestTeams(i,ov,"bal");if(!r)return null;const all=[...r.front,...r.back];return {...extra,inT:all.includes(n),d:r.v-base.v,out:bAll.filter(x=>!all.includes(x)),carry:r.carry}};
+   let rows;if(HUNT_LINK(phe)){rows=Object.keys(own).filter(L=>L!==n&&own[L]>=9).map(L=>{const ov=Object.assign({},own);delete ov[L];ov[n]=own[L];return run(ov,{link:L,m:own[L]})}).filter(Boolean).sort((x,y)=>(y.inT-x.inT)||y.d-x.d)}
+   else rows=HUNT_MS.map(m=>run(Object.assign({},own,{[n]:Math.max(m,own[n]||0)}),{m})).filter(Boolean);
+   out[i]={mode:t.mode,carry:base.carry,rows,link:HUNT_LINK(phe)}});return out}
  finally{if(!had)delete byName[n]}}
 function huntWhy(n,carry){const own=ownedStars(),why=[],warn=[],f9=heroFlags(n,13),d=(EDB[n]||{}).desc||"",ct=skillText(carry,own[carry]||0);
  if(f9&F_CARRY)warn.push(`là carry thứ 2: giành vị trí carry và các hiệu ứng "Công cao nhất" với ${carry}`);
@@ -1226,10 +1232,14 @@ function huntWhy(n,carry){const own=ownedStars(),why=[],warn=[],f9=heroFlags(n,1
 function renderHunt(){const box=document.getElementById("khoHunt");if(!box||!window.KREADY)return;const own=ownedStars(),open=box.open;
  const phes=[...new Set(Object.values(EDB).map(e=>e.phe).filter(Boolean))];
  const cands=Object.keys(EDB).filter(n=>EDB[n].phe===HUNT_PHE&&!(own[n]>=6)&&(SYN[n]||byName[n]));
+ const LK=HUNT_LINK(HUNT_PHE);
  const res=cands.map(n=>{const ev=huntEval(n,EDB[n].phe),pv=ev[0],first=pv?pv.rows.find(r=>r.inT):null,carry=pv?pv.carry:null;return {n,ev,first,carry,...huntWhy(n,carry||"")}})
-  .map(r=>({...r,fb:r.ev[1]?r.ev[1].rows.find(x=>x.inT):null})).sort((a,b)=>(a.first?a.first.m:99)-(b.first?b.first.m:99)||(a.fb?a.fb.m:99)-(b.fb?b.fb.m:99)||a.warn.length-b.warn.length||b.why.length-a.why.length||((b.first||{}).d||0)-((a.first||{}).d||0));
+  .map(r=>({...r,fb:r.ev[1]?r.ev[1].rows.find(x=>x.inT):null})).sort(LK?((a,b)=>(!!b.first-!!a.first)||((b.first||{}).d||-99)-((a.first||{}).d||-99)||(!!b.fb-!!a.fb)||((b.fb||{}).d||-99)-((a.fb||{}).d||-99)||a.warn.length-b.warn.length):((a,b)=>(a.first?a.first.m:99)-(b.first?b.first.m:99)||(a.fb?a.fb.m:99)-(b.fb?b.fb.m:99)||a.warn.length-b.warn.length||b.why.length-a.why.length||((b.first||{}).d||0)-((a.first||{}).d||0)));
  const mlab=m=>m>=16?"NT1":m+"★";
- const cell=(ev,i)=>{const e=ev[i];if(!e)return "–";const f=e.rows.find(r=>r.inT);if(!f)return `<span class="meta">không vào đội tới NT1</span>`;
+ const cell=(ev,i)=>{const e=ev[i];if(!e)return "–";const f=e.rows.find(r=>r.inT);
+  if(e.link){if(!f)return `<span class="meta">liên kết với tướng nào cũng không vào đội</span>`;const alt=e.rows.filter(r=>r.inT&&r!==f).slice(0,2);
+   return `liên kết <b>${esc(f.link)}</b> (${stars(f.m)}) <span class="meta">→ ${f.d>=0?"+":""}${f.d.toFixed(1)} điểm${f.out.length?", ra khỏi đội: "+f.out.map(esc).join(", "):""}${f.carry&&f.carry!==e.carry?`; carry đổi thành ${esc(f.carry)}`:""}${alt.length?`. Khác: ${alt.map(r=>`${esc(r.link)} ${r.d>=0?"+":""}${r.d.toFixed(1)}`).join(", ")}`:""}</span>`}
+  if(!f)return `<span class="meta">không vào đội tới NT1</span>`;
   return `từ <b>${mlab(f.m)}</b> <span class="meta">(+${f.d.toFixed(1)} điểm${f.out.length?", thay "+f.out.map(esc).join(", "):""}${f.carry&&f.carry!==e.carry?`; carry đổi thành ${esc(f.carry)}`:""})</span>`};
  const ml=(ev,i)=>esc((ev[i]||{}).mode||(i?"Boss":"PVP"));
  const rows=res.map((r,k)=>`<div class="optbox" style="margin:8px 0">${heroImg(r.n)?`<img src="${esc(heroImg(r.n))}" alt="" loading="lazy" style="float:right;width:52px;height:104px;object-fit:cover;border-radius:6px;margin-left:8px">`:""}<div class="pmh"><b>${k+1}. ${esc(r.n)}</b><span class="meta">${(SYN[r.n]||[]).map(([f,m])=>(TAGN[f]||FNAME[SYNF[f]]||f)+(m?` (${mlab(m)})`:"")).join(", ")||"chưa có trong bảng SYN"}</span></div>
@@ -1238,8 +1248,8 @@ function renderHunt(){const box=document.getElementById("khoHunt");if(!box||!win
  const carry=(res[0]||{}).carry;
  box.innerHTML=`<summary>Tướng nên săn ${HUNT_PHE?"phe "+esc(HUNT_PHE):""}${carry?` – hợp ${esc(carry)}`:""}</summary>
  <div class="filters" style="margin:8px 0">${phes.map(p=>`<button class="chip ${p===HUNT_PHE?"on":""}" data-hphe="${esc(p)}">${esc(p)}</button>`).join(" ")}</div>
- ${HUNT_PHE==="Cổ Đế"?'<div class="warn">⚠ Tướng Cổ Đế chỉ quay được ở các đợt event (người chơi xác nhận 15/11). Chọn trước 1 tướng để dồn tài nguyên khi event của tướng đó mở; đừng rải đều.</div>':""}
- <p class="meta">Thử thêm từng tướng SSR+ chưa có (hoặc dưới 6★) vào kho ở các mốc 6★/9★/11★/13★/NT1, rồi chạy lại bộ tối ưu đội. Cột đội cho biết tướng đó vào đội từ mốc nào và thay ai. Tướng chưa có điểm chế độ được coi ngang trung bình đội đang tối ưu, nên kết quả so thuần vai trò và sao; vai trò theo bảng <code>SYN</code>. Xếp theo mốc vào đội PVP sớm nhất, rồi Boss, rồi ít xung đột với carry.</p>
+ ${LK?'<div class="warn">⚠ Cổ Đế chỉ quay được ở event (Chiêu Mộ Cổ Đế: bản thể 1,25%/lượt, có mốc bảo đảm cho Cổ Đế chỉ định của kỳ). Cổ Đế <b>liên kết</b> với 1 Tướng Truyền Thuyết Cốt Lõi: cấp và sao đồng bộ theo tướng đó, nhưng 2 tướng không cùng ra trận. Nên liên kết với tướng sao cao đang ngồi dự bị.</div>':""}
+ <p class="meta">${LK?"Thử liên kết từng Cổ Đế chưa có với từng tướng SSR+ ≥9★ trong kho (Cổ Đế nhận sao của tướng đó, tướng đó bị loại khỏi đội), rồi chạy lại bộ tối ưu đội; hiện cách liên kết tốt nhất.":"Thử thêm từng tướng SSR+ chưa có (hoặc dưới 6★) vào kho ở các mốc 6★/9★/11★/13★/NT1, rồi chạy lại bộ tối ưu đội. Cột đội cho biết tướng đó vào đội từ mốc nào và thay ai."} Tướng chưa có điểm chế độ được coi ngang trung bình đội đang tối ưu, nên kết quả so thuần vai trò và sao; vai trò theo bảng <code>SYN</code>. ${LK?"Xếp theo điểm tăng ở PVP, rồi Boss.":"Xếp theo mốc vào đội PVP sớm nhất, rồi Boss, rồi ít xung đột với carry."}</p>
  ${res.length?rows:'<p class="meta">Không có tướng nào của phe này đủ dữ liệu (cần có trong <code>SYN</code>), hoặc bạn đã có hết.</p>'}`;
  box.open=open;box.querySelectorAll("[data-hphe]").forEach(b=>b.onclick=()=>{HUNT_PHE=b.dataset.hphe;renderHunt()})}
 
