@@ -1238,6 +1238,7 @@ function renderHunt(){const box=document.getElementById("khoHunt");if(!box||!win
  const carry=(res[0]||{}).carry;
  box.innerHTML=`<summary>Tướng nên săn ${HUNT_PHE?"phe "+esc(HUNT_PHE):""}${carry?` – hợp ${esc(carry)}`:""}</summary>
  <div class="filters" style="margin:8px 0">${phes.map(p=>`<button class="chip ${p===HUNT_PHE?"on":""}" data-hphe="${esc(p)}">${esc(p)}</button>`).join(" ")}</div>
+ ${HUNT_PHE==="Cổ Đế"?'<div class="warn">⚠ Tướng Cổ Đế chỉ quay được ở các đợt event (người chơi xác nhận 15/11). Chọn trước 1 tướng để dồn tài nguyên khi event của tướng đó mở; đừng rải đều.</div>':""}
  <p class="meta">Thử thêm từng tướng SSR+ chưa có (hoặc dưới 6★) vào kho ở các mốc 6★/9★/11★/13★/NT1, rồi chạy lại bộ tối ưu đội. Cột đội cho biết tướng đó vào đội từ mốc nào và thay ai. Tướng chưa có điểm chế độ được coi ngang trung bình đội đang tối ưu, nên kết quả so thuần vai trò và sao; vai trò theo bảng <code>SYN</code>. Xếp theo mốc vào đội PVP sớm nhất, rồi Boss, rồi ít xung đột với carry.</p>
  ${res.length?rows:'<p class="meta">Không có tướng nào của phe này đủ dữ liệu (cần có trong <code>SYN</code>), hoặc bạn đã có hết.</p>'}`;
  box.open=open;box.querySelectorAll("[data-hphe]").forEach(b=>b.onclick=()=>{HUNT_PHE=b.dataset.hphe;renderHunt()})}

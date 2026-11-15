@@ -72,6 +72,7 @@ index.html, script.js, style.css   SINH TỰ ĐỘNG – không sửa tay
 - **Sao:** vàng 1–5★, đỏ 6–10★, cầu vồng 11–15★.
   - **Nhập Thánh lưu nối tiếp**: 16 = 1 lửa, 17 = 2 lửa…; hiển thị bằng lửa xanh lam.
   - `stars(s)` hiển thị "15★+NT2".
+- **Tướng phe Cổ Đế chỉ quay được ở event** (xác nhận 15/11), không săn tùy lúc được.
 - **Chỉ SSR+ là tướng thật.**
   - SSR (cam) là nguyên liệu nâng sao.
   - Kỹ năng của SSR, SR, R chỉ dùng để phân tích đội địch.
