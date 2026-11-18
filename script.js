@@ -1384,11 +1384,11 @@ function chCost(c,lv){/* giá mỗi lần cường hóa quan sát được: +35/
 function chNext(c,lv){const m=CH_MS.find(([L])=>L>lv);if(!m)return null;return {L:m[0],txt:(c.g==="Mộc"?"Tăng ST PVP +":"Miễn ST PVP +")+m[1]+"%"}}
 function chSteps(c,from,to){let n=0;for(let l=from;l<to;l++)n+=chCost(c,l);return n}
 /* ===== KỲ QUAN (Trợ trận). X.kq = {list:[{n,lv,star,hero:[...5 ô]}]} ===== */
-const KQ_DB={"Nhạc Dương Lâu":{q:"Tím",fx:"Kích hoạt ban đầu: sau khi bị bạo kích, Giảm ST +4%, 1 hiệp, cộng dồn 4 lần (tối đa +16%)",role:"tank",why:"Hiệu ứng chịu đòn: nên đặt tướng bị đánh nhiều nhất trong đội tấn công (đứng làn của Tư Mã Ý địch, chịu bạo kích liên tục)."}};
+const KQ_DB={"Nhạc Dương Lâu":{q:"Tím",fx:"Kích hoạt ban đầu: tướng đặt vào Kỳ quan sau khi bị bạo kích, Giảm ST +4%, 1 hiệp, cộng dồn 4 lần (tối đa +16%). Thuộc tính hiện tại HP 35000 · Công 4650 · Thủ 1155 (20% cộng cho mọi tướng). Lên 1★: 50 mảnh Nhạc Dương Lâu → HP +10000, Công +1330, Thủ +330, Buff Thủ Kỳ quan +7.5% (ảnh 18/11)",role:"tank",why:"Hiệu ứng chịu đòn: nên đặt tướng bị đánh nhiều nhất trong đội tấn công (đứng làn của Tư Mã Ý địch, chịu bạo kích liên tục)."}};
 const KQ_SLOT=[0,3,6,9,12];
 function kqSuggest(){const own=ownedStars();let t=null;try{t=bestTeams(0,null,"bal")}catch(e){}const team=t?[...t.front,...t.back]:[];
  const tanks=team.filter(n=>heroFlags(n,own[n]||0)&(F_TANK|F_SHIELD));const pick=tanks.find(n=>n==="Lý Thế Dân")||tanks[0]||team.find(n=>n!==(t&&t.carry));return {team,pick,tanks}}
-function renderKyQuan(){const box=document.getElementById("kqBox");if(!box||!window.KREADY)return;X.kq=X.kq||{list:[{n:"Nhạc Dương Lâu",lv:45,star:0,cells:0,hero:[]}]};const L=X.kq.list;const sg=kqSuggest();
+function renderKyQuan(){const box=document.getElementById("kqBox");if(!box||!window.KREADY)return;X.kq=X.kq||{list:[{n:"Nhạc Dương Lâu",lv:45,star:0,cells:1,hero:[]}]};if(!X.kq.v2){X.kq.v2=1;X.kq.list.forEach(k=>{if(k.n==="Nhạc Dương Lâu")k.cells=Math.max(k.cells||0,1)})}const L=X.kq.list;const sg=kqSuggest();
  box.innerHTML=`<h3>Kỳ quan của bạn</h3>`+L.map((k,i)=>{const d=KQ_DB[k.n]||{};const open=KQ_SLOT.filter(c=>(k.cells||0)>=c).length;
   return `<div class="optbox" style="margin:8px 0"><div class="pmh"><b>${esc(k.n)}</b> <span class="meta">${esc(d.q||"")} · Lv<input type="number" min="1" data-kq="${i}" data-f="lv" value="${k.lv||1}" style="width:60px"> · ô cấp đã kích hoạt <input type="number" min="0" max="15" data-kq="${i}" data-f="cells" value="${k.cells||0}" style="width:52px"> · sao <input type="number" min="0" max="10" data-kq="${i}" data-f="star" value="${k.star||0}" style="width:52px"></span></div>
   <p class="meta" style="margin:4px 0">${esc(d.fx||"Chưa có dữ liệu – gửi ảnh chi tiết")}</p>
