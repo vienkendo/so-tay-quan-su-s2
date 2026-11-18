@@ -695,6 +695,17 @@ h3 { cursor: pointer; }
     <div class="panel" style="margin-top:14px"><h3>Còn thiếu dữ liệu</h3><ul><li>Số linh phù cùng bậc cần để <b>ghép</b> lên bậc kế (2 hay 3).</li><li>Giá trị ô <b>Tăng ST / Giảm ST</b> theo từng phẩm.</li><li>Điều kiện mở kỹ năng của từng linh thú (Huyền Anh, Tuế Dư, Bạch Tàng, Kim Tố, Chu Minh, Trường Doanh, Thanh Dương, Thương Linh).</li></ul><p class="meta">Gửi ảnh các mục này để web tính ghép và gợi ý chính xác.</p></div>
   </section>
 
+  <section id="tienthuc" hidden>
+    <h2>Tiên Thực</h2>
+    <p class="lead">Kỳ Thảo gom thành <b>tổ hợp 3 cây</b>. Kích hoạt đủ 3 cây mở kỹ năng tổ hợp; nâng sao cả 3 cây lên mốc yêu cầu thì kỹ năng tự lên cấp. Thuộc tính sao của từng Kỳ Thảo cộng cho <b>toàn bộ tướng</b>.</p>
+    <div class="panel" id="ttcBox"></div>
+    <div class="panel" style="margin-top:14px"><h3>Cơ chế (theo mô tả trong game, 18/11)</h3><ul>
+     <li>Tiêu <b>mảnh Kỳ Thảo chỉ định</b> (50 mảnh) để kích hoạt; tiêu nguyên liệu chỉ định để nâng sao.</li>
+     <li>Có kỹ năng tổ hợp áp dụng cho toàn thể tướng, có kỹ năng chỉ cho <b>tướng được trang bị</b>. Tướng <b>đạt 5★</b> mới trang bị được, mỗi tướng tối đa <b>1</b> kỹ năng Kỳ Thảo.</li>
+     <li><b>Kỳ Thảo Kỳ Duyên</b>: rút bằng <b>Kỳ Thảo Linh Sách</b>, nhận khi tích nạp đạt mức chỉ định. Mỗi lần rút thêm 1 <b>Kỳ Thảo Linh Uẩn</b>, đổi Kỳ Thảo chỉ định ở Tiệm Kỳ Thảo (không bị xóa).</li>
+     <li>Trước khi rút chọn <b>Kỳ Thảo Như Ý</b>; rút đủ số lần chắc chắn nhận. Ra Kỳ Thảo Đỏ sớm thì lượt bảo đảm <b>không reset</b>.</li>
+    </ul></div>
+  </section>
   <section id="kyquan" hidden>
     <h2>Kỳ quan</h2>
     <p class="lead">Kỳ quan ra trận tự kích hoạt kỹ năng trong chiến đấu, <b>chỉ cho tướng được xếp vào ô</b> (xác nhận 18/11); <b>20% thuộc tính</b> của Kỳ quan cộng cho toàn bộ tướng. Mỗi Kỳ quan cùng tên chỉ có 1.</p>
@@ -1308,7 +1319,7 @@ document.addEventListener("click",e=>{const b=e.target.closest("[data-uh]");if(!
  const t=document.createElement("span");t.dataset.up=b.dataset.uh;document.getElementById("kList").appendChild(t);t.click();t.remove();
  ids.forEach(id=>{const c=document.querySelector(`#dlg-body .picks input[value="${id}"]`);if(c)c.checked=true});});
 
-function krender(){_kr0();setTimeout(()=>{renderKhoCoverage();try{renderCdLink()}catch(e){console.warn(e)}try{renderHunt()}catch(e){console.warn(e)}if(typeof renderTeamRadar==="function")renderTeamRadar();const sec=document.querySelector("main section:not([hidden])");if(sec&&sec.id==="thanthu")renderThanThu();if(sec&&sec.id==="linhphu")renderLinhPhu();if(sec&&sec.id==="chienhon")renderChienHon();if(sec&&sec.id==="kyquan")renderKyQuan();if(sec&&sec.id==="tuyetky")renderTuyetKy();if(sec&&sec.id==="evlist")renderEvents();clearTimeout(PLANT);PLANT=setTimeout(()=>{renderPlan();const s2=document.querySelector("main section:not([hidden])");if(s2&&s2.id==="kho")_kr0()},50);if(sec&&sec.id==="quy")renderRules();if(window.cdvLoad)cdvLoad()},0);renderUpHint();renderRoad();renderBooks();renderBattles();const od=document.getElementById("kOd");if(od)od.value=X.orbDay||""}
+function krender(){_kr0();setTimeout(()=>{renderKhoCoverage();try{renderCdLink()}catch(e){console.warn(e)}try{renderHunt()}catch(e){console.warn(e)}if(typeof renderTeamRadar==="function")renderTeamRadar();const sec=document.querySelector("main section:not([hidden])");if(sec&&sec.id==="thanthu")renderThanThu();if(sec&&sec.id==="linhphu")renderLinhPhu();if(sec&&sec.id==="chienhon")renderChienHon();if(sec&&sec.id==="kyquan")renderKyQuan();if(sec&&sec.id==="tienthuc")renderTienThuc();if(sec&&sec.id==="tuyetky")renderTuyetKy();if(sec&&sec.id==="evlist")renderEvents();clearTimeout(PLANT);PLANT=setTimeout(()=>{renderPlan();const s2=document.querySelector("main section:not([hidden])");if(s2&&s2.id==="kho")_kr0()},50);if(sec&&sec.id==="quy")renderRules();if(window.cdvLoad)cdvLoad()},0);renderUpHint();renderRoad();renderBooks();renderBattles();const od=document.getElementById("kOd");if(od)od.value=X.orbDay||""}
 function snap(){KUNDO.push(JSON.stringify({k:K,orb:ORB,log:KLOG}))}
 const nid=()=>K.reduce((m,u)=>Math.max(m,u.id),0)+1;
 const today=()=>new Date().toLocaleString("vi-VN",{day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit"});
@@ -2324,6 +2335,16 @@ function chStat(c,lv){const k=lv-c.lv;return {hp:c.hp+k*c.d[0],atk:c.atk+k*c.d[1
 function chCost(c,lv){/* giá mỗi lần cường hóa quan sát được: +35/+36 → 50 · +40/+42 → 60 · +71/+78 → 90 */return lv<40?50:lv<70?60:90}
 function chNext(c,lv){const m=CH_MS.find(([L])=>L>lv);if(!m)return null;return {L:m[0],txt:(c.g==="Mộc"?"Tăng ST PVP +":"Miễn ST PVP +")+m[1]+"%"}}
 function chSteps(c,from,to){let n=0;for(let l=from;l<to;l++)n+=chCost(c,l);return n}
+/* ===== TIÊN THỰC: Kỳ Thảo theo tổ hợp. X.tien={kt:{tên:{m,st}},eq:{tổ hợp:tướng}} ===== */
+const TTC_COMBO=[["Đỏ","Âm Dương Nghịch Loạn",["Âm Dương Huyền Mộc","Vong Xuyên Minh Trúc","Càn Khôn Huyền Đằng"]],["Đỏ","Thời Không Hư Mộng",["Tuế Nguyệt Luân Hoa","Hư Không Cảnh Thụ","Nấm Sát Na Vĩnh Hằng"]],["Đỏ","Ngũ Hành Quy Khư",["Ly Hỏa Niết Bàn Xuân","Nhược Thủy Trầm Tảo","Tức Nhưỡng Thông Liễu"]],["Đỏ","Hỗn Độn Vị Minh",[]]];
+const TTC_SKILL=["Âm Dương Nghịch Loạn","Thời Không Hư Mộng","Ngũ Hành Quy Khư","Hỗn Độn Vị Minh","Chu Thiên Tinh Đấu","Thiên Nhân Ngũ Suy","Thánh Nhân Di Trạch","Đạo Pháp Tự Nhiên","Vạn Tượng Sâm La","Vạn Vật Sô Cẩu","Lục Đạo Luân Hồi","Thần Ma Cấm Lệnh","Xuân Thu Thay Vận","Uy Nghi Bát Hoang","Thiên Tài Địa Bảo","Bách Thảo Thông Linh","Tinh Phách Sơn Hà","Tam Tai Cửu Nạn","Binh Đao Sát Khí","Phong Hoa Tuyết Nguyệt","Dược Tính Kim Thạch","Ngũ Giác Thông Đạt","Tứ Thời Nông Tang","Giang Hồ Bách Nghệ","Khói Lửa Phố Thị","Cửu Uyên Trấn Khế","Vô Tương Nguyệt Đế"];
+function renderTienThuc(){const box=document.getElementById("ttcBox");if(!box||!window.KREADY)return;const T=X.tien=X.tien||{kt:{},eq:{}};T.kt=T.kt||{};T.eq=T.eq||{};
+ const on=n=>(T.kt[n]||{}).m>=50||(T.kt[n]||{}).st>0;const known=new Map(TTC_COMBO.map(c=>[c[1],c]));
+ const done=TTC_SKILL.filter(k=>{const c=known.get(k);return c&&c[2].length&&c[2].every(on)});
+ box.innerHTML=`<h3>Kỳ Thảo Đỏ <span class="meta">(${done.length}/${TTC_SKILL.length} tổ hợp đã mở)</span></h3>`+TTC_COMBO.map(([q,cb,ks])=>`<div class="optbox" style="margin:8px 0"><div class="pmh"><b>${esc(cb)}</b> <span class="meta">(${ks.filter(on).length}/3) ${ks.length&&ks.every(on)?"✅ đã mở kỹ năng":""}</span></div>
+  ${ks.length?ks.map(k=>{const v=T.kt[k]||{};return `<div class="khobar" style="margin:3px 0"><span style="min-width:150px">${esc(k)}</span><span class="meta">mảnh</span><input type="number" min="0" data-ttk="${esc(k)}" data-f="m" value="${v.m||0}" style="width:64px"><span class="meta">/50 · sao</span><input type="number" min="0" max="10" data-ttk="${esc(k)}" data-f="st" value="${v.st||0}" style="width:52px"></div>`}).join(""):'<p class="meta">Chưa có tên 3 Kỳ Thảo – gửi ảnh phần cuối danh sách Đỏ.</p>'}</div>`).join("")+
+ `<h3 style="margin-top:12px">Kỹ năng tổ hợp (${TTC_SKILL.length})</h3><p class="meta">Tất cả LV0 (ảnh 18/11). Hiệu ứng chưa có dữ liệu: bấm vào từng kỹ năng trong game để xem rồi gửi ảnh.</p><div class="filters">${TTC_SKILL.map(k=>`<span class="chip ${done.includes(k)?"on":""}">${esc(k)}</span>`).join(" ")}</div>`;
+ box.querySelectorAll("[data-ttk]").forEach(e=>e.onchange=()=>{const k=e.dataset.ttk;T.kt[k]=T.kt[k]||{};T.kt[k][e.dataset.f]=Math.max(0,+e.value||0);ksave();renderTienThuc()})}
 /* ===== KỲ QUAN (Trợ trận). X.kq = {list:[{n,lv,star,hero:[...5 ô]}]} ===== */
 const KQ_DB={"Nhạc Dương Lâu":{q:"Tím",fx:"Kích hoạt ban đầu: tướng đặt vào Kỳ quan sau khi bị bạo kích, Giảm ST +4%, 1 hiệp, cộng dồn 4 lần (tối đa +16%). Thuộc tính hiện tại HP 35000 · Công 4650 · Thủ 1155 (20% cộng cho mọi tướng). Lên 1★: 50 mảnh Nhạc Dương Lâu → HP +10000, Công +1330, Thủ +330, Buff Thủ Kỳ quan +7.5% (ảnh 18/11)",role:"tank",why:"Hiệu ứng chịu đòn: nên đặt tướng bị đánh nhiều nhất trong đội tấn công (đứng làn của Tư Mã Ý địch, chịu bạo kích liên tục)."}};
 const KQ_SLOT=[0,3,6,9,12];
@@ -2362,7 +2383,7 @@ function renderChienHon(){const g=document.getElementById("chGrid");if(!g||!wind
 const SUBG={
  "kho-nangcap":{label:"Kho & nâng cấp",def:"kho",tabs:[["kho","Kho tướng"],["sao","Nâng sao"],["tuyetky","Tuyệt kỹ"]]},
  "doi-doidau":{label:"Đội hình & đối đầu",def:"doi",tabs:[["doi","Đội hình"],["vs","Đối đầu"]]},
- trotran:{label:"Trợ trận",def:"cp",tabs:[["cp","Công pháp"],["thanthu","Thần thú"],["linhphu","Linh phù"],["chienhon","Chiến hồn"],["kyquan","Kỳ quan"],["trangbi","Trang bị"]]},
+ trotran:{label:"Trợ trận",def:"cp",tabs:[["cp","Công pháp"],["thanthu","Thần thú"],["linhphu","Linh phù"],["chienhon","Chiến hồn"],["kyquan","Kỳ quan"],["tienthuc","Tiên Thực"],["trangbi","Trang bị"]]},
  tracuu:{label:"Tra cứu & sự kiện",def:"tuong",tabs:[["tuong","Tướng"],["quy","Quy tắc"],["camnang","Cẩm nang"],["evlist","Lịch sự kiện"],["codviem","Cổ Đế Viêm"]]}};
 const TROTRAN=SUBG.trotran.tabs.map(t=>t[0]);
 const groupOf=id=>Object.keys(SUBG).find(g=>SUBG[g].tabs.some(t=>t[0]===id));
@@ -2370,7 +2391,7 @@ const groupOf=id=>Object.keys(SUBG).find(g=>SUBG[g].tabs.some(t=>t[0]===id));
  if(bar){bar.hidden=!g;if(g){bar.setAttribute("aria-label",SUBG[g].label);bar.innerHTML=SUBG[g].tabs.map(([k,t])=>`<button data-sub="${k}" aria-pressed="${k===id}">${t}</button>`).join("")}}
  if(g){const tb=document.querySelector(`nav [data-tab="${g}"]`);document.querySelectorAll("nav [data-tab]").forEach(b=>b.setAttribute("aria-selected",b===tb));store.set(g+"Sub",id)}
  const current=document.querySelector('nav button[aria-selected="true"]');if(current)document.getElementById("nav-current").textContent=current.textContent;
- if(id==="thanthu")renderThanThu();if(id==="linhphu")renderLinhPhu();if(id==="chienhon")renderChienHon();if(id==="kyquan")renderKyQuan();if(id==="tuyetky")renderTuyetKy();if(id==="evlist")renderEvents();if(id==="quy")renderRules();if(id==="kho"&&window.PLAN)_kr0();if(id==="cp"&&window.PLAN)renderBooks();if(id==="plan"&&window.KREADY)renderPlan()}})();
+ if(id==="thanthu")renderThanThu();if(id==="linhphu")renderLinhPhu();if(id==="chienhon")renderChienHon();if(id==="kyquan")renderKyQuan();if(id==="tienthuc")renderTienThuc();if(id==="tuyetky")renderTuyetKy();if(id==="evlist")renderEvents();if(id==="quy")renderRules();if(id==="kho"&&window.PLAN)_kr0();if(id==="cp"&&window.PLAN)renderBooks();if(id==="plan"&&window.KREADY)renderPlan()}})();
 /* Lịch sự kiện */
 function EVS(){if(!Array.isArray(X.ev))X.ev=[{id:1,name:"Thí Luyện Cổ Đế Viêm",kind:"Tuần",end:"",goal:"Đạt mục tiêu ST mỗi ngày; xếp hạng theo ST cao nhất kỳ",reward:"",note:"Xem chi tiết ở tab Cổ Đế Viêm",done:false}];return X.ev}
 function evDays(d){if(!d)return null;const t=new Date(d+"T23:59:59");return Math.ceil((t-Date.now())/864e5)}
@@ -2462,7 +2483,7 @@ function renderRules(){const box=document.getElementById("quyDyn");if(!box||!win
  // cần kiểm tra
  const miss=Object.keys(own).filter(n=>!byName[n]&&!((EDB[n]||{}).desc)),nb=(X.books||[]).filter(b=>!BOOKFX[b.name]).map(b=>b.name);
  const q=document.getElementById("quyChk");if(q)q.innerHTML=`<ul>${miss.length?`<li>Chưa có kỹ năng: ${miss.map(esc).join(", ")} – gửi ảnh để đưa vào phân tích.</li>`:""}${nb.length?`<li>Công pháp chưa có hiệu ứng: ${nb.map(esc).join(", ")}.</li>`:""}<li>Boss có miễn khống chế không; khiêu khích có chặn đòn diện rộng không.</li><li>Linh phù: số phù để ghép, giá trị Tăng/Giảm ST. Thần thú: hiệu quả ở sao thấp.</li></ul>`}
-let lastTab=store.get("tab","plan");if(lastTab==="phan-tich")lastTab="tuong"; if(["plan","doi","tuong","vs","kho","cp","thanthu","linhphu","chienhon","kyquan","tuyetky","trangbi","sao","quy","evlist","codviem","camnang"].includes(lastTab)) showTab(lastTab);
+let lastTab=store.get("tab","plan");if(lastTab==="phan-tich")lastTab="tuong"; if(["plan","doi","tuong","vs","kho","cp","thanthu","linhphu","chienhon","kyquan","tienthuc","tuyetky","trangbi","sao","quy","evlist","codviem","camnang"].includes(lastTab)) showTab(lastTab);
 window.__S2READY=true;
 /* Sửa tướng thêm qua KPATCH trước khi EDB sẵn sàng (phe rỗng) */
 try{if(window.KREADY){let fx=0;K.forEach(u=>{if(!u.phe){const e=(byName[u.name])||EDB[u.name];if(e&&e.phe){u.phe=e.phe;fx++}}});if(fx){ksave();krender()}}}catch(e){console.warn(e)}
