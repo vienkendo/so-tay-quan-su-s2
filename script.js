@@ -367,7 +367,7 @@ document.addEventListener("click",e=>{const b=e.target.closest("[data-uh]");if(!
  const t=document.createElement("span");t.dataset.up=b.dataset.uh;document.getElementById("kList").appendChild(t);t.click();t.remove();
  ids.forEach(id=>{const c=document.querySelector(`#dlg-body .picks input[value="${id}"]`);if(c)c.checked=true});});
 
-function krender(){_kr0();setTimeout(()=>{renderKhoCoverage();try{renderCdLink()}catch(e){console.warn(e)}try{renderHunt()}catch(e){console.warn(e)}if(typeof renderTeamRadar==="function")renderTeamRadar();const sec=document.querySelector("main section:not([hidden])");if(sec&&sec.id==="thanthu")renderThanThu();if(sec&&sec.id==="linhphu")renderLinhPhu();if(sec&&sec.id==="chienhon")renderChienHon();if(sec&&sec.id==="tuyetky")renderTuyetKy();if(sec&&sec.id==="evlist")renderEvents();clearTimeout(PLANT);PLANT=setTimeout(()=>{renderPlan();const s2=document.querySelector("main section:not([hidden])");if(s2&&s2.id==="kho")_kr0()},50);if(sec&&sec.id==="quy")renderRules();if(window.cdvLoad)cdvLoad()},0);renderUpHint();renderRoad();renderBooks();renderBattles();const od=document.getElementById("kOd");if(od)od.value=X.orbDay||""}
+function krender(){_kr0();setTimeout(()=>{renderKhoCoverage();try{renderCdLink()}catch(e){console.warn(e)}try{renderHunt()}catch(e){console.warn(e)}if(typeof renderTeamRadar==="function")renderTeamRadar();const sec=document.querySelector("main section:not([hidden])");if(sec&&sec.id==="thanthu")renderThanThu();if(sec&&sec.id==="linhphu")renderLinhPhu();if(sec&&sec.id==="chienhon")renderChienHon();if(sec&&sec.id==="kyquan")renderKyQuan();if(sec&&sec.id==="tuyetky")renderTuyetKy();if(sec&&sec.id==="evlist")renderEvents();clearTimeout(PLANT);PLANT=setTimeout(()=>{renderPlan();const s2=document.querySelector("main section:not([hidden])");if(s2&&s2.id==="kho")_kr0()},50);if(sec&&sec.id==="quy")renderRules();if(window.cdvLoad)cdvLoad()},0);renderUpHint();renderRoad();renderBooks();renderBattles();const od=document.getElementById("kOd");if(od)od.value=X.orbDay||""}
 function snap(){KUNDO.push(JSON.stringify({k:K,orb:ORB,log:KLOG}))}
 const nid=()=>K.reduce((m,u)=>Math.max(m,u.id),0)+1;
 const today=()=>new Date().toLocaleString("vi-VN",{day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit"});
@@ -1383,6 +1383,21 @@ function chStat(c,lv){const k=lv-c.lv;return {hp:c.hp+k*c.d[0],atk:c.atk+k*c.d[1
 function chCost(c,lv){/* giá mỗi lần cường hóa quan sát được: +35/+36 → 50 · +40/+42 → 60 · +71/+78 → 90 */return lv<40?50:lv<70?60:90}
 function chNext(c,lv){const m=CH_MS.find(([L])=>L>lv);if(!m)return null;return {L:m[0],txt:(c.g==="Mộc"?"Tăng ST PVP +":"Miễn ST PVP +")+m[1]+"%"}}
 function chSteps(c,from,to){let n=0;for(let l=from;l<to;l++)n+=chCost(c,l);return n}
+/* ===== KỲ QUAN (Trợ trận). X.kq = {list:[{n,lv,star,hero:[...5 ô]}]} ===== */
+const KQ_DB={"Nhạc Dương Lâu":{q:"Tím",fx:"Kích hoạt ban đầu: sau khi bị bạo kích, Giảm ST +4%, 1 hiệp, cộng dồn 4 lần (tối đa +16%)",role:"tank",why:"Hiệu ứng chịu đòn: nên đặt tướng bị đánh nhiều nhất trong đội tấn công (đứng làn của Tư Mã Ý địch, chịu bạo kích liên tục)."}};
+const KQ_SLOT=[0,3,6,9,12];
+function kqSuggest(){const own=ownedStars();let t=null;try{t=bestTeams(0,null,"bal")}catch(e){}const team=t?[...t.front,...t.back]:[];
+ const tanks=team.filter(n=>heroFlags(n,own[n]||0)&(F_TANK|F_SHIELD));const pick=tanks.find(n=>n==="Lý Thế Dân")||tanks[0]||team.find(n=>n!==(t&&t.carry));return {team,pick,tanks}}
+function renderKyQuan(){const box=document.getElementById("kqBox");if(!box||!window.KREADY)return;X.kq=X.kq||{list:[{n:"Nhạc Dương Lâu",lv:45,star:0,cells:0,hero:[]}]};const L=X.kq.list;const sg=kqSuggest();
+ box.innerHTML=`<h3>Kỳ quan của bạn</h3>`+L.map((k,i)=>{const d=KQ_DB[k.n]||{};const open=KQ_SLOT.filter(c=>(k.cells||0)>=c).length;
+  return `<div class="optbox" style="margin:8px 0"><div class="pmh"><b>${esc(k.n)}</b> <span class="meta">${esc(d.q||"")} · Lv<input type="number" min="1" data-kq="${i}" data-f="lv" value="${k.lv||1}" style="width:60px"> · ô cấp đã kích hoạt <input type="number" min="0" max="15" data-kq="${i}" data-f="cells" value="${k.cells||0}" style="width:52px"> · sao <input type="number" min="0" max="10" data-kq="${i}" data-f="star" value="${k.star||0}" style="width:52px"></span></div>
+  <p class="meta" style="margin:4px 0">${esc(d.fx||"Chưa có dữ liệu – gửi ảnh chi tiết")}</p>
+  <div class="khobar" style="flex-wrap:wrap">${KQ_SLOT.map((c,j)=>j<open?`<select data-kqh="${i}" data-j="${j}"><option value="">— Ô ${j+1} trống —</option>${Object.keys(ownedStars()).sort((a,b)=>a.localeCompare(b,"vi")).map(n=>`<option ${((k.hero||[])[j]===n)?"selected":""}>${esc(n)}</option>`).join("")}</select>`:`<span class="chip">🔒 Ô ${j+1}: cần ${c} ô cấp</span>`).join(" ")}</div>
+  ${d.role==="tank"&&sg.pick?`<p style="margin:6px 0 0">👉 Gợi ý ô 1: <b>${esc(sg.pick)}</b>. <span class="meta">${esc(d.why)} Đội PVP hiện tại: ${sg.team.map(esc).join(", ")}${sg.tanks.length>1?`; tướng chịu đòn khác: ${sg.tanks.filter(x=>x!==sg.pick).map(esc).join(", ")}`:""}.</span></p>`:""}</div>`}).join("")+
+ `<div class="khobar"><input id="kqN" placeholder="Tên Kỳ quan" style="flex:1"><button class="btn" id="kqAdd">Thêm Kỳ quan</button></div>`;
+ box.querySelectorAll("[data-kq]").forEach(e=>e.onchange=()=>{L[+e.dataset.kq][e.dataset.f]=Math.max(0,+e.value||0);ksave();renderKyQuan()});
+ box.querySelectorAll("[data-kqh]").forEach(e=>e.onchange=()=>{const k=L[+e.dataset.kqh];k.hero=k.hero||[];k.hero[+e.dataset.j]=e.value||null;ksave()});
+ document.getElementById("kqAdd").onclick=()=>{const n=document.getElementById("kqN").value.trim();if(!n||L.some(k=>k.n===n))return;L.push({n,lv:1,star:0,cells:0,hero:[]});ksave();renderKyQuan()}}
 function renderChienHon(){const g=document.getElementById("chGrid");if(!g||!window.KREADY)return;const C=CHS();
  let tot={hp:0,atk:0,df:0},est=false;
  const rows=CH_DEF.map(c=>{const lv=+C.lv[c.n]||0,st=chStat(c,lv),nx=chNext(c,lv);tot.hp+=st.hp;tot.atk+=st.atk;tot.df+=st.df;if(st.est)est=true;
@@ -1406,7 +1421,7 @@ function renderChienHon(){const g=document.getElementById("chGrid");if(!g||!wind
 const SUBG={
  "kho-nangcap":{label:"Kho & nâng cấp",def:"kho",tabs:[["kho","Kho tướng"],["sao","Nâng sao"],["tuyetky","Tuyệt kỹ"]]},
  "doi-doidau":{label:"Đội hình & đối đầu",def:"doi",tabs:[["doi","Đội hình"],["vs","Đối đầu"]]},
- trotran:{label:"Trợ trận",def:"cp",tabs:[["cp","Công pháp"],["thanthu","Thần thú"],["linhphu","Linh phù"],["chienhon","Chiến hồn"],["trangbi","Trang bị"]]},
+ trotran:{label:"Trợ trận",def:"cp",tabs:[["cp","Công pháp"],["thanthu","Thần thú"],["linhphu","Linh phù"],["chienhon","Chiến hồn"],["kyquan","Kỳ quan"],["trangbi","Trang bị"]]},
  tracuu:{label:"Tra cứu & sự kiện",def:"tuong",tabs:[["tuong","Tướng"],["quy","Quy tắc"],["camnang","Cẩm nang"],["evlist","Lịch sự kiện"],["codviem","Cổ Đế Viêm"]]}};
 const TROTRAN=SUBG.trotran.tabs.map(t=>t[0]);
 const groupOf=id=>Object.keys(SUBG).find(g=>SUBG[g].tabs.some(t=>t[0]===id));
@@ -1414,7 +1429,7 @@ const groupOf=id=>Object.keys(SUBG).find(g=>SUBG[g].tabs.some(t=>t[0]===id));
  if(bar){bar.hidden=!g;if(g){bar.setAttribute("aria-label",SUBG[g].label);bar.innerHTML=SUBG[g].tabs.map(([k,t])=>`<button data-sub="${k}" aria-pressed="${k===id}">${t}</button>`).join("")}}
  if(g){const tb=document.querySelector(`nav [data-tab="${g}"]`);document.querySelectorAll("nav [data-tab]").forEach(b=>b.setAttribute("aria-selected",b===tb));store.set(g+"Sub",id)}
  const current=document.querySelector('nav button[aria-selected="true"]');if(current)document.getElementById("nav-current").textContent=current.textContent;
- if(id==="thanthu")renderThanThu();if(id==="linhphu")renderLinhPhu();if(id==="chienhon")renderChienHon();if(id==="tuyetky")renderTuyetKy();if(id==="evlist")renderEvents();if(id==="quy")renderRules();if(id==="kho"&&window.PLAN)_kr0();if(id==="cp"&&window.PLAN)renderBooks();if(id==="plan"&&window.KREADY)renderPlan()}})();
+ if(id==="thanthu")renderThanThu();if(id==="linhphu")renderLinhPhu();if(id==="chienhon")renderChienHon();if(id==="kyquan")renderKyQuan();if(id==="tuyetky")renderTuyetKy();if(id==="evlist")renderEvents();if(id==="quy")renderRules();if(id==="kho"&&window.PLAN)_kr0();if(id==="cp"&&window.PLAN)renderBooks();if(id==="plan"&&window.KREADY)renderPlan()}})();
 /* Lịch sự kiện */
 function EVS(){if(!Array.isArray(X.ev))X.ev=[{id:1,name:"Thí Luyện Cổ Đế Viêm",kind:"Tuần",end:"",goal:"Đạt mục tiêu ST mỗi ngày; xếp hạng theo ST cao nhất kỳ",reward:"",note:"Xem chi tiết ở tab Cổ Đế Viêm",done:false}];return X.ev}
 function evDays(d){if(!d)return null;const t=new Date(d+"T23:59:59");return Math.ceil((t-Date.now())/864e5)}
@@ -1506,7 +1521,7 @@ function renderRules(){const box=document.getElementById("quyDyn");if(!box||!win
  // cần kiểm tra
  const miss=Object.keys(own).filter(n=>!byName[n]&&!((EDB[n]||{}).desc)),nb=(X.books||[]).filter(b=>!BOOKFX[b.name]).map(b=>b.name);
  const q=document.getElementById("quyChk");if(q)q.innerHTML=`<ul>${miss.length?`<li>Chưa có kỹ năng: ${miss.map(esc).join(", ")} – gửi ảnh để đưa vào phân tích.</li>`:""}${nb.length?`<li>Công pháp chưa có hiệu ứng: ${nb.map(esc).join(", ")}.</li>`:""}<li>Boss có miễn khống chế không; khiêu khích có chặn đòn diện rộng không.</li><li>Linh phù: số phù để ghép, giá trị Tăng/Giảm ST. Thần thú: hiệu quả ở sao thấp.</li></ul>`}
-let lastTab=store.get("tab","plan");if(lastTab==="phan-tich")lastTab="tuong"; if(["plan","doi","tuong","vs","kho","cp","thanthu","linhphu","chienhon","tuyetky","trangbi","sao","quy","evlist","codviem","camnang"].includes(lastTab)) showTab(lastTab);
+let lastTab=store.get("tab","plan");if(lastTab==="phan-tich")lastTab="tuong"; if(["plan","doi","tuong","vs","kho","cp","thanthu","linhphu","chienhon","kyquan","tuyetky","trangbi","sao","quy","evlist","codviem","camnang"].includes(lastTab)) showTab(lastTab);
 window.__S2READY=true;
 /* Sửa tướng thêm qua KPATCH trước khi EDB sẵn sàng (phe rỗng) */
 try{if(window.KREADY){let fx=0;K.forEach(u=>{if(!u.phe){const e=(byName[u.name])||EDB[u.name];if(e&&e.phe){u.phe=e.phe;fx++}}});if(fx){ksave();krender()}}}catch(e){console.warn(e)}
