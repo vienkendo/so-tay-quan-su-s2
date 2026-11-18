@@ -1182,7 +1182,8 @@ const KPATCH=[{id:"2026-10-23-tui",lv:160,hlv:{"Lữ Bố":170,"Điêu Thuyền"
  {id:"2026-11-14-thang-oz",battles:[{"t": 1794620700000, "win": true, "mode": "PVP – Đấu trường", "lv": 260, "my": 221, "lcMe": 84077970, "lcEn": 78106933, "en": [{"n": "Vương Chiêu Quân", "i": 0, "st": 17, "lv": 200, "tags": []}, {"n": "Tư Mã Ý", "i": 1, "st": 18, "lv": 260, "tags": []}, {"n": "Hạng Vũ", "i": 2, "st": 15, "lv": 220, "tags": []}, {"n": "Lý Bạch", "i": 3, "st": 15, "lv": 200, "tags": []}, {"n": "Lữ Bố", "i": 4, "st": 12, "lv": 203, "tags": []}, {"n": "Điêu Thuyền", "i": 5, "st": 12, "lv": 200, "tags": []}], "note": "Oz – THẮNG ở hiệp 2/20 (cùng đối thủ vừa thua lúc 07:34). Khác biệt: Lữ Bố lên ô 1 (đối diện Vương Chiêu Quân địch, ST 0) → ra đòn thứ 2 toàn trận, trước Tư Mã Ý địch; Lý Thế Dân ô 2 + Tư Mã Ý ta ô 5 chặn làn Tư Mã Ý địch (Tư Mã Ý ta chịu 947 vạn rồi ngã, Lý Thế Dân chịu 562 vạn còn 75%); Võ Tắc Thiên vào ô 4 thay Quỷ Cốc Tử/Lý Long Cơ. Lữ Bố MVP 3446 vạn ST (≈96% ST cả đội), chỉ chịu 165 vạn. Mất 1 tướng (Tư Mã Ý), địch mất cả 6. Ô Điêu Thuyền địch bị che trong ảnh.", "r": 2, "car": "Lữ Bố", "stMe": 35914241, "stEn": 25310000, "per": {"me": [34460000, 725000, 235000, 28656, 403000, 59585], "en": [0, 10990000, 8670000, 4650000, 1000000, 0]}, "team": {"i": 0, "name": "PVP", "front": ["Lữ Bố", "Lý Thế Dân", "Vương Chiêu Quân"], "back": ["Võ Tắc Thiên", "Tư Mã Ý", "Điêu Thuyền"]}}]},
  {id:"2026-11-14-thang-tien-ha-nhien",battles:[{"t": 1794619080000, "win": true, "mode": "PVP – Đấu trường", "lv": 221, "my": 221, "lcMe": 83010287, "lcEn": 79797272, "en": [{"n": "Lý Thế Dân", "i": 0, "st": 16, "lv": 221, "tags": []}, {"n": "Ban Chiêu", "i": 1, "st": 11, "lv": 183, "tags": []}, {"n": "Huyền Trang", "i": 2, "st": 16, "lv": 202, "tags": []}, {"n": "Chung Vô Diệm", "i": 3, "st": 12, "lv": 200, "tags": []}, {"n": "Vương Chiêu Quân", "i": 4, "st": 14, "lv": 214, "tags": []}, {"n": "Triệu Vân", "i": 5, "st": 8, "lv": 183, "tags": []}], "note": "TiênHạ Nhiên – THẮNG hiệp 4/20. Đội địch không có Tư Mã Ý: tank Lý Thế Dân + hồi máu (Ban Chiêu 380 vạn, Lý Thế Dân 220 vạn) nên trận dài hơn. Lữ Bố ô 4 (sau Lý Long Cơ, làn 1–4 đối diện Lý Thế Dân địch) vẫn MVP 4732 vạn (≈87% ST đội), chịu 593 vạn còn 67%. Huyền Trang địch ô 3 gây 1393 vạn vào làn 3–6 → ta mất Lý Long Cơ và Tư Mã Ý (ô 6). Điêu Thuyền hồi 387 vạn. Sao địch đọc từ ảnh (lửa = NT1), ô Triệu Vân bị che.", "r": 4, "car": "Lữ Bố", "stMe": 53515000, "stEn": 23040000, "per": {"me": [3450000, 766000, 1290000, 47320000, 332000, 357000], "en": [1130000, 0, 13930000, 1890000, 6090000, 0]}, "team": {"i": 0, "name": "PVP", "front": ["Lý Long Cơ", "Lý Thế Dân", "Vương Chiêu Quân"], "back": ["Lữ Bố", "Điêu Thuyền", "Tư Mã Ý"]}}]},
  {id:"2026-11-15-lu-bo-nt3",top:{"Lữ Bố":[18]}},
- {id:"2026-11-16-cp-do",books:[["Biển Thước","Đỏ",0],["Huyền Trang","Đỏ",0]]}];
+ {id:"2026-11-16-cp-do",books:[["Biển Thước","Đỏ",0],["Huyền Trang","Đỏ",0]]},
+ {id:"2026-11-18-phuc-hy",add:{"Phục Hy":5}}];
 function kpatch(){X.patches=X.patches||[];let done=false;if(Array.isArray(X.books)){const seen=new Set();let mxb=Math.max(Date.now(),...X.books.map(b=>+b.id||0));X.books.forEach(b=>{if(seen.has(b.id)){b.id=++mxb;done=true}seen.add(b.id)})}KPATCH.forEach(p=>{if(X.patches.includes(p.id))return;snap();const ch=[];let mx=Math.max(0,...K.map(u=>+u.id||0));
  Object.entries(p.add||{}).forEach(([n,st])=>{if(K.some(u=>u.name===n))return;const h=(typeof H!=="undefined"&&H.find(x=>x.name===n))||{};const e=(typeof EDB!=="undefined"&&EDB&&EDB[n])||{};K.push({name:n,phe:h.phe||e.phe||"",star:st,r:"SSR+",id:++mx});ch.push(`+${n} ${st}★`)});
  Object.entries(p.top||{}).forEach(([n,sts])=>{const us=K.filter(u=>u.name===n).sort((a,b)=>b.star-a.star);sts.forEach((st,i)=>{let u=us[i];if(!u){const h=(typeof H!=="undefined"&&H.find(x=>x.name===n))||{};const e=(typeof EDB!=="undefined"&&EDB&&EDB[n])||{};u={name:n,phe:h.phe||e.phe||"",star:5,r:"SSR+",id:++mx};K.push(u);ch.push(`+${n}`)}if(u.star!==st){ch.push(`${n} ${stars(u.star)}→${stars(st)}`);u.star=st}})});
@@ -1301,7 +1302,7 @@ const today=()=>new Date().toLocaleString("vi-VN",{day:"2-digit",month:"2-digit"
 function syncHeroes(){H.forEach(h=>{const us=K.filter(u=>u.name===h.name);if(us.length){h.sao=Math.max(...us.map(u=>u.star));h.ban=us.length}else{h.ban=0}});
  const c=document.getElementById("cash"); if(c){c.value=ORB;renderUp()} renderGrid();renderTeam();}
 const kfEl=document.getElementById("kFilter");
-["Tất cả","3Q","Hán","Tần","Đường","SSR+","SSR (nguyên liệu)","SR (tím)","R (xanh)"].forEach(v=>{const b=document.createElement("button");b.textContent=v;b.dataset.v=v;b.setAttribute("aria-pressed",v===kf);
+["Tất cả","3Q","Hán","Tần","Đường","Cổ Đế","SSR+","SSR (nguyên liệu)","SR (tím)","R (xanh)"].forEach(v=>{const b=document.createElement("button");b.textContent=v;b.dataset.v=v;b.setAttribute("aria-pressed",v===kf);
  b.onclick=()=>{kf=v;[...kfEl.children].forEach(x=>x.setAttribute("aria-pressed",x.dataset.v===v));krender()};kfEl.appendChild(b)});
 const stars=s=>s>15?`15★+NT${s-15}`:`${s}★`;
 
@@ -1315,7 +1316,7 @@ const PHEKEY={"3Q":"phe-3q","Hán":"phe-han","Tần":"phe-tan","Đường":"phe-
 /* Ảnh riêng cho thẻ Kho được thu nhỏ chất lượng cao từ ảnh toàn thân. */
 const HCARD=new Set(["Phục Hy","Ban Chiêu","Hoắc Khứ Bệnh","Điêu Thuyền","Lữ Bố","Lý Long Cơ","Lý Thế Dân","Mạc Tà","Quan Vũ","Quỷ Cốc Tử","Tư Mã Ý","Võ Tắc Thiên","Vương Chiêu Quân"]);
 function heroImg(n){return (HCARD.has(n)&&HFULL[n]?HFULL[n].replace("/full/","/cards/").replace(/\.jpg$/i,".webp"):HFULL[n])||HART[n]||(typeof ICONS!=="undefined"&&ICONS[n])||""}
-const PHE_SHORT={"3Q":"3Q","Hán":"Hán","Tần":"Tần","Đường":"Đường"};
+const PHE_SHORT={"3Q":"3Q","Hán":"Hán","Tần":"Tần","Đường":"Đường","Cổ Đế":"Cổ Đế"};
 function starRow(s){s=+s||0;if(s>15)return `<span class="gstars nt" aria-label="Nhập Thánh ${s-15}">${"🔥".repeat(Math.min(5,s-15))}</span>`;const tier=s<=5?"g":s<=10?"r":"c",k=s<=5?s:s<=10?s-5:Math.min(5,s-10);return `<span class="gstars ${tier}" aria-label="${s} sao">${"★".repeat(Math.max(k,0))}</span>`}
 function heroCard(n,us){const u0=us[0],lv=((X.hlv||{})[n])||LV||"",img=heroImg(n),full=!!(HFULL[n]||HART[n]),r=u0.r||"SSR+";
  return `<div class="gcard r-${r.replace("+","p")} ${CORE.has(n)?"core":""}" tabindex="0" data-gc="${esc(n)}">
@@ -1367,9 +1368,9 @@ const KACT=e=>{
    ksave();krender();syncHeroes();},"Nâng sao");};
 document.getElementById("kList").addEventListener("click",KACT);
 document.getElementById("kAdd").onclick=()=>{
- const known=[...new Set([...H.map(h=>h.name),...K.map(u=>u.name)])].sort((a,b)=>a.localeCompare(b,"vi"));
+ const known=[...new Set([...H.map(h=>h.name),...K.map(u=>u.name),...Object.keys(EDB).filter(n=>EDB[n].phe==="Cổ Đế")])].sort((a,b)=>a.localeCompare(b,"vi"));
  modal("Thêm tướng vào kho",`<div class="form"><label for="aN">Tên</label><input id="aN" list="aL" placeholder="Gõ hoặc chọn"><datalist id="aL">${known.map(n=>`<option value="${esc(n)}">`).join("")}</datalist>
-  <label for="aP">Phe</label><select id="aP"><option>3Q</option><option>Hán</option><option>Tần</option><option>Đường</option></select>
+  <label for="aP">Phe</label><select id="aP"><option>3Q</option><option>Hán</option><option>Tần</option><option>Đường</option><option>Cổ Đế</option></select>
   <label for="aR">Độ hiếm</label><select id="aR"><option>SSR+</option><option>SSR</option><option value="SR">SR (tím)</option><option value="R">R (xanh)</option></select>
   <label for="aS">Sao</label><input id="aS" type="number" min="1" max="20" value="5">
   <label for="aC">Số bản</label><input id="aC" type="number" min="1" max="20" value="1"></div>`,()=>{
@@ -1377,7 +1378,7 @@ document.getElementById("kAdd").onclick=()=>{
    const p=document.getElementById("aP").value,r=document.getElementById("aR").value,s=+document.getElementById("aS").value||5,c=+document.getElementById("aC").value||1;
    snap(); for(let i=0;i<c;i++) K.push({id:nid(),name:n,phe:p,star:s,r}); KLOG.push(`${today()} · Thêm ${c} × ${n} ${stars(s)}`); ksave();krender();syncHeroes();},"Thêm");
  document.getElementById("aR").addEventListener("change",e=>{document.getElementById("aS").value=e.target.value==="SR"?4:e.target.value==="R"?3:5});
- const nEl=document.getElementById("aN"); nEl.addEventListener("input",()=>{const ex=K.find(u=>u.name===nEl.value)||byName[nEl.value]; if(ex){document.getElementById("aP").value=ex.phe; document.getElementById("aR").value=ex.r||(byName[nEl.value]?"SSR+":"SSR"); document.getElementById("aS").value=(ex.r==="SR"?4:ex.r==="R"?3:5);}});};
+ const nEl=document.getElementById("aN"); nEl.addEventListener("input",()=>{const ex=K.find(u=>u.name===nEl.value)||byName[nEl.value]||(EDB[nEl.value]&&EDB[nEl.value].phe==="Cổ Đế"?{phe:"Cổ Đế",r:"SSR+"}:null); if(ex){document.getElementById("aP").value=ex.phe; document.getElementById("aR").value=ex.r||(byName[nEl.value]?"SSR+":"SSR"); document.getElementById("aS").value=(ex.r==="SR"?4:ex.r==="R"?3:5);}});};
 document.getElementById("kIO").onclick=()=>{
  modal("Sao lưu / Khôi phục",`<p class="meta">Đoạn dưới gồm toàn bộ Kho, công pháp, thần thú, linh phù, nhật ký. Sao chép để lưu, hoặc dán bản sao lưu vào rồi bấm Khôi phục. Có thể gửi đoạn này cho Claude để cập nhật file.</p>
   <textarea id="ioT" rows="8" style="width:100%;font:12px var(--mono)">${esc(JSON.stringify({k:K,orb:ORB,lv:LV,atk:ATK,x:X}))}</textarea>
@@ -1605,7 +1606,7 @@ function battleKind(b){const mx=/PVP/.test(b.mode)?20:15;if(/Rèn luyện/.test(
  if(b.r&&b.r<=5)return "Bị dồn sát thương nhanh";
  if(b.stMe&&b.stEn&&b.stEn>b.stMe*2.5)return "Lệch sức mạnh (ST địch > 2,5× mình)";
  return b.r?"Thua giằng co":"";}
-function renderBattles(){
+function renderBattles(){if(!window.__S2READY){setTimeout(renderBattles,0);return}/* kload gọi trước khi TAGN/MODES… khai báo (TDZ) → hoãn tới khi script chạy xong */
  const bt=document.getElementById("blTeam");if(bt&&!bt.options.length){bt.innerHTML=DATA.teams.map((t,i)=>`<option value="${i}">Đội: ${esc(t.name)}</option>`).join("")}if(bt&&typeof curTeam!=="undefined"&&document.activeElement!==bt&&bt.value!=="vs")bt.value=String(curTeam);
  const el=document.getElementById("blList"); if(!el) return; const B=X.battles;
  const W=B.filter(b=>b.win&&!/Rèn luyện/.test(b.mode)).length,L=B.filter(b=>!b.win&&!/Rèn luyện/.test(b.mode)).length;
@@ -2420,6 +2421,9 @@ function renderRules(){const box=document.getElementById("quyDyn");if(!box||!win
  const miss=Object.keys(own).filter(n=>!byName[n]&&!((EDB[n]||{}).desc)),nb=(X.books||[]).filter(b=>!BOOKFX[b.name]).map(b=>b.name);
  const q=document.getElementById("quyChk");if(q)q.innerHTML=`<ul>${miss.length?`<li>Chưa có kỹ năng: ${miss.map(esc).join(", ")} – gửi ảnh để đưa vào phân tích.</li>`:""}${nb.length?`<li>Công pháp chưa có hiệu ứng: ${nb.map(esc).join(", ")}.</li>`:""}<li>Boss có miễn khống chế không; khiêu khích có chặn đòn diện rộng không.</li><li>Linh phù: số phù để ghép, giá trị Tăng/Giảm ST. Thần thú: hiệu quả ở sao thấp.</li></ul>`}
 let lastTab=store.get("tab","plan");if(lastTab==="phan-tich")lastTab="tuong"; if(["plan","doi","tuong","vs","kho","cp","thanthu","linhphu","chienhon","tuyetky","trangbi","sao","quy","evlist","codviem","camnang"].includes(lastTab)) showTab(lastTab);
+window.__S2READY=true;
+/* Sửa tướng thêm qua KPATCH trước khi EDB sẵn sàng (phe rỗng) */
+try{if(window.KREADY){let fx=0;K.forEach(u=>{if(!u.phe){const e=(byName[u.name])||EDB[u.name];if(e&&e.phe){u.phe=e.phe;fx++}}});if(fx){ksave();krender()}}}catch(e){console.warn(e)}
 </script>
 </body>
 </html>
