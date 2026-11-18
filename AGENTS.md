@@ -72,7 +72,7 @@ index.html, script.js, style.css   SINH TỰ ĐỘNG – không sửa tay
 - **Sao:** vàng 1–5★, đỏ 6–10★, cầu vồng 11–15★.
   - **Nhập Thánh lưu nối tiếp**: 16 = 1 lửa, 17 = 2 lửa…; hiển thị bằng lửa xanh lam.
   - `stars(s)` hiển thị "15★+NT2".
-- **Tướng phe Cổ Đế chỉ quay được ở event** (xác nhận 15/11), không săn tùy lúc được. Cổ Đế **liên kết** với 1 Tướng Truyền Thuyết Cốt Lõi: cấp và sao đồng bộ theo tướng đó, 2 tướng không cùng ra trận; có Thức Tỉnh riêng (bảng "Ngự Tiến" 15 bậc: đặc tính ở bậc 2/4/6/8/10, các bậc khác Công/Thủ/HP +10%; nâng bằng bản trùng Cổ Đế). Chiêu mộ: bản thể 1,25%, mảnh 22,9%, có mốc bảo đảm Cổ Đế chỉ định của kỳ.
+- **Tướng phe Cổ Đế chỉ quay được ở event** (xác nhận 15/11), không săn tùy lúc được. Cổ Đế **liên kết** với 1 Tướng Truyền Thuyết Cốt Lõi: cấp và sao đồng bộ theo tướng đó, 2 tướng không cùng ra trận; có Thức Tỉnh riêng (bảng "Ngự Tiến" 15 bậc: đặc tính ở bậc 2/4/6/8/10, các bậc khác Công/Thủ/HP +10%; nâng bằng bản trùng Cổ Đế). **50 mảnh = 1 bản trùng** cho Cổ Đế và mọi tướng SSR+ (xác nhận 18/11). Chiêu mộ: bản thể 1,25%, mảnh 22,9%, có mốc bảo đảm Cổ Đế chỉ định của kỳ.
 - **Chỉ SSR+ là tướng thật.**
   - SSR (cam) là nguyên liệu nâng sao.
   - Kỹ năng của SSR, SR, R chỉ dùng để phân tích đội địch.
