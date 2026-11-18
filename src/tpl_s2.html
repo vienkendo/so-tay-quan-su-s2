@@ -647,6 +647,7 @@ h3 { cursor: pointer; }
     <div class="panel" id="kHint"></div>
     <div class="filters" id="kFilter"></div>
     <details class="panel" id="khoCov" style="margin:10px 0"></details>
+    <div class="panel" id="khoLink" style="margin:10px 0" hidden></div>
     <details class="panel" id="khoHunt" style="margin:10px 0"></details>
     <div class="kview" role="group" aria-label="Kiểu hiển thị"><button data-kv="card">Thẻ</button><button data-kv="list">Danh sách</button></div>
     <div id="kList" class="klist"></div>
@@ -1296,7 +1297,7 @@ document.addEventListener("click",e=>{const b=e.target.closest("[data-uh]");if(!
  const t=document.createElement("span");t.dataset.up=b.dataset.uh;document.getElementById("kList").appendChild(t);t.click();t.remove();
  ids.forEach(id=>{const c=document.querySelector(`#dlg-body .picks input[value="${id}"]`);if(c)c.checked=true});});
 
-function krender(){_kr0();setTimeout(()=>{renderKhoCoverage();try{renderHunt()}catch(e){console.warn(e)}if(typeof renderTeamRadar==="function")renderTeamRadar();const sec=document.querySelector("main section:not([hidden])");if(sec&&sec.id==="thanthu")renderThanThu();if(sec&&sec.id==="linhphu")renderLinhPhu();if(sec&&sec.id==="chienhon")renderChienHon();if(sec&&sec.id==="tuyetky")renderTuyetKy();if(sec&&sec.id==="evlist")renderEvents();clearTimeout(PLANT);PLANT=setTimeout(()=>{renderPlan();const s2=document.querySelector("main section:not([hidden])");if(s2&&s2.id==="kho")_kr0()},50);if(sec&&sec.id==="quy")renderRules();if(window.cdvLoad)cdvLoad()},0);renderUpHint();renderRoad();renderBooks();renderBattles();const od=document.getElementById("kOd");if(od)od.value=X.orbDay||""}
+function krender(){_kr0();setTimeout(()=>{renderKhoCoverage();try{renderCdLink()}catch(e){console.warn(e)}try{renderHunt()}catch(e){console.warn(e)}if(typeof renderTeamRadar==="function")renderTeamRadar();const sec=document.querySelector("main section:not([hidden])");if(sec&&sec.id==="thanthu")renderThanThu();if(sec&&sec.id==="linhphu")renderLinhPhu();if(sec&&sec.id==="chienhon")renderChienHon();if(sec&&sec.id==="tuyetky")renderTuyetKy();if(sec&&sec.id==="evlist")renderEvents();clearTimeout(PLANT);PLANT=setTimeout(()=>{renderPlan();const s2=document.querySelector("main section:not([hidden])");if(s2&&s2.id==="kho")_kr0()},50);if(sec&&sec.id==="quy")renderRules();if(window.cdvLoad)cdvLoad()},0);renderUpHint();renderRoad();renderBooks();renderBattles();const od=document.getElementById("kOd");if(od)od.value=X.orbDay||""}
 function snap(){KUNDO.push(JSON.stringify({k:K,orb:ORB,log:KLOG}))}
 const nid=()=>K.reduce((m,u)=>Math.max(m,u.id),0)+1;
 const today=()=>new Date().toLocaleString("vi-VN",{day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit"});
@@ -1319,11 +1320,11 @@ const HCARD=new Set(["Phục Hy","Ban Chiêu","Hoắc Khứ Bệnh","Điêu Thuy
 function heroImg(n){return (HCARD.has(n)&&HFULL[n]?HFULL[n].replace("/full/","/cards/").replace(/\.jpg$/i,".webp"):HFULL[n])||HART[n]||(typeof ICONS!=="undefined"&&ICONS[n])||""}
 const PHE_SHORT={"3Q":"3Q","Hán":"Hán","Tần":"Tần","Đường":"Đường","Cổ Đế":"Cổ Đế"};
 function starRow(s){s=+s||0;if(s>15)return `<span class="gstars nt" aria-label="Nhập Thánh ${s-15}">${"🔥".repeat(Math.min(5,s-15))}</span>`;const tier=s<=5?"g":s<=10?"r":"c",k=s<=5?s:s<=10?s-5:Math.min(5,s-10);return `<span class="gstars ${tier}" aria-label="${s} sao">${"★".repeat(Math.max(k,0))}</span>`}
-function heroCard(n,us){const u0=us[0],lv=((X.hlv||{})[n])||LV||"",img=heroImg(n),full=!!(HFULL[n]||HART[n]),r=u0.r||"SSR+";
+function heroCard(n,us){const u0=us[0],lk=((X.cdlink||{})[n]),lv=((X.hlv||{})[lk||n])||LV||"",img=heroImg(n),full=!!(HFULL[n]||HART[n]),r=u0.r||"SSR+";
  return `<div class="gcard r-${r.replace("+","p")} ${CORE.has(n)?"core":""}" tabindex="0" data-gc="${esc(n)}">
   <div class="gart ${full?"full":"small"}">${img?`<img src="${img}" alt="" loading="lazy">`:`<span class="gph">${esc(short(n))}</span>`}</div>
   <span class="grar">${rarityBadge(r)}</span>${r==="SSR+"&&window.PLAN?(PLAN.keep[n]?'<span class="gbadge k">Giữ</span>':PLAN.res[n]?'<span class="gbadge r">Dự bị</span>':PLAN.mat[n]?'<span class="gbadge m">Nguyên liệu</span>':""):r!=="SSR+"?'<span class="gbadge m">Nguyên liệu</span>':""}${lv?`<span class="glv">${lv}</span>`:""}${us.length>1?`<span class="gcnt">×${us.length}</span>`:""}
-  <div class="gfoot"><div class="gname">${esc(n)}</div>${starRow(u0.star)}</div><span class="gphe p-${esc(u0.phe)}">${esc(PHE_SHORT[u0.phe]||u0.phe)}</span></div>`}
+  <div class="gfoot"><div class="gname">${esc(n)}</div>${starRow(cdStar(n,u0.star))}${lk?`<div class="meta" style="font-size:11px">🔗 ${esc(lk)}</div>`:""}</div><span class="gphe p-${esc(u0.phe)}">${esc(PHE_SHORT[u0.phe]||u0.phe)}</span></div>`}
 function _kr0(){
  document.getElementById("orb").value=ORB;document.getElementById("kLv").value=LV||"";const vm=document.getElementById("vsMy");if(vm)vm.value=LV||"";
  const groups={};K.forEach(u=>{(groups[u.name]=groups[u.name]||[]).push(u)});
@@ -2037,7 +2038,10 @@ function heroFlags(n,st){if(SYN[n]){let f=0;SYN[n].forEach(([k,m])=>{if((st||0)>
  if(tg.includes("dot")||/Huyết Tích/i.test(t))f|=F_BLEED;if(tg.includes("aoe")||/toàn địch/i.test(t))f|=F_AOE;
  if(tg.includes("rageDep")||((f&F_CARRY)&&/Nộ/.test(t)))f|=F_DEP;return f}
 const PROFILES={bal:{n:"Cân bằng",d:"điểm cao nhất tổng thể"},dmg:{n:"Dồn sát thương",d:"ưu tiên diện rộng, khuếch đại, nguồn Nộ"},tough:{n:"Trụ & khống chế",d:"ưu tiên trụ, hồi máu, khống chế"}};
-function bestTeams(i,ownOv,prof,noPrune,opt){prof=prof||"bal";opt=opt||{};const t=DATA.teams[i],key=opt.key||mk(t.mode),own=ownOv||ownedStars(),EX=opt.extra||{};
+function bestTeams(i,ownOv,prof,noPrune,opt){const own=ownOv||ownedStars(),pr=cdPairs().filter(([c,l])=>own[c]!=null&&own[l]!=null&&byName[c]&&byName[l]);
+ if(!pr.length)return _bestTeams1(i,own,prof,noPrune,opt);let best=null;/* mỗi cặp liên kết: thử bỏ Cổ Đế hoặc bỏ tướng liên kết, lấy đội tốt nhất */
+ for(let mask=0;mask<(1<<pr.length);mask++){const o=Object.assign({},own);pr.forEach(([c,l],k)=>{delete o[(mask>>k)&1?l:c]});const r=_bestTeams1(i,o,prof,noPrune,opt);if(r&&(!best||r.v>best.v))best=r}return best}
+function _bestTeams1(i,ownOv,prof,noPrune,opt){prof=prof||"bal";opt=opt||{};const t=DATA.teams[i],key=opt.key||mk(t.mode),own=ownOv||ownedStars(),EX=opt.extra||{};
  const P=Object.keys(own).filter(n=>byName[n]);if(P.length<6)return null;
  const H=P.map(n=>{const st=own[n]||0,f=heroFlags(n,st),h=byName[n],tn=h.tn||"",pn=tn.split(" – ")[0].split(" (")[0].trim();
   let syn=0;if(f&F_RAGE)syn+=0.8;if(f&F_FEED)syn+=0.8;if(f&F_AMP)syn+=0.6;if(f&F_BLEED)syn+=0.5;if(f&F_CTRL)syn+=0.8;syn+=1.0;/* syn = cận trên mọi điểm cộng của tướng trong evalSet → cắt nhánh an toàn */
@@ -2149,6 +2153,13 @@ function renderKhoCoverage(){const box=document.getElementById("khoCov");if(!box
  const names=[...new Set(K.filter(u=>u.r==="SSR+"||!u.r).map(u=>u.name))];const cnt={};RADAR_AX.slice(0,6).forEach(([k])=>cnt[k]=names.filter(n=>radarScore(n)[k]>=3).length);
  box.innerHTML=`<summary>Độ phủ vai trò trong kho (${names.length} tướng SSR+)</summary><div class="radar-legend" style="margin-top:8px">${RADAR_AX.slice(0,6).map(([k,t])=>`<span>${t}: <b>${cnt[k]}</b> tướng</span>`).join("")}</div><p class="meta">Đếm số tướng có điểm vai trò ≥ 3 (theo phân loại kỹ năng). Vai trò chỉ có 0–1 tướng là chỗ kho đang mỏng.</p>`}
 
+/* ===== Liên kết Cổ Đế: cấp & sao đồng bộ theo Tướng Truyền Thuyết Cốt Lõi được liên kết; 2 tướng không cùng ra trận ===== */
+function renderCdLink(){const box=document.getElementById("khoLink");if(!box)return;const cds=[...new Set(K.filter(u=>u.phe==="Cổ Đế"&&(!u.r||u.r==="SSR+")).map(u=>u.name))];
+ if(!cds.length){box.hidden=true;return}box.hidden=false;X.cdlink=X.cdlink||{};const used=new Set(Object.values(X.cdlink));
+ const opts=[...new Set(K.filter(u=>u.phe!=="Cổ Đế"&&(!u.r||u.r==="SSR+")).map(u=>u.name))].map(n=>({n,s:Math.max(...K.filter(u=>u.name===n).map(u=>+u.star||0))})).sort((a,b)=>b.s-a.s);
+ box.innerHTML=`<h3 style="margin:0 0 6px">🔗 Liên kết Cổ Đế</h3><p class="meta" style="margin:0 0 8px">Cổ Đế nhận cấp và sao của tướng được liên kết; hai tướng không ra trận cùng đội (bộ gợi ý đội đã tính).</p>`+
+  cds.map(c=>{const l=X.cdlink[c]||"";return `<div class="khobar" style="margin:4px 0"><b style="min-width:90px">${esc(c)}</b><select data-cdl="${esc(c)}"><option value="">— Chưa liên kết —</option>${opts.map(o=>`<option value="${esc(o.n)}" ${o.n===l?"selected":""} ${used.has(o.n)&&o.n!==l?"disabled":""}>${esc(o.n)} (${stars(o.s)})</option>`).join("")}</select>${l?`<span class="meta">→ ${esc(c)} ${stars(cdStar(c,0))}</span>`:""}</div>`}).join("");
+ box.querySelectorAll("[data-cdl]").forEach(sel=>sel.onchange=()=>{const c=sel.dataset.cdl;if(sel.value)X.cdlink[c]=sel.value;else delete X.cdlink[c];KLOG.push(`${today()} · ${c} liên kết ${sel.value||"(bỏ)"}`);ksave();krender();if(typeof renderPlan==="function")try{renderPlan()}catch(e){}})}
 /* ===== Tướng nên săn: thử thêm từng tướng chưa có (mặc định phe Cổ Đế) vào kho ở các mốc sao, chạy lại bộ tối ưu đội ===== */
 var HUNT_PHE="Cổ Đế";const HUNT_MS=[6,9,11,13,16];
 /* Cổ Đế: liên kết với 1 Tướng Truyền Thuyết Cốt Lõi → cấp & sao đồng bộ theo tướng đó, và 2 tướng không cùng ra trận (luật event, ảnh 15/11).
@@ -2384,7 +2395,11 @@ window.renderAnalysis=()=>{if(aRes)list();cmp()};
 initTeamRadar();
 /* ===== QUY TẮC ĐỘNG: suy ra từ Kho + kỹ năng + đội hình, không gán cứng tên tướng ===== */
 const MILE=[["base","Cơ bản",0],["s9","9★",9],["s11","11★",11],["s13","13★",13],["nt","Nhập Thánh",16]];
-function ownedStars(){const m={};(K||[]).forEach(u=>{if(u.r&&u.r!=="SSR+")return;/* SSR cam, SR, R chỉ là nguyên liệu */m[u.name]=Math.max(m[u.name]||0,+u.star||0)});return m}
+function ownedStars(){const m={};(K||[]).forEach(u=>{if(u.r&&u.r!=="SSR+")return;/* SSR cam, SR, R chỉ là nguyên liệu */m[u.name]=Math.max(m[u.name]||0,+u.star||0)});
+ Object.entries((typeof X!=="undefined"&&X&&X.cdlink)||{}).forEach(([c,l])=>{if(m[c]!=null&&m[l]!=null)m[c]=m[l]});/* Cổ Đế liên kết: sao đồng bộ theo tướng được liên kết */return m}
+/* Cổ Đế liên kết: [Cổ Đế, tướng] không ra trận cùng đội */
+function cdPairs(){return Object.entries((typeof X!=="undefined"&&X&&X.cdlink)||{}).filter(([c,l])=>c&&l)}
+function cdStar(n,raw){const l=((X&&X.cdlink)||{})[n];if(!l)return raw;const m=Math.max(0,...K.filter(u=>u.name===l&&(!u.r||u.r==="SSR+")).map(u=>+u.star||0));return m||raw}
 function skillHits(re){const own=ownedStars(),out=[];Object.keys(own).forEach(n=>{const h=byName[n];if(h)MILE.forEach(([k,lab,st])=>{if(h[k]&&re.test(h[k]))out.push({n,lab,st,ok:own[n]>=st,txt:h[k]})});else{const d=(EDB[n]||{}).desc||"";if(re.test(d))out.push({n,lab:"Kỹ năng",st:0,ok:true,txt:d})}});return out}
 function teamCarry(t){const all=[...t.front,...t.back];return all.find(n=>/carry/i.test((t.why||{})[n]||""))||all.find(n=>((EDB[n]||{}).tags||[]).includes("carry"))}
 function laneOf(t,n){const i=t.front.indexOf(n);if(i>=0)return i;const j=t.back.indexOf(n);return j>=0?j:-1}
