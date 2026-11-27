@@ -61,7 +61,7 @@ const r=await p.evaluate(()=>{const out={pass:0,fail:[]};const ok=(c,m)=>{if(c)o
  const u=upPlan()[0];ok(u.pick.some(x=>x.id===2)&&u.pick.some(x=>x.id===4)&&!u.pick.some(x=>x.id===3),"T10 bản trùng và SSR cam được chọn, SSR+ khác được giữ");
  K=K.filter(x=>x.id!==4);ok(upPlan()[0].st==="no", "T10 thiếu SSR nguyên liệu không dùng SSR+ thay thế");
  }finally{K=prevK;bookHeroes=prevOrder;ORB=prevOrb;window.KEEPSET=prevKeep;window.PLAN=prevPlan}
- const pp=computePlan();ok(Object.keys(pp.mat).length===0,"T10 kế hoạch không tự phân SSR+ làm nguyên liệu");
+ const pp=computePlan();const cdl=new Set(Object.values(X.cdlink||{}));ok(Object.keys(pp.mat).every(n=>!pp.keep[n]&&!cdl.has(n)&&(byName[n]||{}).phe!=="Cổ Đế"&&pp.mat[n]),"T10 danh sách Bỏ không chứa tướng trong đội, Cổ Đế hay tướng đang liên kết Cổ Đế");
  ok((byName["Tư Mã Ý"].pvp_note||"").includes("3 lửa"),"T11 ghi nhận tiềm năng PVP Tư Mã Ý từ phản hồi người chơi");
  ok(!pp.own["Tư Mã Ý"]||JSON.stringify(pp.keep["Tư Mã Ý"]||pp.res["Tư Mã Ý"]).includes("3 lửa"),"T11 tiềm năng PVP xuất hiện trong kế hoạch");
  return out});

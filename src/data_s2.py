@@ -219,3 +219,33 @@ UP=[
 
 H={h["name"]:h for h in heroes}
 H["Biển Thước"].update(pvp=3)
+
+# Cổ Đế trong đội PVP (27/11)
+if not any(h["name"]=="Phục Hy" for h in heroes):
+    _ph=dict(old["Phục Hy"]); _ph.update(sao=15,books="",ban=1,stat="Cổ Đế – liên kết Tư Mã Ý, nhận sao/cấp của Tư Mã Ý",keep="Cốt lõi (PVP)",pvp=5,boss=4,pve=4); heroes.append(_ph)
+if not any(h["name"]=="Nữ Oa" for h in heroes):
+    heroes.append(dict(name="Nữ Oa",phe="Cổ Đế",nhom="Thủ",sao=12,role="Tank Cổ Đế – khiên, giảm ST, xóa debuff, NT1 hồi sinh đồng đội",
+      base="ĐT 35% ST toàn địch; TC 70% ST toàn địch, 50% xóa 1 debuff cho toàn đội, xóa được thì +20% Giảm ST 2 hiệp",
+      s9="Giảm ST chung cuộc 99% trong 6 lần đầu bị đánh",s11="Sau khi thi triển KN: 1 hiệp [Khiên Vô Địch] cho đồng đội ít %HP nhất",
+      s13="Mỗi 1% HP mất +1% Giảm ST chung cuộc; xóa debuff 100%",nt="NT1: đồng đội tử trận được hồi sinh ngay với HP = 1000% Công Nữ Oa (1 lần/trận)",
+      tn="",pvp=5,boss=4,pve=4,keep="Cốt lõi (PVP)",gear="HP > Thủ > Miễn ST",books="",ban=1,
+      stat="Cổ Đế – liên kết Quan Vũ (12★). ⚠ Công 78,1 vạn – có thể cao hơn Lữ Bố, chiếm hiệu ứng nhắm 'Công cao nhất'."))
+# 27/11/2026: Ban Chiêu đã rời đội (đã dùng làm nguyên liệu, còn 5★). Đội PVP thực tế theo các trận 22–23/11.
+for t in TEAMS:
+    if t["mode"] in ("PVP","Boss"):
+        t["front"]=["Lý Long Cơ","Nữ Oa","Vương Chiêu Quân"]; t["back"]=["Lữ Bố","Phục Hy","Điêu Thuyền"]
+        t["why"]={"Lý Long Cơ":"Ô 1 – gắn [Trường Hận], chắn làn 1–4 cho Lữ Bố","Nữ Oa":"Ô 2 – Cổ Đế (liên kết Quan Vũ), chịu đòn + hồi máu",
+                  "Vương Chiêu Quân":"Ô 3 – +15% Công cả đội, Lữ Bố ra đòn thêm","Lữ Bố":"Ô 4 – carry (19★, NT4)",
+                  "Phục Hy":"Ô 5 – Cổ Đế (liên kết Tư Mã Ý), sát thương + hồi máu","Điêu Thuyền":"Ô 6 – liên kết Công cho Lữ Bố"}
+    if t["mode"]=="PVP":
+        t["note"]="Đội đang dùng theo các trận 22–23/11. Tình Nghĩa: Lữ Bố + Điêu Thuyền (HP +15%)."
+    if t["mode"]=="Boss":
+        t["note"]="Chưa xác nhận đội Boss riêng – tạm dùng đội PVP."
+    if t["mode"]=="PVE":
+        t["back"]=[("Phục Hy" if n=="Ban Chiêu" else n) for n in t["back"]]; t["front"]=[("Phục Hy" if n=="Ban Chiêu" else n) for n in t["front"]]
+        t["why"].pop("Ban Chiêu",None); t["why"]["Phục Hy"]="Hồi máu thay Ban Chiêu (đã rời đội)"
+        t["note"]=t["note"].replace(", Ban Chiêu + Vương Chiêu Quân (HP +15%)","")
+H={h["name"]:h for h in heroes}
+H["Ban Chiêu"].update(keep="Nguyên liệu (Hán)")
+UP=[u for u in UP if u["name"]!="Ban Chiêu"]
+PR=[p for p in PR if p["hero"]!="Ban Chiêu"]
